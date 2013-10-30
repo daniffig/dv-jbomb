@@ -4,17 +4,17 @@ import java.util.List;
 
 public class Game {
 
-	private List<Player> Players;
+	private List<GamePlayer> GamePlayers;
 	private Integer MaxRounds;
 	private Integer CurrentRound;
-	private Integer MaxPlayersAllowed;
+	private Integer MaxGamePlayersAllowed;
 
-	public List<Player> getPlayers() {
-		return Players;
+	public List<GamePlayer> getGamePlayers() {
+		return GamePlayers;
 	}
 
-	public void setPlayers(List<Player> players) {
-		Players = players;
+	public void setGamePlayers(List<GamePlayer> gamePlayers) {
+		GamePlayers = gamePlayers;
 	}
 
 	public Integer getMaxRounds() {
@@ -33,19 +33,19 @@ public class Game {
 		CurrentRound = currentRound;
 	}
 
-	public Integer getMaxPlayersAllowed() {
-		return MaxPlayersAllowed;
+	public Integer getMaxGamePlayersAllowed() {
+		return MaxGamePlayersAllowed;
 	}
 
-	public void setMaxPlayersAllowed(Integer maxPlayersAllowed) {
-		MaxPlayersAllowed = maxPlayersAllowed;
+	public void setMaxGamePlayersAllowed(Integer maxGamePlayersAllowed) {
+		MaxGamePlayersAllowed = maxGamePlayersAllowed;
 	}
 	
-	public Boolean addPlayer(Player p)
+	public Boolean addGamePlayer(GamePlayer p)
 	{
-		if (this.getPlayers().size() < this.getMaxPlayersAllowed())
+		if (this.getGamePlayers().size() < this.getMaxGamePlayersAllowed())
 		{
-			this.getPlayers().add(p);
+			this.getGamePlayers().add(p);
 			
 			return true;
 		}
