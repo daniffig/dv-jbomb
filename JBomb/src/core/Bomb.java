@@ -2,24 +2,24 @@ package core;
 
 public class Bomb {
 
-	private Integer DetonationMilliseconds;
-	private Integer CurrentMilliseconds;
+	private Long DetonationMilliseconds;
+	private Long CurrentMilliseconds;
 	private GamePlayer LastPlayer;
 	private GamePlayer CurrentPlayer;
 
-	public Integer getDetonationMilliseconds() {
+	public Long getDetonationMilliseconds() {
 		return DetonationMilliseconds;
 	}
 
-	public void setDetonationMilliseconds(Integer detonationMilliseconds) {
+	public void setDetonationMilliseconds(Long detonationMilliseconds) {
 		DetonationMilliseconds = detonationMilliseconds;
 	}
 
-	public Integer getCurrentMilliseconds() {
+	public Long getCurrentMilliseconds() {
 		return CurrentMilliseconds;
 	}
 
-	public void setCurrentMilliseconds(Integer currentMilliseconds) {
+	public void setCurrentMilliseconds(Long currentMilliseconds) {
 		CurrentMilliseconds = currentMilliseconds;
 	}
 
