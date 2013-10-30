@@ -14,6 +14,7 @@ import core.*;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -50,6 +51,7 @@ public class GamePlayView {
 		this.Grafo.addEdge("Edge-B", "Lucio", "Jugador 1");
 		this.Grafo.addEdge("Edge-c", "Jugador 1", "Duilio");
 		this.Grafo.addEdge("Edge-D", "Duilio", "Andres");
+		//this.Game.start();
 		//this.Grafo = this.Game.getGraph();
 		
 		Layout<String, String> layout = new CircleLayout(this.Grafo);
@@ -66,17 +68,33 @@ public class GamePlayView {
 		contentPanel.setLayout(new FlowLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
+		final JLabel resultado_jugada = new JLabel("");
+		contentPane.add(resultado_jugada, BorderLayout.NORTH);
+		
 		JButton okButton = new JButton("Siguiente Jugada");
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//TODO
-				//boolean resultado = Game.play();
+				String msj = "El Jugador " + Game.getBomb().getCurrentPlayer().getName() + " respondió ";
+				boolean resultado = Game.play();
+				if(resultado)
+				{
+					msj += " mal.";
+				}
+				else
+				{
+					msj += " bien y le pasó la bomba al Jugador " + Game.getBomb().getCurrentPlayer().getName();
+				}
+				resultado_jugada.setText(msj);
+				
 				//Grafo = Game.getGraph();
 			}
 		});
 		contentPanel.add(vv);
 		contentPane.add(contentPanel, BorderLayout.CENTER);
-
+		
+		
+		
 		JPanel buttonPane = new JPanel();
 		buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		contentPane.add(buttonPane, BorderLayout.SOUTH);
