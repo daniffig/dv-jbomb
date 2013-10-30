@@ -1,4 +1,5 @@
 /bin
 
 !Jung/*.jar
+!DataBinding/*.jar
 
