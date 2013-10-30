@@ -40,11 +40,11 @@ public class JBombMainView {
 	private JFrame frmJbombV;
 	private JTextField newGamePlayerInput;
 	private JTextField maxGamePlayersAllowedInput;
-	private JTextField textField_2;
+	private JTextField roundQtyInput;
 
 	private Game Game = new Game();
 	private DefaultListModel<GamePlayer> GamePlayerListModel = new DefaultListModel<GamePlayer>();
-	private JTextField textField;
+	private JTextField roundDurationInput;
 
 	/**
 	 * Launch the application.
@@ -187,9 +187,9 @@ public class JBombMainView {
 		JLabel lblNewLabel = new JLabel("Cantidad de Rondas");
 		panel_1.add(lblNewLabel);
 
-		textField_2 = new JTextField();
-		panel_1.add(textField_2);
-		textField_2.setColumns(10);
+		roundQtyInput = new JTextField();
+		panel_1.add(roundQtyInput);
+		roundQtyInput.setColumns(10);
 
 		final JLabel maxGamePlayersAllowedLabel = new JLabel("");
 		maxGamePlayersAllowedLabel.setBounds(112, 12, 100, 15);
@@ -211,6 +211,14 @@ public class JBombMainView {
 					maxGamePlayersAllowedLabel.setText("max. "
 							+ maxGamePlayersAllowed);
 				}
+				
+				if (!roundDurationInput.getText().isEmpty()
+						&& Integer.valueOf(roundDurationInput.getText()) > 0) {
+					Integer roundDuration = Integer
+							.valueOf(roundDurationInput.getText());
+					
+					Game.setRoundDuration(roundDuration);					
+				}					
 			}
 		});
 		saveGameConfigurationButton.setBounds(665, 259, 117, 25);
@@ -238,9 +246,9 @@ public class JBombMainView {
 		JLabel lblDuracinDeCada = new JLabel("Duración de cada Ronda:");
 		panel_2.add(lblDuracinDeCada);
 
-		textField = new JTextField();
-		panel_2.add(textField);
-		textField.setColumns(10);
+		roundDurationInput = new JTextField();
+		panel_2.add(roundDurationInput);
+		roundDurationInput.setColumns(10);
 
 		JLabel lblSegundos = new JLabel("segundos");
 		panel_2.add(lblSegundos);

@@ -1,6 +1,7 @@
 package core;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -89,6 +90,12 @@ public class Game {
 			Bomb.setCurrentPlayer(destinationGamePlayer);
 		}
 	}
+	
+	public void start()
+	{
+		this.getBomb().setCurrentMilliseconds((new Date()).getTime());
+		this.getBomb().setDetonationMilliseconds((new Date()).getTime() + this.getRoundDuration() * 1000);
+	}
 
 	public boolean play() {
 		//Simulo Pregunta-Respuesta correcto/incorrecta de forma aleatoria
@@ -97,8 +104,15 @@ public class Game {
 		
 		if(respuesta_correcta)
 		{
-			//Si respondi� bien le paso la bomba a un vecino random
-			this.sendBomb(this.Bomb.getCurrentPlayer(), this.Bomb.getCurrentPlayer().getRandomNeighbour());
+			if (!this.getBomb().isDetonated())
+			{
+				//Si respondi� bien le paso la bomba a un vecino random
+				this.sendBomb(this.Bomb.getCurrentPlayer(), this.Bomb.getCurrentPlayer().getRandomNeighbour());				
+			}
+			else
+			{
+				
+			}
 		}
 		
 		return respuesta_correcta;

@@ -1,5 +1,7 @@
 package core;
 
+import java.util.Date;
+
 public class Bomb {
 
 	private Long DetonationMilliseconds;
@@ -37,5 +39,10 @@ public class Bomb {
 
 	public void setCurrentPlayer(GamePlayer currentPlayer) {
 		CurrentPlayer = currentPlayer;
+	}
+	
+	public Boolean isDetonated()
+	{
+		return ((new Date()).getTime() >= this.getDetonationMilliseconds());
 	}
 }
