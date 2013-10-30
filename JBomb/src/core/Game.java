@@ -2,6 +2,7 @@ package core;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Game {
 
@@ -72,7 +73,19 @@ public class Game {
 		}
 	}
 
-	public void play() {
-
+	public boolean play() {
+		//Simulo Pregunta-Respuesta correcto/incorrecta de forma aleatoria
+		Random	rnd = new Random();
+		Boolean respuesta_correcta = rnd.nextBoolean();
+		
+		if(respuesta_correcta)
+		{
+			//Si respondió bien le paso la bomba a un vecino random
+			this.sendBomb(this.Bomb.getCurrentPlayer(), this.Bomb.getCurrentPlayer().getRandomNeighbour());
+		}
+		
+		return respuesta_correcta;
 	}
+	
+	
 }
