@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import linkageStrategies.AbstractLinkageStrategy;
+
 public class Game {
 
 	private List<GamePlayer> GamePlayers = new ArrayList<GamePlayer>();
@@ -13,6 +15,7 @@ public class Game {
 	private Integer MaxGamePlayersAllowed = 0;
 	private Integer RoundDuration;
 	private Bomb Bomb = new Bomb();
+	private AbstractLinkageStrategy LinkageStrategy;
 
 	public List<GamePlayer> getGamePlayers() {
 		return GamePlayers;
@@ -62,6 +65,14 @@ public class Game {
 		Bomb = bomb;
 	}
 
+	public AbstractLinkageStrategy getLinkageStrategy() {
+		return LinkageStrategy;
+	}
+
+	public void setLinkageStrategy(AbstractLinkageStrategy linkageStrategy) {
+		LinkageStrategy = linkageStrategy;
+	}
+
 	public Boolean addGamePlayer(GamePlayer p) {
 		if (this.canAddPlayer()) {
 			this.getGamePlayers().add(p);
@@ -95,6 +106,8 @@ public class Game {
 	{
 		this.getBomb().setCurrentMilliseconds((new Date()).getTime());
 		this.getBomb().setDetonationMilliseconds((new Date()).getTime() + this.getRoundDuration() * 1000);
+		
+		this.getLinkageStrategy().link(this.getGamePlayers());
 	}
 
 	public boolean play() {

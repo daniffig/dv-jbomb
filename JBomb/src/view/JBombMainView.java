@@ -35,6 +35,9 @@ import java.awt.event.InputMethodEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
 
+import linkageStrategies.AbstractLinkageStrategy;
+import linkageStrategies.RingLinkageStrategy;
+
 public class JBombMainView {
 
 	private JFrame frmJbombV;
@@ -45,6 +48,7 @@ public class JBombMainView {
 	private Game Game = new Game();
 	private DefaultListModel<GamePlayer> GamePlayerListModel = new DefaultListModel<GamePlayer>();
 	private JTextField roundDurationInput;
+	private JList<AbstractLinkageStrategy> linkageStrategiesList;
 
 	/**
 	 * Launch the application.
@@ -218,10 +222,14 @@ public class JBombMainView {
 							.valueOf(roundDurationInput.getText());
 					
 					Game.setRoundDuration(roundDuration);					
-				}					
+				}
+				
+				if (linkageStrategiesList.getSelectedValue() != null) {
+					Game.setLinkageStrategy(linkageStrategiesList.getSelectedValue());
+				}				
 			}
 		});
-		saveGameConfigurationButton.setBounds(665, 259, 117, 25);
+		saveGameConfigurationButton.setBounds(665, 384, 117, 25);
 		frmJbombV.getContentPane().add(saveGameConfigurationButton);
 
 		JButton btnjugar = new JButton("¡Jugar!");
@@ -252,5 +260,17 @@ public class JBombMainView {
 
 		JLabel lblSegundos = new JLabel("segundos");
 		panel_2.add(lblSegundos);
+		
+		JLabel lblEstrategiaDeArmado = new JLabel("Estrategia de Armado");
+		lblEstrategiaDeArmado.setBounds(224, 259, 558, 15);
+		frmJbombV.getContentPane().add(lblEstrategiaDeArmado);
+		
+		DefaultListModel<AbstractLinkageStrategy> linkageListModel = new DefaultListModel<AbstractLinkageStrategy>();
+		linkageListModel.addElement(new RingLinkageStrategy());
+		
+		linkageStrategiesList = new JList<AbstractLinkageStrategy>(linkageListModel);
+		linkageStrategiesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		linkageStrategiesList.setBounds(234, 286, 548, 86);
+		frmJbombV.getContentPane().add(linkageStrategiesList);
 	}
 }
