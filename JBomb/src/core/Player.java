@@ -3,9 +3,8 @@ package core;
 public class Player {
 
 	private String PlayerName;
-	
-	public String toString()
-	{
+
+	public String toString() {
 		return this.getPlayerName();
 	}
 

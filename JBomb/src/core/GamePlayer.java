@@ -1,35 +1,30 @@
 package core;
 
+import java.util.List;
+
 public class GamePlayer {
 
 	/*
-	private Player Player;
-	
-	public String toString()
-	{
-		return this.getPlayer().toString();
-	}
+	 * private Player Player;
+	 * 
+	 * public String toString() { return this.getPlayer().toString(); }
+	 * 
+	 * public Player getPlayer() { return Player; }
+	 * 
+	 * public void setPlayer(Player player) { Player = player; }
+	 */
 
-	public Player getPlayer() {
-		return Player;
-	}
-
-	public void setPlayer(Player player) {
-		Player = player;
-	}
-	*/
-	
 	private String Name;
-	
-	public GamePlayer(){}
-	
-	public GamePlayer(String name)
-	{
+	private List<GamePlayer> Neighbours;
+
+	public GamePlayer() {
+	}
+
+	public GamePlayer(String name) {
 		this.setName(name);
 	}
-	
-	public String toString()
-	{
+
+	public String toString() {
 		return this.getName();
 	}
 
@@ -40,5 +35,32 @@ public class GamePlayer {
 	public void setName(String name) {
 		Name = name;
 	}
+
+	public List<GamePlayer> getNeighbours() {
+		return Neighbours;
+	}
+
+	public void setNeighbours(List<GamePlayer> neighbours) {
+		Neighbours = neighbours;
+	}
+	
+	public void addNeighbour(GamePlayer gamePlayer)
+	{
+		this.getNeighbours().add(gamePlayer);
+	}
+	
+	public GamePlayer getNeighbour(Integer index)
+	{
+		if (index < this.getNeighbours().size())
+		{
+			return this.getNeighbours().get(index);
+		}
+		
+		return null;
+	}
+	
+	public GamePlayer getRandomNeighbour()
+	{
+		return this.getNeighbour((int)(Math.random() * this.getNeighbours().size()));
+	}
 }
-	 

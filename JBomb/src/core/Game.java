@@ -9,6 +9,7 @@ public class Game {
 	private Integer MaxRounds = 0;
 	private Integer CurrentRound;
 	private Integer MaxGamePlayersAllowed = 0;
+	private Bomb Bomb = new Bomb();
 
 	public List<GamePlayer> getGamePlayers() {
 		return GamePlayers;
@@ -41,21 +42,37 @@ public class Game {
 	public void setMaxGamePlayersAllowed(Integer maxGamePlayersAllowed) {
 		MaxGamePlayersAllowed = maxGamePlayersAllowed;
 	}
-	
-	public Boolean addGamePlayer(GamePlayer p)
-	{
-		if (this.canAddPlayer())
-		{
+
+	public Boolean addGamePlayer(GamePlayer p) {
+		if (this.canAddPlayer()) {
 			this.getGamePlayers().add(p);
-			
+
 			return true;
 		}
-		
+
 		return false;
 	}
-	
-	public Boolean canAddPlayer()
-	{
+
+	public Boolean canAddPlayer() {
 		return this.getGamePlayers().size() < this.getMaxGamePlayersAllowed();
+	}
+
+	public Boolean canSendBomb(GamePlayer sourceGamePlayer,
+			GamePlayer destinationGamePlayer) {
+		// TODO
+
+		return true;
+	}
+
+	public void sendBomb(GamePlayer sourceGamePlayer,
+			GamePlayer destinationGamePlayer) {
+		if (this.canSendBomb(sourceGamePlayer, destinationGamePlayer)) {
+			Bomb.setLastPlayer(sourceGamePlayer);
+			Bomb.setCurrentPlayer(destinationGamePlayer);
+		}
+	}
+
+	public void play() {
+
 	}
 }
