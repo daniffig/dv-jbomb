@@ -219,11 +219,11 @@ public class JBombMainView {
 		JButton btnjugar = new JButton("¡Jugar!");
 		btnjugar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				CurrentGame playWindow = new CurrentGame();
+				GamePlayView playWindow = new GamePlayView(Game);
 				
-				playWindow.pack();
+				playWindow.getDialog().pack();
 
-				playWindow.setVisible(true);
+				playWindow.getDialog().setVisible(true);
 			}
 		});
 		btnjugar.setBounds(665, 536, 117, 25);
