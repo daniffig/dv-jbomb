@@ -10,6 +10,7 @@ public class Game {
 	private Integer MaxRounds = 0;
 	private Integer CurrentRound;
 	private Integer MaxGamePlayersAllowed = 0;
+	private Integer RoundDuration;
 	private Bomb Bomb = new Bomb();
 
 	public List<GamePlayer> getGamePlayers() {
@@ -42,6 +43,22 @@ public class Game {
 
 	public void setMaxGamePlayersAllowed(Integer maxGamePlayersAllowed) {
 		MaxGamePlayersAllowed = maxGamePlayersAllowed;
+	}
+
+	public Integer getRoundDuration() {
+		return RoundDuration;
+	}
+
+	public void setRoundDuration(Integer roundDuration) {
+		RoundDuration = roundDuration;
+	}
+
+	public Bomb getBomb() {
+		return Bomb;
+	}
+
+	public void setBomb(Bomb bomb) {
+		Bomb = bomb;
 	}
 
 	public Boolean addGamePlayer(GamePlayer p) {
@@ -80,7 +97,7 @@ public class Game {
 		
 		if(respuesta_correcta)
 		{
-			//Si respondió bien le paso la bomba a un vecino random
+			//Si respondiï¿½ bien le paso la bomba a un vecino random
 			this.sendBomb(this.Bomb.getCurrentPlayer(), this.Bomb.getCurrentPlayer().getRandomNeighbour());
 		}
 		
