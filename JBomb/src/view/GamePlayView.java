@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
 
@@ -34,6 +36,8 @@ public class GamePlayView {
 
 	private Game Game; 
 	
+	private BasicVisualizationServer<String, String> vv;
+	
 	public GamePlayView(Game g) {
 		this.Game = g;
 		// Prueba del grafo
@@ -46,12 +50,11 @@ public class GamePlayView {
 
 		Layout<String, String> layout = new CircleLayout(this.g);
 		layout.setSize(new Dimension(300, 300));
-		BasicVisualizationServer<String, String> vv = new BasicVisualizationServer<String, String>(
-				layout);
+		vv = new BasicVisualizationServer<String, String>(layout);
 		vv.setPreferredSize(new Dimension(350, 350)); // Sets the viewing area
 														// size
 		vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
-		vv.getRenderer().setVertexRenderer(new MyRenderer());
+		vv.getRenderer().setVertexRenderer(new MyRenderer(this.Game));
 
 		this.dialog.setBounds(100, 100, 500, 500);
 		Container contentPane = this.dialog.getContentPane();
@@ -61,7 +64,12 @@ public class GamePlayView {
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		JButton okButton = new JButton("Siguiente Jugada");
-
+		okButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				System.out.println("Hola Andrés");
+				dialog.getContentPane().removeAll();
+			}
+		});
 		contentPanel.add(vv);
 		contentPane.add(contentPanel, BorderLayout.CENTER);
 
@@ -83,6 +91,14 @@ public class GamePlayView {
 	}
 	
 	static class MyRenderer implements Renderer.Vertex<String, String> {
+		Game Game = new Game();
+		
+		public MyRenderer(Game g)
+		{
+			super();
+			this.Game = g;
+		}
+		
 		@Override
 		public void paintVertex(RenderContext<String, String> rc,
 				Layout<String, String> layout, String vertex) {
@@ -90,6 +106,7 @@ public class GamePlayView {
 			GraphicsDecorator graphicsContext = rc.getGraphicsContext();
 			Point2D center = layout.transform(vertex);
 			Color color = null;
+			//Game.getBomb().getCurrentPlayer().getName()
 			if (vertex.equals("Jugador 1")) {
 				color = new Color(0, 255, 0);
 			} else {
