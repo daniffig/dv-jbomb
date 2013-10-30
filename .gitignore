@@ -4,4 +4,4 @@
 *.war
 *.ear
 
-! JBomb/Jung/*.jar
+!JBomb/Jung/*.jar
