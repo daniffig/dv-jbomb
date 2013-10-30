@@ -14,8 +14,6 @@ import javax.swing.BoxLayout;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 
-import net.miginfocom.swing.MigLayout;
-
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.ListSelectionModel;
