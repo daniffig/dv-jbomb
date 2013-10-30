@@ -1,13 +1,14 @@
 package core;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Game {
 
-	private List<GamePlayer> GamePlayers;
-	private Integer MaxRounds;
+	private List<GamePlayer> GamePlayers = new ArrayList<GamePlayer>();
+	private Integer MaxRounds = 0;
 	private Integer CurrentRound;
-	private Integer MaxGamePlayersAllowed;
+	private Integer MaxGamePlayersAllowed = 0;
 
 	public List<GamePlayer> getGamePlayers() {
 		return GamePlayers;
@@ -43,7 +44,7 @@ public class Game {
 	
 	public Boolean addGamePlayer(GamePlayer p)
 	{
-		if (this.getGamePlayers().size() < this.getMaxGamePlayersAllowed())
+		if (this.canAddPlayer())
 		{
 			this.getGamePlayers().add(p);
 			
@@ -51,5 +52,10 @@ public class Game {
 		}
 		
 		return false;
+	}
+	
+	public Boolean canAddPlayer()
+	{
+		return this.getGamePlayers().size() < this.getMaxGamePlayersAllowed();
 	}
 }

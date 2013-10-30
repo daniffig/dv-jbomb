@@ -4,6 +4,11 @@ public class GamePlayer {
 
 	/*
 	private Player Player;
+	
+	public String toString()
+	{
+		return this.getPlayer().toString();
+	}
 
 	public Player getPlayer() {
 		return Player;
@@ -13,8 +18,15 @@ public class GamePlayer {
 		Player = player;
 	}
 	*/
-	 
+	
 	private String Name;
+	
+	public GamePlayer(){}
+	
+	public GamePlayer(String name)
+	{
+		this.setName(name);
+	}
 	
 	public String toString()
 	{
@@ -29,3 +41,4 @@ public class GamePlayer {
 		Name = name;
 	}
 }
+	 
