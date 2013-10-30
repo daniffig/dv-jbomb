@@ -1,15 +1,14 @@
 package view;
 
-import core.*;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
+
+import core.*;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -26,26 +25,17 @@ import edu.uci.ics.jung.visualization.decorators.ToStringLabeller;
 import edu.uci.ics.jung.visualization.renderers.Renderer;
 import edu.uci.ics.jung.visualization.transform.shape.GraphicsDecorator;
 
-public class CurrentGame extends JDialog {
-
+public class GamePlayView {
 	private final JPanel contentPanel = new JPanel();
-
+	
+	private JDialog dialog = new JDialog();
+	
 	public Graph<String, String> g;
 
 	private Game Game; 
-	/**
-	 * Launch the application.
-	 */
-	/*
-	 * public static void main(String[] args) { try { CurrentGame dialog = new
-	 * CurrentGame(); dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-	 * dialog.setVisible(true); } catch (Exception e) { e.printStackTrace(); } }
-	 */
-
-	/**
-	 * Create the dialog.
-	 */
-	public CurrentGame() {
+	
+	public GamePlayView(Game g) {
+		this.Game = g;
 		// Prueba del grafo
 		this.g = new SparseMultigraph<String, String>();
 		this.g.addVertex("Jugador 1");
@@ -63,8 +53,8 @@ public class CurrentGame extends JDialog {
 		vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
 		vv.getRenderer().setVertexRenderer(new MyRenderer());
 
-		setBounds(100, 100, 500, 500);
-		Container contentPane = getContentPane();
+		this.dialog.setBounds(100, 100, 500, 500);
+		Container contentPane = this.dialog.getContentPane();
 
 		contentPane.setLayout(new BorderLayout());
 		contentPanel.setLayout(new FlowLayout());
@@ -82,6 +72,16 @@ public class CurrentGame extends JDialog {
 
 	}
 
+	public JDialog getDialog()
+	{
+		return this.dialog;
+	}
+	
+	public void setDialog(JDialog dialog)
+	{
+		this.dialog = dialog;
+	}
+	
 	static class MyRenderer implements Renderer.Vertex<String, String> {
 		@Override
 		public void paintVertex(RenderContext<String, String> rc,
@@ -101,5 +101,4 @@ public class CurrentGame extends JDialog {
 					center.getY() - 10, 20, 20));
 		}
 	}
-
 }
