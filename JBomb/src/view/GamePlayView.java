@@ -76,8 +76,8 @@ public class GamePlayView {
 					msj += " bien y le pas� la bomba al Jugador " + Game.getBomb().getCurrentPlayer().getName();
 				}
 				resultado_jugada.setText(msj);
-				
-				//Grafo = Game.getGraph();
+
+				Grafo = Game.getGraph();
 			}
 		});
 		contentPanel.add(vv);
