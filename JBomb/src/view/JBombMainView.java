@@ -89,10 +89,17 @@ public class JBombMainView {
 		scrollPane.setBounds(12, 39, 200, 485);
 		frmJbombV.getContentPane().add(scrollPane);
 				
-		JList<GamePlayer> gamePlayersList = new JList<GamePlayer>(GamePlayerListModel);
+		final JList<GamePlayer> gamePlayersList = new JList<GamePlayer>(GamePlayerListModel);
 		scrollPane.setViewportView(gamePlayersList);
 		
 		JButton btnEliminar = new JButton("Eliminar");
+		btnEliminar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Game.getGamePlayers().remove(GamePlayerListModel.get(gamePlayersList.getSelectedIndex()));
+				
+				GamePlayerListModel.remove(gamePlayersList.getSelectedIndex());
+			}
+		});
 		btnEliminar.setBounds(12, 536, 117, 25);
 		frmJbombV.getContentPane().add(btnEliminar);
 		
@@ -200,5 +207,9 @@ public class JBombMainView {
 		});
 		saveGameConfigurationButton.setBounds(665, 222, 117, 25);
 		frmJbombV.getContentPane().add(saveGameConfigurationButton);
+		
+		JButton btnjugar = new JButton("¡Jugar!");
+		btnjugar.setBounds(665, 536, 117, 25);
+		frmJbombV.getContentPane().add(btnjugar);
 	}
 }
