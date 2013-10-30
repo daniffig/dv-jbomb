@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.SparseMultigraph;
 import linkageStrategies.AbstractLinkageStrategy;
 
 public class Game {
@@ -129,6 +131,25 @@ public class Game {
 		}
 		
 		return respuesta_correcta;
+	}
+	
+	public Graph<String, String> getGraph()
+	{
+		Graph<String, String> g = new SparseMultigraph<String, String>();
+		
+		for(GamePlayer gp: this.GamePlayers)
+		{
+			g.addVertex(gp.getName());
+		}
+		
+		for(GamePlayer gp: this.GamePlayers)
+		{
+			for(GamePlayer nb: gp.getNeighbours())
+			{
+				g.addEdge("conexion", gp.getName(), nb.getName());
+			}
+		}
+		return g;
 	}
 	
 	

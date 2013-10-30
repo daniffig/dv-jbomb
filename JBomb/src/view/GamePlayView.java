@@ -32,7 +32,7 @@ public class GamePlayView {
 	
 	private JDialog dialog = new JDialog();
 	
-	public Graph<String, String> g;
+	public Graph<String, String> Grafo = new SparseMultigraph<String, String>();
 
 	private Game Game; 
 	
@@ -41,18 +41,21 @@ public class GamePlayView {
 	public GamePlayView(Game g) {
 		this.Game = g;
 		// Prueba del grafo
-		this.g = new SparseMultigraph<String, String>();
-		this.g.addVertex("Jugador 1");
-		this.g.addVertex("Jugador 2");
-		this.g.addVertex("Jugador 3");
-		this.g.addEdge("Edge-A", "Jugador 1", "Jugador 2");
-		this.g.addEdge("Edge-B", "Jugador 2", "Jugador 3");
-
-		Layout<String, String> layout = new CircleLayout(this.g);
+		this.Grafo = new SparseMultigraph<String, String>();
+		this.Grafo.addVertex("Andres");
+		this.Grafo.addVertex("Lucio");
+		this.Grafo.addVertex("Jugador 1");
+		this.Grafo.addVertex("Duilio");
+		this.Grafo.addEdge("Edge-A", "Andres", "Lucio");
+		this.Grafo.addEdge("Edge-B", "Lucio", "Jugador 1");
+		this.Grafo.addEdge("Edge-c", "Jugador 1", "Duilio");
+		this.Grafo.addEdge("Edge-D", "Duilio", "Andres");
+		//this.Grafo = this.Game.getGraph();
+		
+		Layout<String, String> layout = new CircleLayout(this.Grafo);
 		layout.setSize(new Dimension(300, 300));
 		vv = new BasicVisualizationServer<String, String>(layout);
-		vv.setPreferredSize(new Dimension(350, 350)); // Sets the viewing area
-														// size
+		vv.setPreferredSize(new Dimension(350, 350)); 
 		vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
 		vv.getRenderer().setVertexRenderer(new MyRenderer(this.Game));
 
@@ -66,8 +69,9 @@ public class GamePlayView {
 		JButton okButton = new JButton("Siguiente Jugada");
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Hola Andrés");
-				dialog.getContentPane().removeAll();
+				//TODO
+				//boolean resultado = Game.play();
+				//Grafo = Game.getGraph();
 			}
 		});
 		contentPanel.add(vv);
@@ -106,7 +110,6 @@ public class GamePlayView {
 			GraphicsDecorator graphicsContext = rc.getGraphicsContext();
 			Point2D center = layout.transform(vertex);
 			Color color = null;
-			//Game.getBomb().getCurrentPlayer().getName()
 			if (vertex.equals("Jugador 1")) {
 				color = new Color(0, 255, 0);
 			} else {
