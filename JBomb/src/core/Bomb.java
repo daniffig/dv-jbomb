@@ -43,6 +43,8 @@ public class Bomb {
 	
 	public Boolean isDetonated()
 	{
-		return ((new Date()).getTime() >= this.getDetonationMilliseconds());
+		//return ((new Date()).getTime() >= this.getDetonationMilliseconds());
+		// TODO
+		return false;
 	}
 }

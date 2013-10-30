@@ -41,18 +41,8 @@ public class GamePlayView {
 	
 	public GamePlayView(Game g) {
 		this.Game = g;
-		// Prueba del grafo
-		this.Grafo = new SparseMultigraph<String, String>();
-		this.Grafo.addVertex("Andres");
-		this.Grafo.addVertex("Lucio");
-		this.Grafo.addVertex("Jugador 1");
-		this.Grafo.addVertex("Duilio");
-		this.Grafo.addEdge("Edge-A", "Andres", "Lucio");
-		this.Grafo.addEdge("Edge-B", "Lucio", "Jugador 1");
-		this.Grafo.addEdge("Edge-c", "Jugador 1", "Duilio");
-		this.Grafo.addEdge("Edge-D", "Duilio", "Andres");
-		//this.Game.start();
-		//this.Grafo = this.Game.getGraph();
+		this.Game.start();
+		this.Grafo = this.Game.getGraph();
 		
 		Layout<String, String> layout = new CircleLayout(this.Grafo);
 		layout.setSize(new Dimension(300, 300));
@@ -75,7 +65,7 @@ public class GamePlayView {
 		okButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//TODO
-				String msj = "El Jugador " + Game.getBomb().getCurrentPlayer().getName() + " respondió ";
+				String msj = "El Jugador " + Game.getBomb().getCurrentPlayer().getName() + " respondiï¿½ ";
 				boolean resultado = Game.play();
 				if(resultado)
 				{
@@ -83,7 +73,7 @@ public class GamePlayView {
 				}
 				else
 				{
-					msj += " bien y le pasó la bomba al Jugador " + Game.getBomb().getCurrentPlayer().getName();
+					msj += " bien y le pasï¿½ la bomba al Jugador " + Game.getBomb().getCurrentPlayer().getName();
 				}
 				resultado_jugada.setText(msj);
 				
@@ -128,7 +118,7 @@ public class GamePlayView {
 			GraphicsDecorator graphicsContext = rc.getGraphicsContext();
 			Point2D center = layout.transform(vertex);
 			Color color = null;
-			if (vertex.equals("Jugador 1")) {
+			if (vertex.equals(this.Game.getBomb().getCurrentPlayer().getName())) {
 				color = new Color(0, 255, 0);
 			} else {
 				color = new Color(255, 0, 0);

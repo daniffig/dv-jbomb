@@ -1,5 +1,6 @@
 package core;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GamePlayer {
@@ -15,7 +16,7 @@ public class GamePlayer {
 	 */
 
 	private String Name;
-	private List<GamePlayer> Neighbours;
+	private List<GamePlayer> Neighbours = new ArrayList<GamePlayer>();
 
 	public GamePlayer() {
 	}

@@ -86,7 +86,7 @@ public class Game {
 	}
 
 	public Boolean canAddPlayer() {
-		return this.getGamePlayers().size() < this.getMaxGamePlayersAllowed();
+		return this.getGamePlayers().size() <= this.getMaxGamePlayersAllowed();
 	}
 
 	public Boolean canSendBomb(GamePlayer sourceGamePlayer,
@@ -106,9 +106,11 @@ public class Game {
 	
 	public void start()
 	{
-		this.getBomb().setCurrentMilliseconds((new Date()).getTime());
-		this.getBomb().setDetonationMilliseconds((new Date()).getTime() + this.getRoundDuration() * 1000);
-		
+		//TODO
+		//this.getBomb().setCurrentMilliseconds((new Date()).getTime());
+		//this.getBomb().setDetonationMilliseconds((new Date()).getTime() + this.getRoundDuration() * 1000);
+		this.getBomb().setLastPlayer(null);
+		this.getBomb().setCurrentPlayer(this.getGamePlayers().get((int)(Math.random() * this.getGamePlayers().size())));
 		this.getLinkageStrategy().link(this.getGamePlayers());
 	}
 
@@ -123,10 +125,6 @@ public class Game {
 			{
 				//Si respondi� bien le paso la bomba a un vecino random
 				this.sendBomb(this.Bomb.getCurrentPlayer(), this.Bomb.getCurrentPlayer().getRandomNeighbour());				
-			}
-			else
-			{
-				
 			}
 		}
 		
@@ -146,7 +144,10 @@ public class Game {
 		{
 			for(GamePlayer nb: gp.getNeighbours())
 			{
-				g.addEdge("conexion", gp.getName(), nb.getName());
+				if(!g.containsEdge(nb.getName()+gp.getName()))
+				{
+					g.addEdge(gp.getName()+nb.getName() , gp.getName(), nb.getName());
+				}
 			}
 		}
 		return g;

@@ -13,9 +13,9 @@ public class RingLinkageStrategy extends AbstractLinkageStrategy {
 
 	@Override
 	public void link(List<GamePlayer> gamePlayers) {
-		for (int i = 0; i < gamePlayers.size() - 1; i++)
+		for (int i = 0; i < gamePlayers.size(); i++)
 		{
-			gamePlayers.get(i).addNeighbour(gamePlayers.get(i + 1));
+			gamePlayers.get(i).addNeighbour(gamePlayers.get((i+1)%gamePlayers.size()));
 		}
 	}
 		
