@@ -5,22 +5,15 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import java.awt.BorderLayout;
-
 import javax.swing.JLabel;
 import javax.swing.JList;
-import javax.swing.BoxLayout;
-
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.ListSelectionModel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.JTabbedPane;
 import javax.swing.JSeparator;
 import javax.swing.SwingConstants;
 
@@ -34,9 +27,16 @@ import java.awt.event.InputMethodListener;
 import java.awt.event.InputMethodEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeEvent;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
+import java.util.Vector;
 
 import linkageStrategies.AbstractLinkageStrategy;
 import linkageStrategies.RingLinkageStrategy;
+
+import javax.swing.JComboBox;
 
 public class JBombMainView {
 
@@ -272,5 +272,54 @@ public class JBombMainView {
 		linkageStrategiesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		linkageStrategiesList.setBounds(234, 286, 548, 86);
 		frmJbombV.getContentPane().add(linkageStrategiesList);
+		
+		JButton btnConfigurarPreguntas = new JButton("Avanzado");
+		btnConfigurarPreguntas.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		btnConfigurarPreguntas.setBounds(655, 36, 117, 25);
+		frmJbombV.getContentPane().add(btnConfigurarPreguntas);
+		
+
+		
+		Quiz[] Q =
+		{
+				new Quiz("Preguntas 01"),
+				new Quiz("Preguntas 02"),
+				new Quiz("Preguntas 03"),
+				new Quiz("Preguntas 04")
+		};
+		
+		ComboBoxModel<Quiz> Quizzes = new DefaultComboBoxModel<Quiz>(Q);
+		
+		JComboBox<Quiz> comboBox = new JComboBox<Quiz>(Quizzes);
+		comboBox.setBounds(436, 36, 207, 24);
+		frmJbombV.getContentPane().add(comboBox);
+		
+		Vector<InetAddress> InetAddressList = new Vector<InetAddress>();
+
+		try {
+			for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
+				NetworkInterface intf = en.nextElement();
+			    for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
+			    	InetAddress ipAddr = enumIpAddr.nextElement();
+			    	
+			    	// Que el Dios de los Objetos me perdone por esto...
+			    	if (ipAddr.getClass().getSimpleName().equals("Inet4Address"))
+			    	{
+			    		InetAddressList.add(ipAddr);
+			    	}
+			    }
+			}
+		} catch (SocketException e) {
+			System.out.println(" (error retrieving network interface list)");
+		}
+		
+		ComboBoxModel<InetAddress> InetAddressesComboBoxModel = new DefaultComboBoxModel<InetAddress>(InetAddressList);
+		
+		final JComboBox<InetAddress> comboBox_1 = new JComboBox<InetAddress>(InetAddressesComboBoxModel);
+		comboBox_1.setBounds(436, 70, 207, 24);
+		frmJbombV.getContentPane().add(comboBox_1);		
 	}
 }
