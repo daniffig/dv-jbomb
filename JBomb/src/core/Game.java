@@ -1,5 +1,6 @@
 package core;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -11,6 +12,8 @@ import linkageStrategies.AbstractLinkageStrategy;
 public class Game {
 
 	private String Name;
+	private InetAddress InetIPAddress;
+	private	Integer InetPort;
 	private List<GamePlayer> GamePlayers = new ArrayList<GamePlayer>();
 	private Integer MaxRounds = 0;
 	private Integer CurrentRound;
@@ -19,9 +22,19 @@ public class Game {
 	private Bomb Bomb = new Bomb();
 	private AbstractLinkageStrategy LinkageStrategy;
 	
+	public Game()
+	{
+		
+	}
+	
 	public Game (String name)
 	{
 		this.setName(name);
+	}
+	
+	public Game (Game Game)
+	{
+		this.setName(Game.getName());
 	}
 	
 	public String getName() {
@@ -30,6 +43,22 @@ public class Game {
 
 	public void setName(String name) {
 		this.Name = name;
+	}
+	
+	public InetAddress getInetIPAddress() {
+		return InetIPAddress;
+	}
+
+	public void setInetIPAddress(InetAddress inetIPAddress) {
+		InetIPAddress = inetIPAddress;
+	}
+
+	public Integer getInetPort() {
+		return InetPort;
+	}
+
+	public void setInetPort(Integer inetPort) {
+		InetPort = inetPort;
 	}
 
 	public List<GamePlayer> getGamePlayers() {
@@ -166,5 +195,14 @@ public class Game {
 		return g;
 	}
 	
+	public Boolean isValid()
+	{
+		return true;
+	}
+	
+	public void deepCopy(Game newGame)
+	{
+		this.setName(newGame.getName());
+	}
 	
 }

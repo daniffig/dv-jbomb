@@ -1,5 +1,7 @@
 package view;
 
+import core.*;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -24,12 +26,21 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.AutoBinding;
+import org.jdesktop.beansbinding.Bindings;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class JBombServerGameFormView extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField GameNameTextField;
 	private JTextField GamePortTextField;
+	
+	private Game OldGame;
+	private Game NewGame;
 
 	/**
 	 * Launch the application.
@@ -38,7 +49,7 @@ public class JBombServerGameFormView extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					JBombServerGameFormView frame = new JBombServerGameFormView();
+					JBombServerGameFormView frame = new JBombServerGameFormView(new Game());
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -50,10 +61,14 @@ public class JBombServerGameFormView extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public JBombServerGameFormView() {
+	public JBombServerGameFormView(Game Game) {
+		
+		this.setOldGame(Game);
+		this.setNewGame(new Game(Game));
+		
 		setTitle("JBomb - Configuración del Juego");
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 320, 380);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -133,7 +148,7 @@ public class JBombServerGameFormView extends JFrame {
 			    	InetAddress ipAddr = enumIpAddr.nextElement();
 			    	
 			    	// Que el Dios de los Objetos me perdone por esto...
-			    	if (ipAddr.getClass().getSimpleName().equals("Inet4Address"))
+			    	if (ipAddr.getClass().getSimpleName().equals("Inet4Address") && !ipAddr.isLoopbackAddress())
 			    	{
 			    		InetAddressVector.add(ipAddr);
 			    	}
@@ -171,11 +186,49 @@ public class JBombServerGameFormView extends JFrame {
 		panel.add(comboBox_1);
 		
 		JButton btnNewButton = new JButton("Guardar");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (NewGame.isValid())
+				{
+					OldGame.deepCopy(NewGame);
+					
+					
+				}
+			}
+		});
 		btnNewButton.setBounds(185, 318, 117, 25);
 		contentPane.add(btnNewButton);
 		
 		JButton btnNewButton_1 = new JButton("Cancelar");
 		btnNewButton_1.setBounds(12, 318, 117, 25);
 		contentPane.add(btnNewButton_1);
+		initDataBindings();
+	}
+
+	public Game getOldGame() {
+		return OldGame;
+	}
+
+	public void setOldGame(Game oldGame) {
+		OldGame = oldGame;
+	}
+
+	public Game getNewGame() {
+		return NewGame;
+	}
+
+	public void setNewGame(Game newGame) {
+		NewGame = newGame;
+	}
+	protected void initDataBindings() {
+		BeanProperty<Game, String> gameBeanProperty = BeanProperty.create("name");
+		BeanProperty<JTextField, String> jTextFieldBeanProperty = BeanProperty.create("text");
+		AutoBinding<Game, String, JTextField, String> autoBinding = Bindings.createAutoBinding(UpdateStrategy.READ_WRITE, OldGame, gameBeanProperty, GameNameTextField, jTextFieldBeanProperty);
+		autoBinding.bind();
+		//
+		BeanProperty<Game, Integer> gameBeanProperty_1 = BeanProperty.create("inetPort");
+		BeanProperty<JTextField, String> jTextFieldBeanProperty_1 = BeanProperty.create("text");
+		AutoBinding<Game, Integer, JTextField, String> autoBinding_1 = Bindings.createAutoBinding(UpdateStrategy.READ_WRITE, NewGame, gameBeanProperty_1, GamePortTextField, jTextFieldBeanProperty_1);
+		autoBinding_1.bind();
 	}
 }
