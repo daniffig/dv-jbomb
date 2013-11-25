@@ -10,6 +10,7 @@ import linkageStrategies.AbstractLinkageStrategy;
 
 public class Game {
 
+	private String Name;
 	private List<GamePlayer> GamePlayers = new ArrayList<GamePlayer>();
 	private Integer MaxRounds = 0;
 	private Integer CurrentRound;
@@ -17,6 +18,19 @@ public class Game {
 	private Integer RoundDuration;
 	private Bomb Bomb = new Bomb();
 	private AbstractLinkageStrategy LinkageStrategy;
+	
+	public Game (String name)
+	{
+		this.setName(name);
+	}
+	
+	public String getName() {
+		return Name;
+	}
+
+	public void setName(String name) {
+		this.Name = name;
+	}
 
 	public List<GamePlayer> getGamePlayers() {
 		return GamePlayers;
