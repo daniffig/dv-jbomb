@@ -65,17 +65,15 @@ public class JBombServerMainView {
 		
 		Vector<String> GameFields = new Vector<String>();
 		
-		GameFields.add("Name");
+		GameFields.add("Nombre");
 		
 		Vector<Vector<Object>> GameVector = new Vector<Vector<Object>>();
 		
-		for (int i = 0; i < Games.size(); i++)
-		{
-			Game Game = Games.elementAt(i);
-			
+		for (Game g : Games)
+		{			
 			Vector<Object> v = new Vector<Object>();
 			
-			v.add(Game.getName());
+			v.add(g.getName());
 			
 			GameVector.add(v);
 		}

@@ -1,22 +1,33 @@
 package view;
 
+import core.*;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
+import java.util.Vector;
 
 public class QuizFormView extends JFrame {
 
 	private JPanel contentPane;
-	private JTable table;
+	private AbstractTableModel QuizQuestionsTableModel;
+	private JTable QuizQuestionsTable;
+	
+	private Quiz Quiz;
 
 	/**
 	 * Launch the application.
@@ -51,38 +62,75 @@ public class QuizFormView extends JFrame {
 		contentPane.add(lblNewLabel);
 		
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent arg0) {
+			}
+		});
 		scrollPane.setBounds(12, 39, 309, 222);
 		contentPane.add(scrollPane);
 		
-		table = new JTable();
-		scrollPane.setViewportView(table);
+		this.Quiz = new Quiz("Cuestionario 01");
 		
-		JButton btnNueva = new JButton("Nueva");
-		btnNueva.addActionListener(new ActionListener() {
+		QuizQuestion q = new QuizQuestion("Fede!");
+		q.addAnswer("Fede");
+		q.addAnswer("Te queremos");
+		q.setCorrectAnswer(0);
+		
+		this.Quiz.addQuizQuestion(q);
+		
+		Vector<String> QuizQuestionFields = new Vector<String>();
+		
+		QuizQuestionFields.add("Pregunta");
+		QuizQuestionFields.add("Respuesta");
+		
+		Vector<Vector<Object>> QuizQuestionVector = new Vector<Vector<Object>>();
+		
+		for (QuizQuestion qq : this.Quiz.getQuizQuestions())
+		{
+			Vector<Object> v = new Vector<Object>();
+			
+			v.add(qq.getQuestion());
+			v.add(qq.getAnswer(qq.getCorrectAnswer()));
+			
+			QuizQuestionVector.add(v);			
+		}
+		
+		this.QuizQuestionsTableModel = new DefaultTableModel(QuizQuestionVector, QuizQuestionFields);
+		
+		QuizQuestionsTable = new JTable(QuizQuestionsTableModel);
+		scrollPane.setViewportView(QuizQuestionsTable);
+		
+		JButton btnQuizQuestionNew = new JButton("Nueva");
+		btnQuizQuestionNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				QuizQuestionFormView QuizQuestionFormView = new QuizQuestionFormView();
+				QuizQuestionFormView QuizQuestionFormView = new QuizQuestionFormView(QuizFormView.this);
 				
 				QuizQuestionFormView.setVisible(true);
 			}
 		});
-		btnNueva.setBounds(333, 40, 99, 25);
-		contentPane.add(btnNueva);
+		btnQuizQuestionNew.setBounds(333, 40, 99, 25);
+		contentPane.add(btnQuizQuestionNew);
 		
-		JButton btnEditar = new JButton("Modificar");
-		btnEditar.addActionListener(new ActionListener() {
+		JButton btnQuizQuestionEdit = new JButton("Modificar");
+		btnQuizQuestionEdit.setEnabled(false);
+		btnQuizQuestionEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnEditar.setBounds(333, 77, 99, 25);
-		contentPane.add(btnEditar);
+		btnQuizQuestionEdit.setBounds(333, 77, 99, 25);
+		contentPane.add(btnQuizQuestionEdit);
 		
-		JButton btnEliminar = new JButton("Eliminar");
-		btnEliminar.setBounds(333, 114, 99, 25);
-		contentPane.add(btnEliminar);
+		JButton btnQuizQuestionDelete = new JButton("Eliminar");
+		btnQuizQuestionDelete.setBounds(333, 114, 99, 25);
+		contentPane.add(btnQuizQuestionDelete);
 		
-		JButton btnGuardar = new JButton("Guardar");
-		btnGuardar.setBounds(333, 236, 99, 25);
-		contentPane.add(btnGuardar);
+		JButton btnQuizSave = new JButton("Guardar");
+		btnQuizSave.setBounds(333, 236, 99, 25);
+		contentPane.add(btnQuizSave);
 	}
-
+	
+	public void updateQuizQuestionsTable()
+	{
+		this.QuizQuestionsTableModel.fireTableDataChanged();
+	}
 }

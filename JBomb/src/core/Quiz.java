@@ -44,5 +44,6 @@ public class Quiz {
 	
 	public void addQuizQuestion(QuizQuestion quizQuestion) {
 		this.getQuizQuestions().add(quizQuestion);
+		quizQuestion.setQuiz(this);
 	}
 }
