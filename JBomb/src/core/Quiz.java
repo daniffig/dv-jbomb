@@ -1,14 +1,13 @@
 package core;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Vector;
 
 public class Quiz {
 
 	private String Title;
 	private String Filename;
 
-	private List<QuizQuestion> QuizQuestions = new ArrayList<QuizQuestion>();
+	private Vector<QuizQuestion> QuizQuestions = new Vector<QuizQuestion>();
 	
 	public Quiz(String title) {
 		this.Title = title;
@@ -34,12 +33,17 @@ public class Quiz {
 		Filename = filename;
 	}
 
-	public List<QuizQuestion> getQuizQuestions() {
+	public Vector<QuizQuestion> getQuizQuestions() {
 		return QuizQuestions;
 	}
 
-	public void setQuizQuestions(List<QuizQuestion> quizQuestions) {
+	public void setQuizQuestions(Vector<QuizQuestion> quizQuestions) {
 		QuizQuestions = quizQuestions;
+		
+		for (QuizQuestion qq : this.getQuizQuestions())
+		{
+			qq.setQuiz(this);
+		}
 	}
 	
 	public void addQuizQuestion(QuizQuestion quizQuestion) {

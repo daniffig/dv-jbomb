@@ -5,6 +5,7 @@ import core.*;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTable;
@@ -22,6 +23,11 @@ import javax.swing.table.DefaultTableModel;
 
 import java.awt.Color;
 import java.util.Vector;
+
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.AutoBinding;
+import org.jdesktop.beansbinding.Bindings;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 public class QuizQuestionFormView extends JFrame {
 
@@ -115,10 +121,34 @@ public class QuizQuestionFormView extends JFrame {
 		JButton btnQuizQuestionSave = new JButton("Guardar");
 		btnQuizQuestionSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				/*
+					JOptionPane.showMessageDialog(QuizQuestionFormView.this,
+						    "Debe marcar alguna respuesta como válida.",
+						    "Datos incorrectos",
+						    JOptionPane.WARNING_MESSAGE);
+				*/
+										
+				
+				
 				if (QuizFormView != null)
 				{
+					Vector<String> qa = new Vector<String>();
+					Integer ca = -1;
 					
-					QuizFormView.updateQuizQuestionsTable();					
+					for (int i = 0; i < QuizQuestionFormView.this.QuizAnswerTable.getRowCount(); i++)
+					{
+						qa.add(QuizQuestionFormView.this.QuizAnswerTable.getValueAt(i, 0).toString());
+						
+						if ((Boolean)QuizQuestionFormView.this.QuizAnswerTable.getValueAt(i, 1))
+						{
+							ca = i;
+						}
+					}
+					
+					QuizQuestionFormView.this.QuizQuestion.setAnswers(qa);
+					QuizQuestionFormView.this.QuizQuestion.setCorrectAnswer(ca);					
+					
+					QuizFormView.addQuizQuestion(QuizQuestionFormView.this.QuizQuestion);					
 				}
 				
 				QuizQuestionFormView.this.dispose();
@@ -225,6 +255,7 @@ public class QuizQuestionFormView extends JFrame {
 				
 			}
 		});
+		initDataBindings();
 	}
 
 	public QuizQuestion getQuizQuestion() {
@@ -235,4 +266,10 @@ public class QuizQuestionFormView extends JFrame {
 		QuizQuestion = quizQuestion;
 	}
 
+	protected void initDataBindings() {
+		BeanProperty<QuizQuestion, String> quizQuestionBeanProperty = BeanProperty.create("question");
+		BeanProperty<JTextField, String> jTextFieldBeanProperty = BeanProperty.create("text");
+		AutoBinding<QuizQuestion, String, JTextField, String> autoBinding = Bindings.createAutoBinding(UpdateStrategy.READ_WRITE, QuizQuestion, quizQuestionBeanProperty, QuizQuestionTextField, jTextFieldBeanProperty);
+		autoBinding.bind();
+	}
 }

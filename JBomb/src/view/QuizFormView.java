@@ -28,6 +28,7 @@ public class QuizFormView extends JFrame {
 	private JTable QuizQuestionsTable;
 	
 	private Quiz Quiz;
+	private Vector<Vector<Object>> QuizQuestionVector;
 
 	/**
 	 * Launch the application.
@@ -83,7 +84,7 @@ public class QuizFormView extends JFrame {
 		QuizQuestionFields.add("Pregunta");
 		QuizQuestionFields.add("Respuesta");
 		
-		Vector<Vector<Object>> QuizQuestionVector = new Vector<Vector<Object>>();
+		QuizQuestionVector = new Vector<Vector<Object>>();
 		
 		for (QuizQuestion qq : this.Quiz.getQuizQuestions())
 		{
@@ -125,12 +126,27 @@ public class QuizFormView extends JFrame {
 		contentPane.add(btnQuizQuestionDelete);
 		
 		JButton btnQuizSave = new JButton("Guardar");
+		btnQuizSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnQuizSave.setBounds(333, 236, 99, 25);
 		contentPane.add(btnQuizSave);
 	}
 	
-	public void updateQuizQuestionsTable()
+	public void addQuizQuestion(QuizQuestion QuizQuestion)
 	{
+		Vector<Object> v = new Vector<Object>();
+		
+		v.add(QuizQuestion.getQuestion());
+		v.add(QuizQuestion.getAnswer(QuizQuestion.getCorrectAnswer()));
+		
+		this.QuizQuestionVector.add(v);
+		
 		this.QuizQuestionsTableModel.fireTableDataChanged();
+	}
+
+	public Quiz getQuiz() {
+		return Quiz;
 	}
 }
