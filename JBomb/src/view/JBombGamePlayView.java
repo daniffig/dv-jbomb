@@ -8,9 +8,21 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import network.GameClient;
+import javax.swing.JButton;
+import javax.swing.ImageIcon;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import javax.swing.SwingConstants;
+import javax.swing.border.TitledBorder;
+import javax.swing.border.LineBorder;
+import java.awt.Color;
 
 public class JBombGamePlayView extends JFrame{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private GameClient game_client = new GameClient();
 
@@ -35,43 +47,72 @@ public class JBombGamePlayView extends JFrame{
 		setTitle(this.game_client.gameName);
 		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(200, 100, 700, 500);
+		setBounds(200, 100, 700, 600);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JLabel nombre_jugador = new JLabel("Jugador unNombre");
-		nombre_jugador.setBounds(275, 230, 150, 30);
+		nombre_jugador.setBounds(275, 348, 150, 30);
 		contentPane.add(nombre_jugador);
 		
-		JLabel jugador_adelante = new JLabel("Jugador_Adelante");
-		jugador_adelante.setBounds(275, 100, 150, 30);
-		contentPane.add(jugador_adelante);
-		
-		JLabel jugador_derecha = new JLabel("Jugador_Derecha");
-		jugador_derecha.setBounds(475, 230, 150, 30);
+		JLabel jugador_derecha = new JLabel("Jugador 03 (derecha)");
+		jugador_derecha.setBounds(535, 363, 147, 15);
 		contentPane.add(jugador_derecha);
 		
-		JLabel jugador_abajo = new JLabel("Jugador_Abajo");
-		jugador_abajo.setBounds(275, 360, 150, 30);
+		JLabel jugador_abajo = new JLabel("Jugador 04 (abajo)");
+		jugador_abajo.setBounds(275, 531, 150, 30);
 		contentPane.add(jugador_abajo);
 		
-		JLabel jugador_izquierda = new JLabel("Jugador_Izquierda");
-		jugador_izquierda.setBounds(25, 230, 150, 30);
+		JLabel jugador_izquierda = new JLabel("Jugador 05 (izquierda)");
+		jugador_izquierda.setBounds(12, 363, 156, 15);
 		contentPane.add(jugador_izquierda);
 		
+		JPanel panel = new JPanel();
+		panel.setBorder(new TitledBorder(new LineBorder(new Color(184, 207, 229)), "Informaci\u00F3n", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		panel.setBounds(12, 12, 670, 73);
+		contentPane.add(panel);
+		panel.setLayout(null);
+		
 		JLabel notificaciones = new JLabel("Esta es una notificacion de ejemplo porque van a ser de este largo mas o menos");
-		notificaciones.setBounds(150, 20, 500, 30);
-		contentPane.add(notificaciones);
+		notificaciones.setBounds(145, 17, 500, 30);
+		panel.add(notificaciones);
 		
 		JLabel ronda = new JLabel("Ronda: #/#");
-		ronda.setBounds(10,20,80,20);
-		contentPane.add(ronda);
+		ronda.setBounds(5, 17, 80, 20);
+		panel.add(ronda);
 		
 		JLabel cant_jugadores = new JLabel("Cant. Jugadores: ##");
-		cant_jugadores.setBounds(10,40,120,20);
-		contentPane.add(cant_jugadores);
+		cant_jugadores.setBounds(5, 37, 120, 20);
+		panel.add(cant_jugadores);
+		
+		JLabel lblJugador = new JLabel("Jugador 02 (arriba)");
+		lblJugador.setBounds(275, 97, 132, 15);
+		contentPane.add(lblJugador);
+		
+		JButton button = new JButton("");
+		button.setIcon(new ImageIcon(JBombGamePlayView.class.getResource("/images/LeftArrow.png")));
+		button.setToolTipText("Pasar al Jugador 02");
+		button.setBounds(12, 259, 92, 92);
+		contentPane.add(button);
+		
+		JButton button_1 = new JButton("");
+		button_1.setIcon(new ImageIcon(JBombGamePlayView.class.getResource("/images/RightArrow.png")));
+		button_1.setToolTipText("Pasar al Jugador 02");
+		button_1.setBounds(590, 259, 92, 92);
+		contentPane.add(button_1);
+		
+		JButton button_2 = new JButton("");
+		button_2.setIcon(new ImageIcon(JBombGamePlayView.class.getResource("/images/DownArrow.png")));
+		button_2.setToolTipText("Pasar al Jugador 02");
+		button_2.setBounds(275, 427, 92, 92);
+		contentPane.add(button_2);
+		
+		JButton button_3 = new JButton("");
+		button_3.setIcon(new ImageIcon(JBombGamePlayView.class.getResource("/images/UpArrow.png")));
+		button_3.setToolTipText("Pasar al Jugador 02");
+		button_3.setBounds(275, 126, 92, 92);
+		contentPane.add(button_3);
 	}
-
 }
