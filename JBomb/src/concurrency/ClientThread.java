@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import network.JBombGameEvent;
 import core.Game;
 import core.GamePlayer;
 import core.QuizQuestion;
@@ -39,28 +40,42 @@ public class ClientThread implements Runnable {
 		
 		this.event_handler.joinBarrier(this); //esperos a que todos tengan la informaci�n del juego, el ultimo inicia el juego.
 		
-		//pregunto quien tiene la bomba
-		String player_with_bomb = this.current_game.getBomb().getCurrentPlayer().getName();
 		
-		this.sendStringToClient(player_with_bomb);
+		while(!this.current_game.getBomb().isDetonated())
+		{
+			//pregunto quien tiene la bomba
+			String player_with_bomb = this.current_game.getBomb().getCurrentPlayer().getName();
 		
-		if(!player_with_bomb.equals(client_player_name))
-		{
-			//si no soy yo, me voy a dormir
-			this.event_handler.waitForMove();
-		}
-		else
-		{
-			QuizQuestion qq = this.current_game.getQuiz().getRandomQuizQuestion();
-			this.sendQuizQuestion(qq);
-			String answer = this.receiveStringFromClient();//TODO falta siguiente jugador
-			if(qq.getCorrectAnswer().equals(answer))
+			this.sendStringToClient(player_with_bomb);
+		
+			if(!player_with_bomb.equals(client_player_name))
 			{
-				this.event_handler.wakeUpAll();
+				//si no soy yo, me voy a dormir
+				this.event_handler.waitForMove();
 			}
 			else
 			{
+				QuizQuestion qq = this.current_game.getQuiz().getRandomQuizQuestion();
+			
+				this.sendQuizQuestion(qq);
+				//this.current_game.getBomb().turnOnCronometer();
+				String answer = this.receiveStringFromClient();//TODO falta siguiente jugador
+				//this.current_game.getBomb().turnOffCronometer()
+			
+				if(!this.current_game.getBomb().isDetonated())
+				{	
+					if(qq.getCorrectAnswer().equals(answer))
+					{
+						this.event_handler.setEvent(JBombGameEvent.CORRECT_ANSWER);
+						//TODO paso la bomba
+					}
+					else
+						this.event_handler.setEvent(JBombGameEvent.WRONG_ANSWER);
+				}
+				else
+					this.event_handler.setEvent(JBombGameEvent.BOMB_EXPLODED);
 				
+				this.event_handler.wakeUpAll();
 			}
 		}
 		
