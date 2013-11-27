@@ -7,9 +7,11 @@ import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Vector;
 
 import core.Game;
 import core.GamePlayer;
+import core.QuizQuestion;
 
 public class ClientThread implements Runnable {
 
@@ -35,7 +37,7 @@ public class ClientThread implements Runnable {
 		
 		this.sendCurrentGameInformation();
 		
-		this.event_handler.joinBarrier(); //esperos a que todos tengan la información del juego, el ultimo inicia el juego.
+		this.event_handler.joinBarrier(this); //esperos a que todos tengan la información del juego, el ultimo inicia el juego.
 		
 		//pregunto quien tiene la bomba
 		String player_with_bomb = this.current_game.getBomb().getCurrentPlayer().getName();
@@ -49,13 +51,48 @@ public class ClientThread implements Runnable {
 		}
 		else
 		{
-			//si soy yo, mando pregunta, espero respuesta y pregunto a game si esta bien o mal
-			//este bien o mal tengo que despertar a todos para que actualicen la noticia
-			
+			QuizQuestion qq = this.current_game.getQuiz().getRandomQuizQuestion();
+			this.sendQuizQuestion(qq);
+			String answer = this.receiveStringFromClient();//TODO falta siguiente jugador
+			if(qq.getCorrectAnswer().equals(answer))
+			{
+				
+			}
+			else
+			{
+				
+			}
+			//this.event_handler.wakeUpAll();
 		}
 		
 	}
-
+	
+	public void startGame()
+	{
+		this.current_game.start();
+	}
+	
+	public void sendQuizQuestion(QuizQuestion qq)
+	{
+		try{
+			ObjectOutputStream outToClient = new ObjectOutputStream(this.client_socket.getOutputStream());
+		
+			Vector<String> quiz = new Vector<String>();
+			quiz.add(qq.getQuestion());
+			
+			for(String s : qq.getAnswers())
+			{
+				quiz.add(s);
+			}
+			
+			outToClient.writeObject(quiz);
+		}
+		catch(Exception e)
+		{
+			System.out.println("The QuizQuestion couldn't be send to the client");
+		}
+	}
+	
 	public void sendCurrentGameInformation()
 	{
 		try{
@@ -65,7 +102,7 @@ public class ClientThread implements Runnable {
 			game_info.add(this.current_game.getName());
 			game_info.add(this.current_game.getMaxGamePlayersAllowed().toString());
 			game_info.add(this.current_game.getMaxRounds().toString());
-			//Mando vecinos(nombre) en sentido horario comenzando por arriba, si no existe pongo en null.
+			//TODO Mando vecinos(nombre) en sentido horario comenzando por arriba, si no existe pongo en null.
 			
 			outToClient.writeObject(game_info);
 		}

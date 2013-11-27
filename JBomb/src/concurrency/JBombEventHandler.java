@@ -39,7 +39,12 @@ public class JBombEventHandler {
 	  }
 	}
 	
-	public synchronized void joinBarrier()
+	public void wakeUpAll()
+	{
+		this.notifyAll();
+	}
+	
+	public synchronized void joinBarrier(ClientThread ct)
 	{
 		this.current_barrier_size++;
 		
@@ -54,8 +59,12 @@ public class JBombEventHandler {
 				System.out.println("El thread salió del wait() por una interrupción");
 			}
 		}
-		this.current_barrier_size = 0;
-		this.notifyAll();
+		else
+		{
+			this.current_barrier_size = 0;
+			this.notifyAll();
+			ct.startGame();
+		}
 	}
 	
 	public void setNotification(String s)
