@@ -92,24 +92,52 @@ public class JBombGamePlayView extends JFrame{
 		contentPane.add(lblJugador);
 		
 		JButton button = new JButton("");
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JBombClientAnswerQuestionFormView JBombClientAnswerQuestionFormView = new JBombClientAnswerQuestionFormView(JBombGamePlayView.this);
+				
+				JBombClientAnswerQuestionFormView.setVisible(true);
+			}
+		});
 		button.setIcon(new ImageIcon(JBombGamePlayView.class.getResource("/images/LeftArrow.png")));
 		button.setToolTipText("Pasar al Jugador 02");
 		button.setBounds(12, 259, 92, 92);
 		contentPane.add(button);
 		
 		JButton button_1 = new JButton("");
+		button_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JBombClientAnswerQuestionFormView JBombClientAnswerQuestionFormView = new JBombClientAnswerQuestionFormView(JBombGamePlayView.this);
+				
+				JBombClientAnswerQuestionFormView.setVisible(true);
+			}
+		});
 		button_1.setIcon(new ImageIcon(JBombGamePlayView.class.getResource("/images/RightArrow.png")));
 		button_1.setToolTipText("Pasar al Jugador 02");
 		button_1.setBounds(590, 259, 92, 92);
 		contentPane.add(button_1);
 		
 		JButton button_2 = new JButton("");
+		button_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JBombClientAnswerQuestionFormView JBombClientAnswerQuestionFormView = new JBombClientAnswerQuestionFormView(JBombGamePlayView.this);
+				
+				JBombClientAnswerQuestionFormView.setVisible(true);
+			}
+		});
 		button_2.setIcon(new ImageIcon(JBombGamePlayView.class.getResource("/images/DownArrow.png")));
 		button_2.setToolTipText("Pasar al Jugador 02");
 		button_2.setBounds(275, 427, 92, 92);
 		contentPane.add(button_2);
 		
 		JButton button_3 = new JButton("");
+		button_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JBombClientAnswerQuestionFormView JBombClientAnswerQuestionFormView = new JBombClientAnswerQuestionFormView(JBombGamePlayView.this);
+				
+				JBombClientAnswerQuestionFormView.setVisible(true);
+			}
+		});
 		button_3.setIcon(new ImageIcon(JBombGamePlayView.class.getResource("/images/UpArrow.png")));
 		button_3.setToolTipText("Pasar al Jugador 02");
 		button_3.setBounds(275, 126, 92, 92);
