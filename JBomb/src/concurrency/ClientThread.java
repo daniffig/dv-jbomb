@@ -30,8 +30,11 @@ public class ClientThread implements Runnable {
 	@Override
 	public void run() {
 		System.out.println("Conexión establecida! Thread # " + Thread.currentThread().getName() + " creado");
+		
 		this.processJoinGameRequest();
+		
 		this.sendCurrentGameInformation();
+		
 		this.event_handler.joinBarrier(); //esperos a que todos tengan la información del juego, el ultimo inicia el juego.
 		
 		//pregunto quien tiene la bomba
@@ -42,6 +45,7 @@ public class ClientThread implements Runnable {
 		if(!player_with_bomb.equals(client_player_name))
 		{
 			//si no soy yo, me voy a dormir
+			this.event_handler.waitForMove();
 		}
 		else
 		{

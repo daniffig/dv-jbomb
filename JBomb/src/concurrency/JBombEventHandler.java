@@ -27,7 +27,18 @@ public class JBombEventHandler {
 		this.suscriptors.remove(ct);
 	}
 	
-
+	public void waitForMove()
+	{
+	  try
+	  {
+		  this.wait();
+	  }	
+	  catch(InterruptedException e)
+	  {
+		  System.out.println("no pude  hacer un waitForMove porque me vi interrumpido");
+	  }
+	}
+	
 	public synchronized void joinBarrier()
 	{
 		this.current_barrier_size++;
