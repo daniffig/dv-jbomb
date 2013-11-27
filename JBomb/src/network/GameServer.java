@@ -17,7 +17,7 @@ public class GameServer {
 		current_game.setInetPort(6621);
 		current_game.setName("JBomb!");
 		current_game.setMaxRounds(2);
-		current_game.setMaxGamePlayersAllowed(10);
+		current_game.setMaxGamePlayersAllowed(4);
 	}
 	
 	public Game getGame()

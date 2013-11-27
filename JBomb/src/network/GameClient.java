@@ -1,7 +1,12 @@
 package network;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Socket;
 import java.util.Scanner;
 
 import annotations.Server;
@@ -10,12 +15,18 @@ import annotations.Server;
 public class GameClient {
 
 	public String server_ip;
-	public String server_port;
+	public int server_port;
+	private Socket socket;
 	
 	public GameClient()
 	{
 		this.readConfigurationFile();
 	}
+	
+	public static void main(String[] args) {
+
+	}
+	
 	
 	public void readConfigurationFile()
 	{
@@ -38,7 +49,7 @@ public class GameClient {
 			{
 				key = scanner.next();
 				if(key.equals("ipServer")) this.server_ip = scanner.next();
-				else if(key.equals("portServer"))this.server_port = scanner.next();
+				else if(key.equals("portServer"))this.server_port = Integer.parseInt(scanner.next());
 			}
 			scanner.close();
 		}
@@ -49,9 +60,53 @@ public class GameClient {
 		
 		System.out.println("Servidor " + this.server_ip + ":" + this.server_port);
 	}
-	
-	public static void main(String[] args) {
-
+	public String receiveStringFromServer()
+	{
+		try
+		{
+			BufferedReader inFromServer = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+		
+			return inFromServer.readLine();
+		}
+		catch(IOException e)
+		{
+			System.out.println("Fallo la recepción desde el Servidor.");
+			
+			return null;
+		}
 	}
-
+	
+	public void sendStringToServer(String s)
+	{
+		try
+		{
+			DataOutputStream outToServer =	new DataOutputStream(this.socket.getOutputStream());
+			outToServer.writeBytes(s + '\n');
+		}
+		catch(IOException e)
+		{
+			System.out.println("Fallo el envio de datos");
+		}
+	}
+	
+	public void connectToServer()
+	{
+		try	{
+			this.socket = new Socket(this.server_ip, this.server_port);
+		}catch(IOException e){
+			System.out.println("Connection to server failed!");
+		}
+	}
+	
+	public void disconnectFromServer()
+	{
+		try{
+			this.socket.close();
+		}catch(IOException e){
+			System.out.println("Disconnection failed!");
+		}
+		
+	}
+	
+	
 }

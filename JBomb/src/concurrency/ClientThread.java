@@ -14,6 +14,7 @@ public class ClientThread implements Runnable {
 		this.client_socket = s;
 		this.current_game = g;
 	}
+	
 	@Override
 	public void run() {
 		System.out.println("Conexión establecida! Thread # " + Thread.currentThread().getName() + " creado");
