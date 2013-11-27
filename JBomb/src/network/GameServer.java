@@ -1,5 +1,6 @@
 package network;
 
+import view.*;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -11,6 +12,7 @@ import core.Game;
 public class GameServer {
 
 	private Game current_game;
+	private JBombServerMainView JBombServerMainView;
 	
 	public GameServer()
 	{
@@ -21,9 +23,10 @@ public class GameServer {
 		current_game.setMaxGamePlayersAllowed(2);
 	}
 	
-	public GameServer(Game Game)
+	public GameServer(Game Game, JBombServerMainView JBombServerMainView)
 	{
 		this.current_game = Game;
+		this.JBombServerMainView = JBombServerMainView;
 	}
 	
 	public Game getGame()
@@ -63,6 +66,8 @@ public class GameServer {
 					ClientThread stp = new ClientThread(server.accept(), this.current_game, event_handler);
 					Thread t = new Thread(stp);
 					t.start();
+					
+					this.JBombServerMainView.refresh();
 				}
 				catch (IOException e)
 				{

@@ -31,13 +31,13 @@ public class ClientThread implements Runnable {
 	
 	@Override
 	public void run() {
-		System.out.println("Conexión establecida! Thread # " + Thread.currentThread().getName() + " creado");
+		System.out.println("Conexiï¿½n establecida! Thread # " + Thread.currentThread().getName() + " creado");
 		
 		this.processJoinGameRequest();
 		
 		this.sendCurrentGameInformation();
 		
-		this.event_handler.joinBarrier(this); //esperos a que todos tengan la información del juego, el ultimo inicia el juego.
+		this.event_handler.joinBarrier(this); //esperos a que todos tengan la informaciï¿½n del juego, el ultimo inicia el juego.
 		
 		//pregunto quien tiene la bomba
 		String player_with_bomb = this.current_game.getBomb().getCurrentPlayer().getName();
@@ -141,7 +141,7 @@ public class ClientThread implements Runnable {
 		}
 		catch(IOException e)
 		{
-			System.out.println("Fallo la recepción de datos del cliente");
+			System.out.println("Fallo la recepciï¿½n de datos del cliente");
 			return null;
 		}
 	}

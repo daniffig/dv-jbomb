@@ -131,7 +131,7 @@ public class JBombServerMainView {
 				{
 					Game Game = JBSMV.GameVector.get(JBSMV.GamesTable.convertRowIndexToModel(JBSMV.GamesTable.getSelectedRow()));
 					
-					GameServer GameServer = new GameServer(Game);
+					GameServer GameServer = new GameServer(Game, JBSMV);
 					
 					JBSMV.GameServerVector.add(GameServer);
 					
@@ -167,7 +167,8 @@ public class JBombServerMainView {
 			// TODO: Agregar lógica para poder modificar un juego;
 		}
 		
-		((DefaultTableModel)this.GamesTable.getModel()).fireTableDataChanged();
+		this.refresh();
+		//((DefaultTableModel)this.GamesTable.getModel()).fireTableDataChanged();
 	}
 	
 	public void addQuiz(Quiz Quiz)
@@ -178,5 +179,10 @@ public class JBombServerMainView {
 	public Vector<Quiz> getQuizVector()
 	{
 		return this.QuizVector;
+	}
+	
+	public void refresh()
+	{
+		((DefaultTableModel)this.GamesTable.getModel()).fireTableDataChanged();
 	}
 }
