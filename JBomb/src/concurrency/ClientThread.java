@@ -12,20 +12,39 @@ import core.GamePlayer;
 public class ClientThread implements Runnable {
 
 	private Socket client_socket;
+	private JBombEventHandler event_handler;
+	private String client_player_name;
 	private Game current_game;
 	
-	public ClientThread(Socket s, Game g)
+	public ClientThread(Socket s, Game g, JBombEventHandler eh)
 	{
 		this.client_socket = s;
+		this.event_handler = eh;
 		this.current_game = g;
+		
+		this.event_handler.subscribe(this);
 	}
 	
 	@Override
 	public void run() {
 		System.out.println("Conexión establecida! Thread # " + Thread.currentThread().getName() + " creado");
 		this.processJoinGameRequest();
+		this.sendCurrentGameInformation();
+		this.event_handler.joinBarrier();
+		//Empieza el juego
+		//Mando nombre del jugador con la bomba
+		//si no soy yo, me duermo
 	}
 
+	public void sendCurrentGameInformation()
+	{
+		//nombre, ronda, rondas_totales, cantidad jugadores y jugadores_adyacentes al jugador actual
+		this.sendStringToClient(this.current_game.getName());
+		this.sendStringToClient(this.current_game.getMaxGamePlayersAllowed().toString());
+		this.sendStringToClient(this.current_game.getCurrentRound().toString());
+		this.sendStringToClient(this.current_game.getMaxRounds().toString());
+	}
+	
 	public void processJoinGameRequest()
 	{
 		String player_name = this.receiveStringFromClient();
@@ -41,7 +60,10 @@ public class ClientThread implements Runnable {
 			if(!this.current_game.addGamePlayer(gp))
 				this.sendStringToClient("Juego completo! no se pueden agregar mas jugadores");
 			else
+			{
+				this.client_player_name = player_name;
 				this.sendStringToClient("ACCEPTED");
+			}
 		}
 	}
 	

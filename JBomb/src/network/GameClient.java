@@ -19,14 +19,17 @@ public class GameClient {
 	public int server_port;
 	private Socket socket;
 	
+	public String gameName;
+	public int currentRound;
+	public int totalRounds;
+	public int totalPlayers;
+	public String[] adjacentPlayers = new String[4];
+	
 	public GameClient()
 	{
 		this.readConfigurationFile();
 	}
 	
-	public static void main(String[] args) {
-
-	}
 	
 	public String joinGame()
 	{
@@ -35,6 +38,14 @@ public class GameClient {
 		this.sendStringToServer(this.username);
 		
 		return this.receiveStringFromServer();
+	}
+	
+	public void receiveGameInformation()
+	{
+		this.gameName = this.receiveStringFromServer();
+		this.totalPlayers = Integer.parseInt(this.receiveStringFromServer());
+		this.currentRound = Integer.parseInt(this.receiveStringFromServer());
+		this.totalRounds  = Integer.parseInt(this.receiveStringFromServer());
 	}
 	
 	public void readConfigurationFile()
@@ -117,5 +128,13 @@ public class GameClient {
 		
 	}
 	
+	public void addPlayer(AdjacentDirections direction, String player)
+	{
+		this.adjacentPlayers[direction.index()] = player;
+	}
 	
+	public String getPlayer(AdjacentDirections direction)
+	{
+		return this.adjacentPlayers[direction.index()];
+	}
 }

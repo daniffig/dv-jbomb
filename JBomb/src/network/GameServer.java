@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 
 import concurrency.ClientThread;
+import concurrency.JBombEventHandler;
 import core.Game;
 
 public class GameServer {
@@ -33,6 +34,7 @@ public class GameServer {
 	public static void main(String[] args)
 	{
 		GameServer game_server = new GameServer();
+		JBombEventHandler event_handler = new JBombEventHandler(game_server.getGame().getMaxGamePlayersAllowed());
 		ServerSocket server = null;
 		
 		try
@@ -45,13 +47,14 @@ public class GameServer {
 			System.exit(-1);
 		}
 		
-		while(game_server.getGame().canAddPlayer())
+		//while(game_server.getGame().canAddPlayer())
+		while(true)
 		{
 			if(server != null)
 			{
 				try
 				{
-					ClientThread stp = new ClientThread(server.accept(), game_server.current_game);
+					ClientThread stp = new ClientThread(server.accept(), game_server.current_game, event_handler);
 					Thread t = new Thread(stp);
 					t.start();
 				}

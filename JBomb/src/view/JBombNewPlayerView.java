@@ -69,12 +69,12 @@ public class JBombNewPlayerView extends JFrame {
 				game_client.username = PlayerNameInput.getText();
 				
 				String connection_result = game_client.joinGame();
-				System.out.println("el server me respondio " + connection_result);
 				
 				if(connection_result.equals("ACCEPTED"))
 				{
-					System.out.println("aceptado!");
-					//TODO Crear ventana de juego
+					JBombGamePlayView gameplayview = new JBombGamePlayView(game_client);
+					gameplayview.setVisible(true);
+					dispose();			
 				}
 				else
 				{
