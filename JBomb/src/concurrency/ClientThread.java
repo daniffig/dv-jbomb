@@ -58,9 +58,9 @@ public class ClientThread implements Runnable {
 				QuizQuestion qq = this.current_game.getQuiz().getRandomQuizQuestion();
 			
 				this.sendQuizQuestion(qq);
-				//this.current_game.getBomb().turnOnCronometer();
+				this.current_game.getBomb().activate();
 				String answer = this.receiveStringFromClient();//TODO falta siguiente jugador
-				//this.current_game.getBomb().turnOffCronometer()
+				this.current_game.getBomb().deactivate();
 			
 				if(!this.current_game.getBomb().isDetonated())
 				{	

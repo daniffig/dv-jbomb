@@ -1,0 +1,17 @@
+<Cuestionario.nombre>
+<Cuestionario.cantidadPreguntas> // Por ejemplo, 2.
+<Pregunta0.pregunta>
+<Pregunta0.cantidadRespuestas> // Por ejemplo, 3.
+<Pregunta0.Respuesta0>
+<Pregunta0.Respuesta1>
+<Pregunta0.Respuesta2>
+<Pregunta0.RespuestaCorrecta> // Debe ser la posición en la colección de Respuesta, comenzando por 0. Por ejemplo, 0.
+<Pregunta1.pregunta>
+<Pregunta1.cantidadRespuestas> // Por ejemplo, 6.
+<Pregunta1.Respuesta0>
+<Pregunta1.Respuesta1>
+<Pregunta1.Respuesta2>
+<Pregunta1.Respuesta3>
+<Pregunta1.Respuesta4>
+<Pregunta1.Respuesta5>
+<Pregunta1.RespuestaCorrecta> // Por ejemplo, 4.

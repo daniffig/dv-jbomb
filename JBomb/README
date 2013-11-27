@@ -1,0 +1,50 @@
+JBomb v0.2
+
+Autores:
+	CIMADAMORE, Andrés
+	DI GIACOMO NOACK, Lucio Flavio - 10596/0 - daniffig[at]gmail[dot]com
+	
+NOTAS:
+
+	JBomb es una aplicación construida con una arquitectura cliente-servidor.
+	
+	El cliente tiene la posibilidad de conectarse y participar del juego ubicado en el host especificado en el archivo conf.properties.
+	El servidor tiene la posibilidad de alojar múltiples juegos en distintas redes y puertos.
+	
+	Dentro de lo solicitado en esta tercera entrega, se cumplió lo siguiente:
+	
+	1) El cliente utiliza anotaciones para realizar la lectura del archivo de configuración y cargar así la dirección IP y puerto del servidor.
+	2) El servidor atiende y responde en simultáneo las solicitudes de múltiples clientes.
+	3) El servidor puede configurar en el juego la cantidad máxima de jugadores permitidos.
+	4) El servidor puede configurar el tiempo de vida de la bomba.
+	5) El servidor puede configurar su dirección IP y puerto de manera independiente para cada juego.
+	6) El cliente puede configurar los datos de conexión al servidor en el archivo conf.properties.
+	7) El servidor puede realizar la carga de cuestionarios utilizando un formato determinado.
+	7b) El servidor también puede realizar la carga utilizando una interface interactiva, pero se deshabilitó la funcionalidad por falta de testing.
+	8) El cliente puede unirse al juego en espera del servidor enviando su identificación. El servidor lo registra en el juego.
+	9) El servidor puede armar el grafo de juego con los clientes registrados.
+	
+	Aún no hemos podido implementar:
+	
+	1) El servidor no notifica a los clientes cuáles serán los jugadores adyacentes, ni puede realizar funciones relativas al transcurso del juego.
+	
+	
+CÓMO PROBARLO:
+
+	Servidor:
+	
+	1) Ejecute JBombServerMainView.
+	2) Haga clic en Administrar Cuestionarios, luego en Cargar. Seleccione un cuestionario de la carpeta QuizDB y haga clic en Aceptar.
+	2b) También puede cargar sus propios cuestionarios siguiendo las indicaciones en el archivo QuizDB/template.
+	3) Cierre la ventana de Administrar Cuestionarios.
+	4) Haga clic en Nuevo para crear un nuevo juego.
+	5) Ingrese los datos requeridos. Recuerde que la dirección IP debe ser 127.0.0.1 y el puerto 4321. Presione Guardar.
+	6) Seleccione el juego creado en el listado y presione Iniciar. El servidor ahora atenderá las solicitudes de los clientes.
+	
+	Cliente:
+	
+	1) Ejecute JBombNewPlayerView.
+	2) Ingrese el nombre del nuevo jugador y presione en Conectar.
+	
+	
+	
