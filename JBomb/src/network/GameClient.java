@@ -6,7 +6,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import annotations.Server;
@@ -42,10 +44,19 @@ public class GameClient {
 	
 	public void receiveGameInformation()
 	{
-		this.gameName = this.receiveStringFromServer();
-		this.totalPlayers = Integer.parseInt(this.receiveStringFromServer());
-		this.currentRound = Integer.parseInt(this.receiveStringFromServer());
-		this.totalRounds  = Integer.parseInt(this.receiveStringFromServer());
+		try{
+			ObjectInputStream inFromClient = new ObjectInputStream(this.socket.getInputStream());
+			ArrayList<String> gameInformation = (ArrayList<String>) inFromClient.readObject();
+			
+			this.gameName = gameInformation.get(0);
+			this.totalPlayers = Integer.parseInt(gameInformation.get(1));
+			//this.currentRound = Integer.parseInt(gameInformation.get(2));
+			this.totalRounds  = Integer.parseInt(gameInformation.get(2));
+		}
+		catch(Exception e)
+		{
+			System.out.println("Something went wrong :S");
+		}
 	}
 	
 	public void readConfigurationFile()

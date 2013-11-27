@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import core.Game;
 import core.GamePlayer;
@@ -30,19 +32,23 @@ public class ClientThread implements Runnable {
 		System.out.println("Conexión establecida! Thread # " + Thread.currentThread().getName() + " creado");
 		this.processJoinGameRequest();
 		this.sendCurrentGameInformation();
-		this.event_handler.joinBarrier();
-		//Empieza el juego
-		//Mando nombre del jugador con la bomba
-		//si no soy yo, me duermo
+		this.event_handler.joinBarrier(); 
 	}
 
 	public void sendCurrentGameInformation()
 	{
-		//nombre, ronda, rondas_totales, cantidad jugadores y jugadores_adyacentes al jugador actual
-		this.sendStringToClient(this.current_game.getName());
-		this.sendStringToClient(this.current_game.getMaxGamePlayersAllowed().toString());
-		this.sendStringToClient(this.current_game.getCurrentRound().toString());
-		this.sendStringToClient(this.current_game.getMaxRounds().toString());
+		try{
+			ObjectOutputStream outToClient = new ObjectOutputStream(this.client_socket.getOutputStream());
+		
+			ArrayList<String> game_info = new ArrayList<String>();
+			game_info.add(this.current_game.getName());
+			game_info.add(this.current_game.getMaxGamePlayersAllowed().toString());
+			game_info.add(this.current_game.getMaxRounds().toString());
+		
+			outToClient.writeObject(game_info);
+		}
+		catch(Exception e)
+		{}
 	}
 	
 	public void processJoinGameRequest()

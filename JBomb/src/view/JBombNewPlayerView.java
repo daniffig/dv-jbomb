@@ -69,7 +69,7 @@ public class JBombNewPlayerView extends JFrame {
 				game_client.username = PlayerNameInput.getText();
 				
 				String connection_result = game_client.joinGame();
-				
+				System.out.println("recibi " + connection_result);
 				if(connection_result.equals("ACCEPTED"))
 				{
 					JBombGamePlayView gameplayview = new JBombGamePlayView(game_client);

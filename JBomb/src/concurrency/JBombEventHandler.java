@@ -38,10 +38,10 @@ public class JBombEventHandler {
 			}
 			catch(InterruptedException e)
 			{
-				System.out.println("EL thread salió del wait() por una interrupción");
+				System.out.println("El thread salió del wait() por una interrupción");
 			}
 		}
-		
+		this.current_barrier_size = 0;
 		this.notifyAll();
 	}
 }
