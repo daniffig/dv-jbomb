@@ -56,13 +56,12 @@ public class ClientThread implements Runnable {
 			String answer = this.receiveStringFromClient();//TODO falta siguiente jugador
 			if(qq.getCorrectAnswer().equals(answer))
 			{
-				
+				this.event_handler.wakeUpAll();
 			}
 			else
 			{
 				
 			}
-			//this.event_handler.wakeUpAll();
 		}
 		
 	}
