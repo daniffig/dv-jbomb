@@ -53,7 +53,7 @@ public class ClientThread implements Runnable {
 		{
 			QuizQuestion qq = this.current_game.getQuiz().getRandomQuizQuestion();
 			this.sendQuizQuestion(qq);
-			String answer = this.receiveStringFromClient();
+			String answer = this.receiveStringFromClient();//TODO falta siguiente jugador
 			if(qq.getCorrectAnswer().equals(answer))
 			{
 				
@@ -102,7 +102,7 @@ public class ClientThread implements Runnable {
 			game_info.add(this.current_game.getName());
 			game_info.add(this.current_game.getMaxGamePlayersAllowed().toString());
 			game_info.add(this.current_game.getMaxRounds().toString());
-			//Mando vecinos(nombre) en sentido horario comenzando por arriba, si no existe pongo en null.
+			//TODO Mando vecinos(nombre) en sentido horario comenzando por arriba, si no existe pongo en null.
 			
 			outToClient.writeObject(game_info);
 		}

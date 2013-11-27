@@ -39,6 +39,11 @@ public class JBombEventHandler {
 	  }
 	}
 	
+	public void wakeUpAll()
+	{
+		this.notifyAll();
+	}
+	
 	public synchronized void joinBarrier(ClientThread ct)
 	{
 		this.current_barrier_size++;
