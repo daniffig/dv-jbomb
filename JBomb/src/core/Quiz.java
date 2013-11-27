@@ -9,6 +9,8 @@ public class Quiz {
 
 	private Vector<QuizQuestion> QuizQuestions = new Vector<QuizQuestion>();
 	
+	public Quiz(){}
+	
 	public Quiz(String title) {
 		this.Title = title;
 	}
@@ -49,5 +51,20 @@ public class Quiz {
 	public void addQuizQuestion(QuizQuestion quizQuestion) {
 		this.getQuizQuestions().add(quizQuestion);
 		quizQuestion.setQuiz(this);
+	}
+	
+	public Boolean isNew()
+	{
+		return this.Title == null;
+	}
+	
+	public Vector<Object> toVector()
+	{
+		Vector<Object> v = new Vector<Object>();
+		
+		v.add(this.Title);
+		v.add(this.Filename);
+		
+		return v;
 	}
 }

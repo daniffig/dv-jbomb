@@ -31,8 +31,7 @@ public class QuizConfigurationFormView extends JFrame {
 	private JPanel contentPane;
 	private JTable QuizTable;
 
-	private Vector<Vector<Object>> QuizVector;
-	private AbstractTableModel QuizTableModel;
+	private Vector<Quiz> QuizVector;
 	
 	/**
 	 * Launch the application.
@@ -76,12 +75,18 @@ public class QuizConfigurationFormView extends JFrame {
 		Vector<String> QuizFields = new Vector<String>();
 		
 		QuizFields.add("Nombre");
+		QuizFields.add("Archivo");
 		
-		QuizVector = new Vector<Vector<Object>>();
+		QuizVector = new Vector<Quiz>();
 		
-		QuizTableModel = new DefaultTableModel(QuizVector, QuizFields);
+		Vector<Vector<Object>> ObjectVector = new Vector<Vector<Object>>();
 		
-		QuizTable = new JTable(QuizTableModel);
+		for (Quiz Quiz : QuizVector)
+		{
+			ObjectVector.add(Quiz.toVector());
+		}
+		
+		QuizTable = new JTable(new DefaultTableModel(ObjectVector, QuizFields));
 		QuizScrollPane.setViewportView(QuizTable);
 		
 		JLabel lblQuizList = new JLabel("Listado de Cuestionarios");
@@ -91,7 +96,7 @@ public class QuizConfigurationFormView extends JFrame {
 		JButton btnQuizNew = new JButton("Nuevo");
 		btnQuizNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				QuizFormView QuizFormView = new QuizFormView();
+				QuizFormView QuizFormView = new QuizFormView(QuizConfigurationFormView.this, new Quiz());
 				
 				QuizFormView.setVisible(true);
 			}
@@ -134,8 +139,8 @@ public class QuizConfigurationFormView extends JFrame {
 						
 						v.add(Quiz.getTitle());
 						
-						QuizConfigurationFormView.this.QuizVector.add(v);
-						QuizConfigurationFormView.this.QuizTableModel.fireTableDataChanged();
+						((DefaultTableModel)QuizConfigurationFormView.this.QuizTable.getModel()).addRow(v);
+						((DefaultTableModel)QuizConfigurationFormView.this.QuizTable.getModel()).fireTableDataChanged();
 					
 			            source.close();
 			            
@@ -150,13 +155,34 @@ public class QuizConfigurationFormView extends JFrame {
 		contentPane.add(btnQuizLoad);
 		
 		JButton btnNewButton_2 = new JButton("Modificar");
-		btnNewButton_2.setEnabled(false);
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				QuizConfigurationFormView QCFV = QuizConfigurationFormView.this;
+				
+				if (QCFV.QuizTable.getSelectedRow() >= 0)
+				{
+					Quiz SelectedQuiz = QCFV.QuizVector.get(QCFV.QuizTable.convertRowIndexToModel(QCFV.QuizTable.getSelectedRow()));
+					
+					QuizFormView QuizFormView = new QuizFormView(QuizConfigurationFormView.this, QuizConfigurationFormView.this.QuizVector.get(QCFV.QuizTable.getSelectedRow()));
+					
+					QuizFormView.setVisible(true);					
+				}
+				
+			}
+		});
 		btnNewButton_2.setBounds(483, 115, 99, 25);
 		contentPane.add(btnNewButton_2);
 		
 		JButton btnQuizDelete = new JButton("Eliminar");
 		btnQuizDelete.setBounds(483, 152, 99, 25);
 		contentPane.add(btnQuizDelete);
+	}
+	
+	public void addQuiz(Quiz Quiz)
+	{
+		this.QuizVector.add(Quiz);
+		((DefaultTableModel)this.QuizTable.getModel()).addRow(Quiz.toVector());
+		((DefaultTableModel)this.QuizTable.getModel()).fireTableDataChanged();
 	}
 
 }
