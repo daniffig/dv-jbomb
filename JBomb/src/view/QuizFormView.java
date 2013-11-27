@@ -152,7 +152,7 @@ public class QuizFormView extends JFrame {
 	public void addQuizQuestion(QuizQuestion QuizQuestion)
 	{
 		this.Quiz.addQuizQuestion(QuizQuestion);
-		((DefaultTableModel)this.QuizQuestionsTable.getModel()).addRow(QuizQuestion.toVector());		
+		((DefaultTableModel)this.QuizQuestionsTable.getModel()).addRow(QuizQuestion.toVector());
 		((DefaultTableModel)this.QuizQuestionsTable.getModel()).fireTableDataChanged();
 	}
 	

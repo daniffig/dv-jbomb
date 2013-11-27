@@ -9,20 +9,21 @@ import javax.swing.JButton;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 
-import core.Game;
+import core.*;
 
-import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.Window.Type;
 import java.util.Vector;
 
 import javax.swing.JScrollPane;
+import java.awt.Toolkit;
 
 public class JBombServerMainView {
 
 	private JFrame frmJbombV;
 	private JTable GamesTable;
+	
+	private Vector<Quiz> QuizVector = new Vector<Quiz>();
 
 	/**
 	 * Launch the application.
@@ -52,6 +53,7 @@ public class JBombServerMainView {
 	 */
 	private void initialize() {
 		frmJbombV = new JFrame();
+		frmJbombV.setIconImage(Toolkit.getDefaultToolkit().getImage(JBombServerMainView.class.getResource("/images/icon.png")));
 		frmJbombV.setTitle("JBomb v0.2 - Servidor");
 		frmJbombV.setResizable(false);
 		frmJbombV.setBounds(100, 100, 600, 392);
@@ -94,7 +96,7 @@ public class JBombServerMainView {
 		JButton btnNewButton = new JButton("Nuevo");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JBombServerGameFormView GameFormWindow = new JBombServerGameFormView(new Game());
+				JBombServerGameFormView GameFormWindow = new JBombServerGameFormView(JBombServerMainView.this, new Game());
 				
 				GameFormWindow.setVisible(true);
 			}
@@ -113,7 +115,7 @@ public class JBombServerMainView {
 				{					
 					Game aGame = Games.elementAt(GamesTable.convertRowIndexToModel(GamesTable.getSelectedRow()));
 					
-					JBombServerGameFormView GameFormWindow = new JBombServerGameFormView(aGame);
+					JBombServerGameFormView GameFormWindow = new JBombServerGameFormView(JBombServerMainView.this, aGame);
 					
 					GameFormWindow.setVisible(true);					
 				}
@@ -129,12 +131,22 @@ public class JBombServerMainView {
 		JButton btnConfigurarPreguntas = new JButton("Administrar Cuestionarios");
 		btnConfigurarPreguntas.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				QuizConfigurationFormView QuizConfigurationFormView = new QuizConfigurationFormView();
+				QuizConfigurationFormView QuizConfigurationFormView = new QuizConfigurationFormView(JBombServerMainView.this);
 				
 				QuizConfigurationFormView.setVisible(true);
 			}
 		});
 		btnConfigurarPreguntas.setBounds(12, 331, 219, 25);
 		frmJbombV.getContentPane().add(btnConfigurarPreguntas);
+	}
+	
+	public void addQuiz(Quiz Quiz)
+	{
+		this.QuizVector.add(Quiz);
+	}
+	
+	public Vector<Quiz> getQuizVector()
+	{
+		return this.QuizVector;
 	}
 }

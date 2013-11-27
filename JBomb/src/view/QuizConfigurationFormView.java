@@ -1,7 +1,5 @@
 package view;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -31,36 +29,25 @@ public class QuizConfigurationFormView extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	private JBombServerMainView parentWindow;
+	
 	private JPanel contentPane;
 	private JTable QuizTable;
 
 	private Vector<Quiz> QuizVector;
-	
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					QuizConfigurationFormView frame = new QuizConfigurationFormView();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 
 	/**
 	 * Create the frame.
 	 */
-	public QuizConfigurationFormView() {
+	public QuizConfigurationFormView(JBombServerMainView JBombServerMainView) {
+		
+		this.parentWindow = JBombServerMainView;
+		
 		setResizable(false);
 		setIconImage(Toolkit.getDefaultToolkit().getImage("/home/daniffig/Escritorio/Bomb.png"));
 		setTitle("Administración de Cuestionarios");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 600, 218);
+		setBounds(100, 100, 600, 249);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -72,7 +59,7 @@ public class QuizConfigurationFormView extends JFrame {
 				
 			}
 		});
-		QuizScrollPane.setBounds(12, 39, 459, 138);
+		QuizScrollPane.setBounds(12, 39, 459, 175);
 		contentPane.add(QuizScrollPane);
 		
 		Vector<String> QuizFields = new Vector<String>();
@@ -99,6 +86,8 @@ public class QuizConfigurationFormView extends JFrame {
 		JButton btnQuizNew = new JButton("Nuevo");
 		btnQuizNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				QuizConfigurationFormView.this.setEnabled(false);;
+				
 				QuizFormView QuizFormView = new QuizFormView(QuizConfigurationFormView.this, new Quiz());
 				
 				QuizFormView.setVisible(true);
@@ -111,8 +100,7 @@ public class QuizConfigurationFormView extends JFrame {
 		btnQuizLoad.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				final JFileChooser fc = new JFileChooser();
-				int returnVal = fc.showOpenDialog(QuizConfigurationFormView.this);
-				
+				int returnVal = fc.showOpenDialog(QuizConfigurationFormView.this);				
 
 		        if (returnVal == JFileChooser.APPROVE_OPTION) {
 		            File file = fc.getSelectedFile();
@@ -144,6 +132,8 @@ public class QuizConfigurationFormView extends JFrame {
 						((DefaultTableModel)QuizConfigurationFormView.this.QuizTable.getModel()).fireTableDataChanged();
 					
 			            source.close();
+			            
+			            QuizConfigurationFormView.this.parentWindow.addQuiz(Quiz);
 			            
 					} catch (FileNotFoundException e) {
 						// TODO Auto-generated catch block
@@ -177,6 +167,15 @@ public class QuizConfigurationFormView extends JFrame {
 		JButton btnQuizDelete = new JButton("Eliminar");
 		btnQuizDelete.setBounds(483, 152, 99, 25);
 		contentPane.add(btnQuizDelete);
+		
+		JButton btnQuizConfigurationFormClose = new JButton("Cerrar");
+		btnQuizConfigurationFormClose.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				QuizConfigurationFormView.this.dispose();
+			}
+		});
+		btnQuizConfigurationFormClose.setBounds(483, 189, 99, 25);
+		contentPane.add(btnQuizConfigurationFormClose);
 	}
 	
 	public void addQuiz(Quiz Quiz)
@@ -185,5 +184,4 @@ public class QuizConfigurationFormView extends JFrame {
 		((DefaultTableModel)this.QuizTable.getModel()).addRow(Quiz.toVector());
 		((DefaultTableModel)this.QuizTable.getModel()).fireTableDataChanged();
 	}
-
 }

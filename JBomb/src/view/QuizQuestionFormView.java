@@ -20,11 +20,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.Color;
 import java.util.Vector;
 
-import org.jdesktop.beansbinding.BeanProperty;
-import org.jdesktop.beansbinding.AutoBinding;
-import org.jdesktop.beansbinding.Bindings;
-import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
-
 public class QuizQuestionFormView extends JFrame {
 	
 	/**
@@ -36,9 +31,9 @@ public class QuizQuestionFormView extends JFrame {
 	
 	private JPanel contentPane;
 	private JTable QuizAnswerTable;
-	private JTextField QuizQuestionTextField;
 
 	private QuizQuestion QuizQuestion;
+	private JTextField QuizQuestionTextField;
 	
 	/**
 	 * Create the frame.
@@ -78,28 +73,32 @@ public class QuizQuestionFormView extends JFrame {
 						    "Datos incorrectos",
 						    JOptionPane.WARNING_MESSAGE);
 				*/
+				
+				QuizQuestionFormView QQFV = QuizQuestionFormView.this;
+				
+				QQFV.QuizQuestion.setQuestion(QQFV.QuizQuestionTextField.getText());
 										
-				
-				
-					Vector<String> qa = new Vector<String>();
-					Integer ca = -1;
+				Vector<String> qa = new Vector<String>();
+				Integer ca = -1;
 					
-					for (int i = 0; i < QuizQuestionFormView.this.QuizAnswerTable.getRowCount(); i++)
+				for (int i = 0; i < QQFV.QuizAnswerTable.getRowCount(); i++)
+				{
+					qa.add(QQFV.QuizAnswerTable.getValueAt(i, 0).toString());
+					
+					if ((Boolean)QQFV.QuizAnswerTable.getValueAt(i, 1))
 					{
-						qa.add(QuizQuestionFormView.this.QuizAnswerTable.getValueAt(i, 0).toString());
-						
-						if ((Boolean)QuizQuestionFormView.this.QuizAnswerTable.getValueAt(i, 1))
-						{
-							ca = i;
-						}
+						ca = i;
 					}
+				}
 					
-					QuizQuestionFormView.this.QuizQuestion.setAnswers(qa);
-					QuizQuestionFormView.this.QuizQuestion.setCorrectAnswer(ca);					
+				QQFV.QuizQuestion.setAnswers(qa);
+				QQFV.QuizQuestion.setCorrectAnswer(ca);
 					
-					QuizQuestionFormView.this.parentWindow.addQuizQuestion(QuizQuestionFormView.this.QuizQuestion);	
+				QQFV.parentWindow.addQuizQuestion(QQFV.QuizQuestion);
 				
-				QuizQuestionFormView.this.dispose();
+				QQFV.parentWindow.setEnabled(true);
+				
+				QQFV.dispose();
 			}
 		});
 		btnQuizQuestionSave.setBounds(333, 256, 99, 25);
@@ -178,42 +177,39 @@ public class QuizQuestionFormView extends JFrame {
 		btnQuizAnswerOK.setBounds(333, 152, 99, 25);
 		contentPane.add(btnQuizAnswerOK);
 		
-		JTextField QuizAnswerTextField = new JTextField();
+		final JTextField QuizAnswerTextField = new JTextField();
 		QuizAnswerTextField.setBounds(15, 225, 306, 19);
 		contentPane.add(QuizAnswerTextField);
 		QuizAnswerTextField.setColumns(10);
 		
-		JButton btnQuizAnswerNew = new JButton("Agregar");
-		btnQuizAnswerNew.setBounds(333, 219, 99, 25);
-		contentPane.add(btnQuizAnswerNew);
+		JButton btnQuizAnswerAdd = new JButton("Agregar");
+		btnQuizAnswerAdd.setBounds(333, 219, 99, 25);
+		contentPane.add(btnQuizAnswerAdd);
 		
 		JButton btnQuizQuestionCancel = new JButton("Cancelar");
+		btnQuizQuestionCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				QuizQuestionFormView.this.dispose();
+			}
+		});
 		btnQuizQuestionCancel.setBounds(15, 256, 96, 25);
 		contentPane.add(btnQuizQuestionCancel);
-		btnQuizAnswerNew.addActionListener(new ActionListener() {
+		btnQuizAnswerAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				QuizQuestionFormView QQFV = QuizQuestionFormView.this;
 				
-				QQFV.QuizQuestion.addAnswer(QQFV.QuizQuestionTextField.getText());				
-				((DefaultTableModel)QQFV.QuizAnswerTable.getModel()).addRow(new Object[]{QQFV.QuizQuestionTextField.getText(), false});
-				((DefaultTableModel)QQFV.QuizAnswerTable.getModel()).fireTableDataChanged();
+				if (!QuizAnswerTextField.getText().equals(""))
+				{				
+					QQFV.QuizQuestion.addAnswer(QuizAnswerTextField.getText());				
+					((DefaultTableModel)QQFV.QuizAnswerTable.getModel()).addRow(new Object[]{QuizAnswerTextField.getText(), false});
+					((DefaultTableModel)QQFV.QuizAnswerTable.getModel()).fireTableDataChanged();
+					
+					QuizAnswerTextField.setText("");
+				}
 			}
 		});
 		initDataBindings();
 	}
-
-	public QuizQuestion getQuizQuestion() {
-		return QuizQuestion;
-	}
-
-	public void setQuizQuestion(QuizQuestion quizQuestion) {
-		QuizQuestion = quizQuestion;
-	}
-
 	protected void initDataBindings() {
-		BeanProperty<QuizQuestion, String> quizQuestionBeanProperty = BeanProperty.create("question");
-		BeanProperty<JTextField, String> jTextFieldBeanProperty = BeanProperty.create("text");
-		AutoBinding<QuizQuestion, String, JTextField, String> autoBinding = Bindings.createAutoBinding(UpdateStrategy.READ_WRITE, QuizQuestion, quizQuestionBeanProperty, QuizQuestionTextField, jTextFieldBeanProperty);
-		autoBinding.bind();
 	}
 }

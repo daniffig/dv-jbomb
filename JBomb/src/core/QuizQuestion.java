@@ -83,6 +83,7 @@ public class QuizQuestion {
 		Vector<Object> v = new Vector<Object>();
 		
 		v.add(this.Question);
+		v.add(this.getAnswer(this.getCorrectAnswer()));
 		
 		return v;
 	}

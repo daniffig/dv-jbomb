@@ -2,14 +2,10 @@ package view;
 
 import core.*;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
-import javax.swing.JTable;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.LineBorder;
 
@@ -22,18 +18,28 @@ import java.util.Vector;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
+
 import org.jdesktop.beansbinding.BeanProperty;
 import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+import linkageStrategies.*;
+
 public class JBombServerGameFormView extends JFrame {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	private JBombServerMainView parentWindow;
 
 	private JPanel contentPane;
 	private JTextField GameNameTextField;
@@ -43,25 +49,11 @@ public class JBombServerGameFormView extends JFrame {
 	private Game NewGame;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					JBombServerGameFormView frame = new JBombServerGameFormView(new Game());
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
 	 */
-	public JBombServerGameFormView(Game Game) {
+	public JBombServerGameFormView(JBombServerMainView JBombServerMainView, Game Game) {
+		
+		this.parentWindow = JBombServerMainView;
 		
 		this.setOldGame(Game);
 		this.setNewGame(new Game(Game));
@@ -90,7 +82,9 @@ public class JBombServerGameFormView extends JFrame {
 		panel.add(GameNameTextField);
 		GameNameTextField.setColumns(10);
 		
-		JComboBox GameLinkageStrategyComboBox = new JComboBox();
+		JComboBox<AbstractLinkageStrategy> GameLinkageStrategyComboBox =
+				new JComboBox<AbstractLinkageStrategy>(	new DefaultComboBoxModel<AbstractLinkageStrategy>(new AbstractLinkageStrategy[]{new RingLinkageStrategy()}));
+		
 		GameLinkageStrategyComboBox.setBounds(116, 114, 162, 24);
 		panel.add(GameLinkageStrategyComboBox);
 		
@@ -98,7 +92,14 @@ public class JBombServerGameFormView extends JFrame {
 		lblJugadoresmx.setBounds(12, 191, 125, 15);
 		panel.add(lblJugadoresmx);
 		
-		JComboBox GameMaxPlayersComboBox = new JComboBox();
+		Vector<Integer> GameMaxPlayersVector = new Vector<Integer>();
+		
+		for (Integer i = 2; i <= 16; i++)
+		{
+			GameMaxPlayersVector.add(i);
+		}
+		
+		JComboBox<Integer> GameMaxPlayersComboBox = new JComboBox<Integer>(new DefaultComboBoxModel<Integer>(GameMaxPlayersVector));
 		GameMaxPlayersComboBox.setBounds(155, 186, 123, 24);
 		panel.add(GameMaxPlayersComboBox);
 		
@@ -170,7 +171,7 @@ public class JBombServerGameFormView extends JFrame {
 		GamePortTextField.setColumns(10);
 		
 		JLabel lblPuerto = new JLabel("Puerto");
-		lblPuerto.setBounds(12, 83, 48, 15);
+		lblPuerto.setBounds(12, 85, 48, 15);
 		panel.add(lblPuerto);
 		
 		JLabel label = new JLabel("Topología");
@@ -181,9 +182,9 @@ public class JBombServerGameFormView extends JFrame {
 		lblPreguntas.setBounds(12, 155, 125, 15);
 		panel.add(lblPreguntas);
 		
-		JComboBox comboBox_1 = new JComboBox();
-		comboBox_1.setBounds(116, 150, 162, 24);
-		panel.add(comboBox_1);
+		JComboBox<Quiz> GameQuizComboBox = new JComboBox<Quiz>(new DefaultComboBoxModel<Quiz>(this.parentWindow.getQuizVector()));
+		GameQuizComboBox.setBounds(116, 150, 162, 24);
+		panel.add(GameQuizComboBox);
 		
 		JButton btnNewButton = new JButton("Guardar");
 		btnNewButton.addActionListener(new ActionListener() {
@@ -200,6 +201,11 @@ public class JBombServerGameFormView extends JFrame {
 		contentPane.add(btnNewButton);
 		
 		JButton btnNewButton_1 = new JButton("Cancelar");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JBombServerGameFormView.this.dispose();
+			}
+		});
 		btnNewButton_1.setBounds(12, 318, 117, 25);
 		contentPane.add(btnNewButton_1);
 		initDataBindings();
