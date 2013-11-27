@@ -2,10 +2,7 @@ package view;
 
 import core.*;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTable;
@@ -18,7 +15,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.LineBorder;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.Color;
@@ -30,48 +26,37 @@ import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 public class QuizQuestionFormView extends JFrame {
-
+	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+
+	private QuizFormView parentWindow;
+	
 	private JPanel contentPane;
 	private JTable QuizAnswerTable;
 	private JTextField QuizQuestionTextField;
-	private JTextField QuizAnswerTextField;
 
 	private QuizQuestion QuizQuestion;
 	
-	private QuizFormView QuizFormView;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					QuizQuestionFormView frame = new QuizQuestionFormView();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-	
-	public QuizQuestionFormView(QuizFormView QuizFormView)
-	{
-		this();
-		
-		this.QuizFormView = QuizFormView;
-	}
-
 	/**
 	 * Create the frame.
 	 */
-	public QuizQuestionFormView() {
-		setTitle("Pregunta");
+	public QuizQuestionFormView(QuizFormView QuizFormView, QuizQuestion QuizQuestion) {
+		
+		this.parentWindow = QuizFormView;
+		this.QuizQuestion = QuizQuestion;
+		
+		if (this.QuizQuestion.isNew())
+		{
+			setTitle("Nueva Pregunta");
+		}
+		else
+		{
+			setTitle("Editar Pregunta");
+		}
+		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 320);
 		contentPane = new JPanel();
@@ -79,44 +64,10 @@ public class QuizQuestionFormView extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		QuizQuestion qq = new QuizQuestion("¿Cuántos años tenés?");
-		
-		qq.addAnswer("20");
-		qq.addAnswer("25");
-		qq.addAnswer("30");
-		
-		this.setQuizQuestion(qq);
-		
 		Vector<String> QuizAnswerFields = new Vector<String>();
 		
 		QuizAnswerFields.add("Respuesta");
 		QuizAnswerFields.add("Correcta");
-		
-		final Vector<Vector<Object>> QuizAnswerVector = new Vector<Vector<Object>>();
-		
-		Integer index = 0;
-		
-		for (String ans : this.QuizQuestion.getAnswers())
-		{
-			Vector<Object> v = new Vector<Object>();
-			
-			v.add(ans);
-			
-			if (index == this.getQuizQuestion().getCorrectAnswer())
-			{
-				v.add(new Boolean(true));
-			}
-			else
-			{
-				v.add(new Boolean(false));
-			}
-			
-			QuizAnswerVector.add(v);
-			
-			index++;
-		}
-
-		final AbstractTableModel QuizAnswerTableModel = new DefaultTableModel(QuizAnswerVector, QuizAnswerFields);
 		
 		JButton btnQuizQuestionSave = new JButton("Guardar");
 		btnQuizQuestionSave.addActionListener(new ActionListener() {
@@ -130,8 +81,6 @@ public class QuizQuestionFormView extends JFrame {
 										
 				
 				
-				if (QuizFormView != null)
-				{
 					Vector<String> qa = new Vector<String>();
 					Integer ca = -1;
 					
@@ -148,8 +97,7 @@ public class QuizQuestionFormView extends JFrame {
 					QuizQuestionFormView.this.QuizQuestion.setAnswers(qa);
 					QuizQuestionFormView.this.QuizQuestion.setCorrectAnswer(ca);					
 					
-					QuizFormView.addQuizQuestion(QuizQuestionFormView.this.QuizQuestion);					
-				}
+					QuizQuestionFormView.this.parentWindow.addQuizQuestion(QuizQuestionFormView.this.QuizQuestion);	
 				
 				QuizQuestionFormView.this.dispose();
 			}
@@ -188,18 +136,19 @@ public class QuizQuestionFormView extends JFrame {
 		QuizAnswerScrollPane.setBounds(15, 78, 306, 135);
 		contentPane.add(QuizAnswerScrollPane);
 		
-		QuizAnswerTable = new JTable(QuizAnswerTableModel);
+		QuizAnswerTable = new JTable(new DefaultTableModel(this.QuizQuestion.getAnswersVector(), QuizAnswerFields));
 		QuizAnswerScrollPane.setViewportView(QuizAnswerTable);
 		
 		JButton btnQuizAnswerDelete = new JButton("Eliminar");
 		btnQuizAnswerDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (QuizAnswerTable.getSelectedRow() >= 0)
+				QuizQuestionFormView QQFV = QuizQuestionFormView.this;
+				
+				if (QQFV.QuizAnswerTable.getSelectedRow() >= 0)
 				{
-					QuizQuestion.removeAnswer(QuizAnswerTable.getSelectedRow());					
-					QuizAnswerVector.remove(QuizAnswerTable.getSelectedRow());					
-					
-					QuizAnswerTableModel.fireTableDataChanged();
+					QQFV.QuizQuestion.removeAnswer(QQFV.QuizAnswerTable.getSelectedRow());					
+					((DefaultTableModel)QQFV.QuizAnswerTable.getModel()).removeRow(QuizAnswerTable.getSelectedRow());				
+					((DefaultTableModel)QQFV.QuizAnswerTable.getModel()).fireTableDataChanged();
 				}
 				else
 				{
@@ -213,21 +162,23 @@ public class QuizQuestionFormView extends JFrame {
 		JButton btnQuizAnswerOK = new JButton("Correcta");
 		btnQuizAnswerOK.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (QuizAnswerTable.getSelectedRow() >= 0)
+				QuizQuestionFormView QQFV = QuizQuestionFormView.this;
+				
+				if (QQFV.QuizAnswerTable.getSelectedRow() >= 0)
 				{					
-					for (int i = 0; i < QuizAnswerTableModel.getRowCount(); i++)
+					for (int i = 0; i < ((DefaultTableModel)QQFV.QuizAnswerTable.getModel()).getRowCount(); i++)
 					{
-						QuizAnswerTableModel.setValueAt(i == QuizAnswerTable.getSelectedRow(), i, 1);
+						((DefaultTableModel)QQFV.QuizAnswerTable.getModel()).setValueAt(i == QuizAnswerTable.getSelectedRow(), i, 1);
 					}
 					
-					QuizAnswerTableModel.fireTableDataChanged();
+					((DefaultTableModel)QQFV.QuizAnswerTable.getModel()).fireTableDataChanged();
 				}
 			}
 		});
 		btnQuizAnswerOK.setBounds(333, 152, 99, 25);
 		contentPane.add(btnQuizAnswerOK);
 		
-		QuizAnswerTextField = new JTextField();
+		JTextField QuizAnswerTextField = new JTextField();
 		QuizAnswerTextField.setBounds(15, 225, 306, 19);
 		contentPane.add(QuizAnswerTextField);
 		QuizAnswerTextField.setColumns(10);
@@ -241,18 +192,11 @@ public class QuizQuestionFormView extends JFrame {
 		contentPane.add(btnQuizQuestionCancel);
 		btnQuizAnswerNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//if (!QuizAnswerTextField.getText().equals(""))
-				//{
-					Vector<Object> v = new Vector<Object>();
-					
-					v.add(QuizAnswerTextField.getText());
-					v.add(false);
-					
-					QuizAnswerVector.add(v);
-					
-					QuizAnswerTableModel.fireTableDataChanged();
-				//}
+				QuizQuestionFormView QQFV = QuizQuestionFormView.this;
 				
+				QQFV.QuizQuestion.addAnswer(QQFV.QuizQuestionTextField.getText());				
+				((DefaultTableModel)QQFV.QuizAnswerTable.getModel()).addRow(new Object[]{QQFV.QuizQuestionTextField.getText(), false});
+				((DefaultTableModel)QQFV.QuizAnswerTable.getModel()).fireTableDataChanged();
 			}
 		});
 		initDataBindings();

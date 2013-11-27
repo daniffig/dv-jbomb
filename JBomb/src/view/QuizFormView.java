@@ -2,15 +2,10 @@ package view;
 
 import core.*;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 import javax.swing.JButton;
@@ -24,17 +19,24 @@ import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.AutoBinding;
+import org.jdesktop.beansbinding.Bindings;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 public class QuizFormView extends JFrame {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private QuizConfigurationFormView parentWindow;
 
 	private JPanel contentPane;
-	private AbstractTableModel QuizQuestionsTableModel;
 	private JTable QuizQuestionsTable;
 	
 	private Quiz Quiz;
-	private Vector<Vector<Object>> QuizQuestionVector;
 	private JTextField QuizTitleTextField;
 
 	/**
@@ -93,30 +95,13 @@ public class QuizFormView extends JFrame {
 		QuizQuestionFields.add("Pregunta");
 		QuizQuestionFields.add("Respuesta");
 		
-		QuizQuestionVector = new Vector<Vector<Object>>();
-		
-		if (!this.Quiz.isNew())
-		{
-			for (QuizQuestion qq : this.Quiz.getQuizQuestions())
-			{
-				Vector<Object> v = new Vector<Object>();
-				
-				v.add(qq.getQuestion());
-				v.add(qq.getAnswer(qq.getCorrectAnswer()));
-				
-				QuizQuestionVector.add(v);			
-			}			
-		}
-		
-		this.QuizQuestionsTableModel = new DefaultTableModel(QuizQuestionVector, QuizQuestionFields);
-		
-		QuizQuestionsTable = new JTable(QuizQuestionsTableModel);
+		QuizQuestionsTable = new JTable(new DefaultTableModel(this.Quiz.getQuestionsVector(), QuizQuestionFields));
 		scrollPane.setViewportView(QuizQuestionsTable);
 		
 		JButton btnQuizQuestionNew = new JButton("Nueva");
 		btnQuizQuestionNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				QuizQuestionFormView QuizQuestionFormView = new QuizQuestionFormView(QuizFormView.this);
+				QuizQuestionFormView QuizQuestionFormView = new QuizQuestionFormView(QuizFormView.this, new QuizQuestion());
 				
 				QuizQuestionFormView.setVisible(true);
 			}
@@ -125,7 +110,6 @@ public class QuizFormView extends JFrame {
 		contentPane.add(btnQuizQuestionNew);
 		
 		JButton btnQuizQuestionEdit = new JButton("Modificar");
-		btnQuizQuestionEdit.setEnabled(false);
 		btnQuizQuestionEdit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
@@ -162,21 +146,20 @@ public class QuizFormView extends JFrame {
 		JButton btnQuizCancel = new JButton("Cancelar");
 		btnQuizCancel.setBounds(12, 216, 96, 25);
 		contentPane.add(btnQuizCancel);
+		initDataBindings();
 	}
 	
 	public void addQuizQuestion(QuizQuestion QuizQuestion)
 	{
-		Vector<Object> v = new Vector<Object>();
-		
-		v.add(QuizQuestion.getQuestion());
-		v.add(QuizQuestion.getAnswer(QuizQuestion.getCorrectAnswer()));
-		
-		this.QuizQuestionVector.add(v);
-		
-		this.QuizQuestionsTableModel.fireTableDataChanged();
+		this.Quiz.addQuizQuestion(QuizQuestion);
+		((DefaultTableModel)this.QuizQuestionsTable.getModel()).addRow(QuizQuestion.toVector());		
+		((DefaultTableModel)this.QuizQuestionsTable.getModel()).fireTableDataChanged();
 	}
-
-	public Quiz getQuiz() {
-		return Quiz;
+	
+	protected void initDataBindings() {
+		BeanProperty<Quiz, String> quizBeanProperty = BeanProperty.create("title");
+		BeanProperty<JTextField, String> jTextFieldBeanProperty = BeanProperty.create("text");
+		AutoBinding<Quiz, String, JTextField, String> autoBinding = Bindings.createAutoBinding(UpdateStrategy.READ_WRITE, Quiz, quizBeanProperty, QuizTitleTextField, jTextFieldBeanProperty);
+		autoBinding.bind();
 	}
 }

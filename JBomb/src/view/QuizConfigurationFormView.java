@@ -1,12 +1,10 @@
 package view;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JFileChooser;
 import javax.swing.JTable;
@@ -28,6 +26,11 @@ import java.beans.PropertyChangeEvent;
 
 public class QuizConfigurationFormView extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private JPanel contentPane;
 	private JTable QuizTable;
 
@@ -120,6 +123,7 @@ public class QuizConfigurationFormView extends JFrame {
 						source = new Scanner(file);
 						
 						Quiz Quiz = new Quiz(source.nextLine());
+						Quiz.setFilename(file.getName());
 												
 						for (int i = Integer.parseInt(source.nextLine()); i > 0; i--)
 						{							
@@ -135,11 +139,8 @@ public class QuizConfigurationFormView extends JFrame {
 							Quiz.addQuizQuestion(QuizQuestion);							
 						}
 						
-						Vector<Object> v = new Vector<Object>();
-						
-						v.add(Quiz.getTitle());
-						
-						((DefaultTableModel)QuizConfigurationFormView.this.QuizTable.getModel()).addRow(v);
+						QuizConfigurationFormView.this.QuizVector.add(Quiz);						
+						((DefaultTableModel)QuizConfigurationFormView.this.QuizTable.getModel()).addRow(Quiz.toVector());
 						((DefaultTableModel)QuizConfigurationFormView.this.QuizTable.getModel()).fireTableDataChanged();
 					
 			            source.close();
@@ -159,10 +160,10 @@ public class QuizConfigurationFormView extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				QuizConfigurationFormView QCFV = QuizConfigurationFormView.this;
 				
+				System.out.println(QCFV.QuizTable.getSelectedRow());
+				
 				if (QCFV.QuizTable.getSelectedRow() >= 0)
-				{
-					Quiz SelectedQuiz = QCFV.QuizVector.get(QCFV.QuizTable.convertRowIndexToModel(QCFV.QuizTable.getSelectedRow()));
-					
+				{					
 					QuizFormView QuizFormView = new QuizFormView(QuizConfigurationFormView.this, QuizConfigurationFormView.this.QuizVector.get(QCFV.QuizTable.getSelectedRow()));
 					
 					QuizFormView.setVisible(true);					

@@ -67,4 +67,21 @@ public class Quiz {
 		
 		return v;
 	}
+	
+	public Vector<Vector<Object>> getQuestionsVector()
+	{
+		Vector<Vector<Object>> v = new Vector<Vector<Object>>();
+		
+		for (QuizQuestion q : this.getQuizQuestions())
+		{			
+			Vector<Object> a = new Vector<Object>();
+			
+			a.add(q.getQuestion());
+			a.add(q.getAnswer(q.getCorrectAnswer()));
+			
+			v.add(a);
+		}
+		
+		return v;
+	}
 }

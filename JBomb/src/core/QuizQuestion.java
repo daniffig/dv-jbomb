@@ -2,6 +2,7 @@ package core;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class QuizQuestion {
 
@@ -72,7 +73,40 @@ public class QuizQuestion {
 		CorrectAnswer = correctAnswer;
 	}
 	
+	public Boolean isNew()
+	{
+		return this.Question == null;
+	}
 	
+	public Vector<Object> toVector()
+	{
+		Vector<Object> v = new Vector<Object>();
+		
+		v.add(this.Question);
+		
+		return v;
+	}
+	
+	public Vector<Vector<Object>> getAnswersVector()
+	{
+		Vector<Vector<Object>> v = new Vector<Vector<Object>>();
+		
+		int i = 0;
+		
+		for (String s : this.getAnswers())
+		{			
+			Vector<Object> a = new Vector<Object>();
+			
+			a.add(s);
+			a.add(i == this.getCorrectAnswer());
+			
+			v.add(a);
+			
+			i++;
+		}
+		
+		return v;
+	}
 	
 	
 }
