@@ -75,7 +75,7 @@ public class JBombGamePlayView extends JFrame{
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
-		JLabel notificaciones = new JLabel("Esta es una notificacion de ejemplo porque van a ser de este largo mas o menos");
+		JLabel notificaciones = new JLabel("");
 		notificaciones.setBounds(145, 17, 500, 30);
 		panel.add(notificaciones);
 		
@@ -83,7 +83,7 @@ public class JBombGamePlayView extends JFrame{
 		ronda.setBounds(5, 17, 80, 20);
 		panel.add(ronda);
 		
-		JLabel cant_jugadores = new JLabel("Cant. Jugadores: ##");
+		JLabel cant_jugadores = new JLabel("Cant. Jugadores: " + this.game_client.totalPlayers);
 		cant_jugadores.setBounds(5, 37, 120, 20);
 		panel.add(cant_jugadores);
 		

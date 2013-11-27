@@ -21,6 +21,7 @@ public class GameClient {
 	public int server_port;
 	private Socket socket;
 	
+	public String notification;
 	public String gameName;
 	public int currentRound;
 	public int totalRounds;
