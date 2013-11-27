@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Vector;
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
@@ -21,11 +22,9 @@ public class Game {
 	private Integer RoundDuration;
 	private Bomb Bomb = new Bomb();
 	private AbstractLinkageStrategy LinkageStrategy;
+	private Quiz Quiz;
 	
-	public Game()
-	{
-		
-	}
+	public Game(){}
 	
 	public Game (String name)
 	{
@@ -211,6 +210,23 @@ public class Game {
 	public void deepCopy(Game newGame)
 	{
 		this.setName(newGame.getName());
+	}
+	
+	public Vector<Object> toVector()
+	{
+		Vector<Object> v = new Vector<Object>();
+		
+		v.add(this.getName());
+		
+		return v;
+	}
+
+	public Quiz getQuiz() {
+		return Quiz;
+	}
+
+	public void setQuiz(Quiz quiz) {
+		Quiz = quiz;
 	}
 	
 }

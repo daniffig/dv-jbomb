@@ -84,6 +84,7 @@ public class QuizConfigurationFormView extends JFrame {
 		contentPane.add(lblQuizList);
 		
 		JButton btnQuizNew = new JButton("Nuevo");
+		btnQuizNew.setEnabled(false);
 		btnQuizNew.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				QuizConfigurationFormView.this.setEnabled(false);;
@@ -146,6 +147,7 @@ public class QuizConfigurationFormView extends JFrame {
 		contentPane.add(btnQuizLoad);
 		
 		JButton btnNewButton_2 = new JButton("Modificar");
+		btnNewButton_2.setEnabled(false);
 		btnNewButton_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				QuizConfigurationFormView QCFV = QuizConfigurationFormView.this;
@@ -165,6 +167,7 @@ public class QuizConfigurationFormView extends JFrame {
 		contentPane.add(btnNewButton_2);
 		
 		JButton btnQuizDelete = new JButton("Eliminar");
+		btnQuizDelete.setEnabled(false);
 		btnQuizDelete.setBounds(483, 152, 99, 25);
 		contentPane.add(btnQuizDelete);
 		

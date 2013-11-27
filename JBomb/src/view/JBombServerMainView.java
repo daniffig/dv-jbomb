@@ -6,7 +6,6 @@ import javax.swing.JFrame;
 import javax.swing.JTable;
 import javax.swing.JLabel;
 import javax.swing.JButton;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 
 import core.*;
@@ -23,6 +22,7 @@ public class JBombServerMainView {
 	private JFrame frmJbombV;
 	private JTable GamesTable;
 	
+	private Vector<Game> GameVector = new Vector<Game>();
 	private Vector<Quiz> QuizVector = new Vector<Quiz>();
 
 	/**
@@ -60,33 +60,22 @@ public class JBombServerMainView {
 		frmJbombV.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmJbombV.getContentPane().setLayout(null);
 		
-		final Vector<Game> Games = new Vector<Game>();
-		
-		Games.add(new Game("Juego 01"));
-		Games.add(new Game("Juego 02"));
-		
 		Vector<String> GameFields = new Vector<String>();
 		
 		GameFields.add("Nombre");
 		
-		Vector<Vector<Object>> GameVector = new Vector<Vector<Object>>();
+		Vector<Vector<Object>> ObjectVector = new Vector<Vector<Object>>();
 		
-		for (Game g : Games)
+		for (Game g : GameVector)
 		{			
-			Vector<Object> v = new Vector<Object>();
-			
-			v.add(g.getName());
-			
-			GameVector.add(v);
+			ObjectVector.add(g.toVector());
 		}
-		
-		AbstractTableModel GameTableModel = new DefaultTableModel(GameVector, GameFields);
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(12, 39, 459, 280);
 		frmJbombV.getContentPane().add(scrollPane);
 		
-		GamesTable = new JTable(GameTableModel);
+		GamesTable = new JTable(new DefaultTableModel(ObjectVector, GameFields));
 		scrollPane.setViewportView(GamesTable);
 		
 		JLabel lblJuegosActivos = new JLabel("Listado de Juegos");
@@ -110,12 +99,12 @@ public class JBombServerMainView {
 		
 		JButton btnNewButton_1 = new JButton("Modificar");
 		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {				
+			public void actionPerformed(ActionEvent arg0) {
+				JBombServerMainView JBSMV = JBombServerMainView.this;
+				
 				if (GamesTable.getSelectedRow() > 0)
 				{					
-					Game aGame = Games.elementAt(GamesTable.convertRowIndexToModel(GamesTable.getSelectedRow()));
-					
-					JBombServerGameFormView GameFormWindow = new JBombServerGameFormView(JBombServerMainView.this, aGame);
+					JBombServerGameFormView GameFormWindow = new JBombServerGameFormView(JBSMV, JBSMV.GameVector.get(JBSMV.GamesTable.getSelectedRow()));
 					
 					GameFormWindow.setVisible(true);					
 				}
@@ -138,6 +127,13 @@ public class JBombServerMainView {
 		});
 		btnConfigurarPreguntas.setBounds(12, 331, 219, 25);
 		frmJbombV.getContentPane().add(btnConfigurarPreguntas);
+	}
+	
+	public void addGame(Game Game)
+	{
+		this.GameVector.add(Game);
+		((DefaultTableModel)this.GamesTable.getModel()).addRow(Game.toVector());
+		((DefaultTableModel)this.GamesTable.getModel()).fireTableDataChanged();
 	}
 	
 	public void addQuiz(Quiz Quiz)
