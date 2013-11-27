@@ -7,6 +7,8 @@ import java.util.List;
 public class JBombEventHandler {
 	private int current_barrier_size;
 	private int barrier_size;
+	private String event;
+	private String notification;
 	private List<ClientThread> suscriptors = new ArrayList<ClientThread>();
 
 	public JBombEventHandler(int cant)
@@ -43,5 +45,25 @@ public class JBombEventHandler {
 		}
 		this.current_barrier_size = 0;
 		this.notifyAll();
+	}
+	
+	public void setNotification(String s)
+	{
+		this.notification = s;
+	}
+	
+	public String getNotification()
+	{
+		return this.notification;
+	}
+	
+	public void setEvent(String s)
+	{
+		this.event = s;
+	}
+	
+	public String getEvent()
+	{
+		return this.event;
 	}
 }

@@ -32,7 +32,24 @@ public class ClientThread implements Runnable {
 		System.out.println("Conexión establecida! Thread # " + Thread.currentThread().getName() + " creado");
 		this.processJoinGameRequest();
 		this.sendCurrentGameInformation();
-		this.event_handler.joinBarrier(); 
+		this.event_handler.joinBarrier(); //esperos a que todos tengan la información del juego, el ultimo inicia el juego.
+		
+		//pregunto quien tiene la bomba
+		String player_with_bomb = this.current_game.getBomb().getCurrentPlayer().getName();
+		
+		this.sendStringToClient(player_with_bomb);
+		
+		if(!player_with_bomb.equals(client_player_name))
+		{
+			//si no soy yo, me voy a dormir
+		}
+		else
+		{
+			//si soy yo, mando pregunta, espero respuesta y pregunto a game si esta bien o mal
+			//este bien o mal tengo que despertar a todos para que actualicen la noticia
+			
+		}
+		
 	}
 
 	public void sendCurrentGameInformation()
@@ -44,7 +61,8 @@ public class ClientThread implements Runnable {
 			game_info.add(this.current_game.getName());
 			game_info.add(this.current_game.getMaxGamePlayersAllowed().toString());
 			game_info.add(this.current_game.getMaxRounds().toString());
-		
+			//Mando vecinos(nombre) en sentido horario comenzando por arriba, si no existe pongo en null.
+			
 			outToClient.writeObject(game_info);
 		}
 		catch(Exception e)
