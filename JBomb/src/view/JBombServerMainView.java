@@ -15,6 +15,7 @@ import java.awt.event.ActionEvent;
 import java.util.Vector;
 
 import javax.swing.JScrollPane;
+
 import java.awt.Toolkit;
 
 public class JBombServerMainView {
@@ -63,6 +64,9 @@ public class JBombServerMainView {
 		Vector<String> GameFields = new Vector<String>();
 		
 		GameFields.add("Nombre");
+		GameFields.add("Dirección IP");
+		GameFields.add("Puerto");
+		GameFields.add("Modo");
 		
 		Vector<Vector<Object>> ObjectVector = new Vector<Vector<Object>>();
 		
@@ -115,6 +119,10 @@ public class JBombServerMainView {
 		frmJbombV.getContentPane().add(btnNewButton_1);
 		
 		JButton btnIniciar = new JButton("Iniciar");
+		btnIniciar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnIniciar.setBounds(483, 294, 99, 25);
 		frmJbombV.getContentPane().add(btnIniciar);
 		

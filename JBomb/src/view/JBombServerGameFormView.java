@@ -26,9 +26,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import linkageStrategies.*;
+import gameModes.*;
 
 import java.awt.Toolkit;
-import javax.swing.ComboBoxModel;
 
 public class JBombServerGameFormView extends JFrame {
 	
@@ -46,7 +46,7 @@ public class JBombServerGameFormView extends JFrame {
 	private JTextField GameInetPortTextField;	
 	private JComboBox<AbstractLinkageStrategy> GameLinkageStrategyComboBox;
 	private JComboBox<Quiz> GameQuizComboBox;
-	private JComboBox<Quiz> GameModeComboBox;
+	private JComboBox<AbstractGameMode> GameModeComboBox;
 	private JComboBox<Integer> GameMaxPlayersComboBox;
 	private JComboBox<Integer> GameRoundsComboBox;
 	private JComboBox<Integer> GameRoundDurationComboBox;
@@ -164,7 +164,7 @@ public class JBombServerGameFormView extends JFrame {
 		GameQuizComboBox.setBounds(116, 150, 162, 24);
 		panel.add(GameQuizComboBox);
 		
-		GameModeComboBox = new JComboBox<Quiz>((ComboBoxModel) null);
+		GameModeComboBox = new JComboBox<AbstractGameMode>(new DefaultComboBoxModel<AbstractGameMode>(new AbstractGameMode[]{new NormalGameMode(), new BouncingGameMode()}));
 		GameModeComboBox.setBounds(116, 186, 162, 24);
 		panel.add(GameModeComboBox);
 		
@@ -184,6 +184,7 @@ public class JBombServerGameFormView extends JFrame {
 					JBSGFV.Game.setInetPort(Integer.parseInt(JBSGFV.GameInetPortTextField.getText()));
 					JBSGFV.Game.setLinkageStrategy((AbstractLinkageStrategy)JBSGFV.GameLinkageStrategyComboBox.getSelectedItem());
 					JBSGFV.Game.setQuiz((Quiz)JBSGFV.GameQuizComboBox.getSelectedItem());
+					JBSGFV.Game.setMode((AbstractGameMode)JBSGFV.GameModeComboBox.getSelectedItem());
 					JBSGFV.Game.setMaxGamePlayersAllowed((Integer)JBSGFV.GameMaxPlayersComboBox.getSelectedItem());
 					JBSGFV.Game.setMaxRounds((Integer)JBSGFV.GameRoundsComboBox.getSelectedItem());					
 					JBSGFV.Game.setRoundDuration((Integer)JBSGFV.GameRoundDurationComboBox.getSelectedItem());

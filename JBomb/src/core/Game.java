@@ -219,6 +219,9 @@ public class Game {
 		Vector<Object> v = new Vector<Object>();
 		
 		v.add(this.getName());
+		v.add(this.getInetIPAddress());
+		v.add(this.getInetPort());
+		v.add(this.getMode());
 		
 		return v;
 	}
