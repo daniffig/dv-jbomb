@@ -64,11 +64,11 @@ public class JBombNewPlayerView extends JFrame {
 		contentPane.add(info_server);
 		
 		JLabel nombre_jugador = new JLabel("Nombre del jugador:");
-		nombre_jugador.setBounds(12, 107, 145, 15);
+		nombre_jugador.setBounds(12, 70, 145, 15);
 		contentPane.add(nombre_jugador);
 		
 		PlayerNameInput = new JTextField();
-		PlayerNameInput.setBounds(175, 105, 257, 19);
+		PlayerNameInput.setBounds(150, 70, 250, 19);
 		contentPane.add(PlayerNameInput);
 		PlayerNameInput.setColumns(10);
 		
@@ -96,34 +96,8 @@ public class JBombNewPlayerView extends JFrame {
 				}
 			}
 		});
-		btnQuizSave.setBounds(232, 136, 200, 25);
+		btnQuizSave.setBounds(210, 120, 200, 25);
 		contentPane.add(btnQuizSave);
-		
-		JPanel panel = new JPanel();
-		panel.setBorder(new TitledBorder(new LineBorder(new Color(184, 207, 229)), "Servidor", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel.setBounds(10, 37, 422, 58);
-		contentPane.add(panel);
-		panel.setLayout(null);
-		
-		GameServerInetIPAddressTextField = new JTextField();
-		GameServerInetIPAddressTextField.setEnabled(false);
-		GameServerInetIPAddressTextField.setBounds(43, 27, 179, 19);
-		panel.add(GameServerInetIPAddressTextField);
-		GameServerInetIPAddressTextField.setColumns(10);
-		
-		GameServerInetPortTextField = new JTextField();
-		GameServerInetPortTextField.setEnabled(false);
-		GameServerInetPortTextField.setBounds(296, 27, 114, 19);
-		panel.add(GameServerInetPortTextField);
-		GameServerInetPortTextField.setColumns(10);
-		
-		JLabel lblDireccinIp = new JLabel("IP");
-		lblDireccinIp.setBounds(12, 29, 13, 15);
-		panel.add(lblDireccinIp);
-		
-		JLabel lblPuerto = new JLabel("Puerto");
-		lblPuerto.setBounds(230, 29, 48, 15);
-		panel.add(lblPuerto);
 	}
 	
 	public Boolean isFormValid()
