@@ -8,6 +8,7 @@ import java.util.Vector;
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
+import gameModes.AbstractGameMode;
 import linkageStrategies.AbstractLinkageStrategy;
 
 public class Game {
@@ -23,6 +24,7 @@ public class Game {
 	private Bomb Bomb = new Bomb();
 	private AbstractLinkageStrategy LinkageStrategy;
 	private Quiz Quiz;
+	private AbstractGameMode Mode;
 	
 	public Game(){}
 	
@@ -228,5 +230,12 @@ public class Game {
 	public void setQuiz(Quiz quiz) {
 		Quiz = quiz;
 	}
-	
+
+	public AbstractGameMode getMode() {
+		return Mode;
+	}
+
+	public void setMode(AbstractGameMode mode) {
+		Mode = mode;
+	}
 }

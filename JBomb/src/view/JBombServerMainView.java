@@ -98,11 +98,12 @@ public class JBombServerMainView {
 		frmJbombV.getContentPane().add(btnEliminar);
 		
 		JButton btnNewButton_1 = new JButton("Modificar");
+		btnNewButton_1.setEnabled(false);
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				JBombServerMainView JBSMV = JBombServerMainView.this;
 				
-				if (GamesTable.getSelectedRow() > 0)
+				if (GamesTable.getSelectedRow() >= 0)
 				{					
 					JBombServerGameFormView GameFormWindow = new JBombServerGameFormView(JBSMV, JBSMV.GameVector.get(JBSMV.GamesTable.getSelectedRow()));
 					
@@ -131,8 +132,16 @@ public class JBombServerMainView {
 	
 	public void addGame(Game Game)
 	{
-		this.GameVector.add(Game);
-		((DefaultTableModel)this.GamesTable.getModel()).addRow(Game.toVector());
+		if (!this.GameVector.contains(Game))
+		{
+			this.GameVector.add(Game);
+			((DefaultTableModel)this.GamesTable.getModel()).addRow(Game.toVector());			
+		}
+		else
+		{
+			// TODO: Agregar lógica para poder modificar un juego;
+		}
+		
 		((DefaultTableModel)this.GamesTable.getModel()).fireTableDataChanged();
 	}
 	

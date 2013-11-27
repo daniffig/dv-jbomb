@@ -16,8 +16,8 @@ import java.net.SocketException;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
@@ -26,6 +26,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import linkageStrategies.*;
+
+import java.awt.Toolkit;
+import javax.swing.ComboBoxModel;
 
 public class JBombServerGameFormView extends JFrame {
 	
@@ -43,7 +46,9 @@ public class JBombServerGameFormView extends JFrame {
 	private JTextField GameInetPortTextField;	
 	private JComboBox<AbstractLinkageStrategy> GameLinkageStrategyComboBox;
 	private JComboBox<Quiz> GameQuizComboBox;
+	private JComboBox<Quiz> GameModeComboBox;
 	private JComboBox<Integer> GameMaxPlayersComboBox;
+	private JComboBox<Integer> GameRoundsComboBox;
 	private JComboBox<Integer> GameRoundDurationComboBox;
 	
 	private Game Game;
@@ -52,6 +57,7 @@ public class JBombServerGameFormView extends JFrame {
 	 * Create the frame.
 	 */
 	public JBombServerGameFormView(JBombServerMainView JBombServerMainView, Game Game) {
+		setIconImage(Toolkit.getDefaultToolkit().getImage(JBombServerGameFormView.class.getResource("/images/icon.png")));
 		
 		this.parentWindow = JBombServerMainView;
 		
@@ -60,7 +66,7 @@ public class JBombServerGameFormView extends JFrame {
 		setTitle("JBomb - Configuración del Juego");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 320, 380);
+		setBounds(100, 100, 320, 416);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -68,7 +74,7 @@ public class JBombServerGameFormView extends JFrame {
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new TitledBorder(new LineBorder(new Color(184, 207, 229)), "Configuraci\u00F3n", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-		panel.setBounds(12, 12, 290, 294);
+		panel.setBounds(12, 12, 290, 330);
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
@@ -87,35 +93,27 @@ public class JBombServerGameFormView extends JFrame {
 		panel.add(GameLinkageStrategyComboBox);
 		
 		JLabel lblGameMaxPlayers = new JLabel("Jugadores (máx.)");
-		lblGameMaxPlayers.setBounds(12, 191, 125, 15);
+		lblGameMaxPlayers.setBounds(12, 227, 125, 15);
 		panel.add(lblGameMaxPlayers);
 		
 		GameMaxPlayersComboBox = new JComboBox<Integer>(new DefaultComboBoxModel<Integer>(new Integer[]{2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16}));
-		GameMaxPlayersComboBox.setBounds(155, 186, 123, 24);
+		GameMaxPlayersComboBox.setBounds(155, 222, 123, 24);
 		panel.add(GameMaxPlayersComboBox);
 		
-		Vector<Integer> GameRoundsVector = new Vector<Integer>();
-		
-		GameRoundsVector.add(2);
-		GameRoundsVector.add(3);
-		GameRoundsVector.add(4);
-		
-		ComboBoxModel<Integer> GameRoundsComboBoxModel = new DefaultComboBoxModel<Integer>(GameRoundsVector);
-		
-		JComboBox<Integer> GameRoundsComboBox = new JComboBox<Integer>(GameRoundsComboBoxModel);
-		GameRoundsComboBox.setBounds(155, 222, 123, 24);
+		GameRoundsComboBox = new JComboBox<Integer>(new DefaultComboBoxModel<Integer>(new Integer[]{2, 3, 4}));
+		GameRoundsComboBox.setBounds(155, 258, 123, 24);
 		panel.add(GameRoundsComboBox);
 		
 		JLabel lblGameRounds = new JLabel("Rondas");
-		lblGameRounds.setBounds(12, 227, 125, 15);
+		lblGameRounds.setBounds(12, 263, 125, 15);
 		panel.add(lblGameRounds);
 		
 		JLabel lblGameDuration = new JLabel("Duración");
-		lblGameDuration.setBounds(12, 263, 125, 15);
+		lblGameDuration.setBounds(12, 299, 125, 15);
 		panel.add(lblGameDuration);
 		
 		GameRoundDurationComboBox = new JComboBox<Integer>(new DefaultComboBoxModel<Integer>(new Integer[]{30, 60, 90}));
-		GameRoundDurationComboBox.setBounds(155, 258, 123, 24);
+		GameRoundDurationComboBox.setBounds(155, 294, 123, 24);
 		panel.add(GameRoundDurationComboBox);
 		
 		JLabel lblInetIPAddress = new JLabel("Dirección IP");
@@ -166,6 +164,14 @@ public class JBombServerGameFormView extends JFrame {
 		GameQuizComboBox.setBounds(116, 150, 162, 24);
 		panel.add(GameQuizComboBox);
 		
+		GameModeComboBox = new JComboBox<Quiz>((ComboBoxModel) null);
+		GameModeComboBox.setBounds(116, 186, 162, 24);
+		panel.add(GameModeComboBox);
+		
+		JLabel lblGameMode = new JLabel("Modo");
+		lblGameMode.setBounds(12, 191, 125, 15);
+		panel.add(lblGameMode);
+		
 		JButton btnNewButton = new JButton("Guardar");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -178,16 +184,17 @@ public class JBombServerGameFormView extends JFrame {
 					JBSGFV.Game.setInetPort(Integer.parseInt(JBSGFV.GameInetPortTextField.getText()));
 					JBSGFV.Game.setLinkageStrategy((AbstractLinkageStrategy)JBSGFV.GameLinkageStrategyComboBox.getSelectedItem());
 					JBSGFV.Game.setQuiz((Quiz)JBSGFV.GameQuizComboBox.getSelectedItem());
-					JBSGFV.Game.setMaxGamePlayersAllowed(Integer.parseInt((String)JBSGFV.GameMaxPlayersComboBox.getSelectedItem()));
-					JBSGFV.Game.setRoundDuration(Integer.parseInt((String)JBSGFV.GameRoundDurationComboBox.getSelectedItem()));
-					
+					JBSGFV.Game.setMaxGamePlayersAllowed((Integer)JBSGFV.GameMaxPlayersComboBox.getSelectedItem());
+					JBSGFV.Game.setMaxRounds((Integer)JBSGFV.GameRoundsComboBox.getSelectedItem());					
+					JBSGFV.Game.setRoundDuration((Integer)JBSGFV.GameRoundDurationComboBox.getSelectedItem());
+										
 					JBSGFV.parentWindow.addGame(JBombServerGameFormView.this.Game);		
 					
 					JBSGFV.dispose();			
 				}
 			}
 		});
-		btnNewButton.setBounds(185, 318, 117, 25);
+		btnNewButton.setBounds(185, 354, 117, 25);
 		contentPane.add(btnNewButton);
 		
 		JButton btnNewButton_1 = new JButton("Cancelar");
@@ -196,7 +203,7 @@ public class JBombServerGameFormView extends JFrame {
 				JBombServerGameFormView.this.dispose();
 			}
 		});
-		btnNewButton_1.setBounds(12, 318, 117, 25);
+		btnNewButton_1.setBounds(12, 354, 117, 25);
 		contentPane.add(btnNewButton_1);
 	}
 
@@ -210,6 +217,54 @@ public class JBombServerGameFormView extends JFrame {
 	
 	public Boolean isFormValid()
 	{
+		if (this.GameNameTextField.getText().equals(""))
+		{
+			JOptionPane.showMessageDialog(this, "Debe ingresar un nombre.", "¡Atención!", JOptionPane.WARNING_MESSAGE);
+			
+			return false;
+		}
+		
+		if (this.GameInetIPAddressComboBox.getSelectedIndex() < 0)
+		{
+			JOptionPane.showMessageDialog(this, "Debe seleccionar una dirección IP.", "¡Atención!", JOptionPane.WARNING_MESSAGE);
+			
+			return false;
+		}
+		
+		if (this.GameInetPortTextField.getText().equals(""))
+		{			
+			JOptionPane.showMessageDialog(this, "Debe ingresar un puerto.", "¡Atención!", JOptionPane.WARNING_MESSAGE);
+			
+			return false;
+		}
+		else
+		{
+			try
+			{
+				Integer.parseInt(this.GameInetPortTextField.getText());
+			}
+			catch (Exception e)
+			{				
+				JOptionPane.showMessageDialog(this, "El número de puerto es inválido.", "¡Atención!", JOptionPane.WARNING_MESSAGE);
+				
+				return false;
+			}			
+		}
+		
+		if (this.GameLinkageStrategyComboBox.getSelectedIndex() < 0)
+		{
+			JOptionPane.showMessageDialog(this, "Debe seleccionar una topología.", "¡Atención!", JOptionPane.WARNING_MESSAGE);
+			
+			return false;
+		}
+		
+		if (this.GameQuizComboBox.getSelectedIndex() < 0)
+		{
+			JOptionPane.showMessageDialog(this, "Debe seleccionar un cuestionario.", "¡Atención!", JOptionPane.WARNING_MESSAGE);
+			
+			return false;
+		}		
+		
 		return true;
 	}
 }
