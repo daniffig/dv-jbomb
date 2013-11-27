@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 
 
 
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -13,9 +14,12 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
+import network.GameClient;
+
 public class JBombNewPlayerView extends JFrame {
 	private JPanel contentPane;
 	private JTextField PlayerNameInput;
+	private GameClient game_client = new GameClient();
 	/**
 	 * Launch the application.
 	 */
@@ -44,7 +48,7 @@ public class JBombNewPlayerView extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel info_server = new JLabel("Servidor xxx.xxx.xxx.xxx:pppp");
+		JLabel info_server = new JLabel("Servidor " + this.game_client.server_ip + ":" + this.game_client.server_port);
 		info_server.setBounds(10, 10, 200, 15);
 		contentPane.add(info_server);
 		
