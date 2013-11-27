@@ -4,6 +4,7 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.TimerTask;
 import java.util.Vector;
 
 import edu.uci.ics.jung.graph.Graph;
@@ -21,7 +22,7 @@ public class Game {
 	private Integer CurrentRound;
 	private Integer MaxGamePlayersAllowed = 0;
 	private Integer RoundDuration;
-	private Bomb Bomb = new Bomb();
+	private Bomb Bomb = new Bomb(60000L, new TimerTask(){ public void run(){}});
 	private AbstractLinkageStrategy LinkageStrategy;
 	private Quiz Quiz;
 	private AbstractGameMode Mode;
