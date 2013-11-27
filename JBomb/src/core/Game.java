@@ -131,6 +131,14 @@ public class Game {
 		return this.getGamePlayers().size() <= this.getMaxGamePlayersAllowed();
 	}
 
+	public synchronized Boolean existPlayer(String username)
+	{
+		for(GamePlayer gp : this.GamePlayers)
+			if(gp.getName().equals(username)) return true;
+		
+		return false;
+	}
+	
 	public Boolean canSendBomb(GamePlayer sourceGamePlayer,
 			GamePlayer destinationGamePlayer) {
 		// TODO

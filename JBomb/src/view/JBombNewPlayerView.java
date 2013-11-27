@@ -7,9 +7,11 @@ import java.awt.event.ActionListener;
 
 
 
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -64,6 +66,18 @@ public class JBombNewPlayerView extends JFrame {
 		JButton btnQuizSave = new JButton("Sumarme al juego!");
 		btnQuizSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				game_client.username = PlayerNameInput.getText();
+				
+				String connection_result = game_client.joinGame();
+				
+				if(!connection_result.equals("ACCEPTED"))
+				{
+					//TODO Crear ventana de juego
+				}
+				else
+				{
+					JOptionPane.showMessageDialog(contentPane, connection_result);
+				}
 			}
 		});
 		btnQuizSave.setBounds(125, 110, 200, 25);

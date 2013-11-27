@@ -14,6 +14,7 @@ import annotations.Server;
 @Server("conf.properties.txt")
 public class GameClient {
 
+	public String username;
 	public String server_ip;
 	public int server_port;
 	private Socket socket;
@@ -27,6 +28,14 @@ public class GameClient {
 
 	}
 	
+	public String joinGame()
+	{
+		this.connectToServer();
+		
+		this.sendStringToServer(this.username);
+		
+		return this.receiveStringFromServer();
+	}
 	
 	public void readConfigurationFile()
 	{
