@@ -14,10 +14,10 @@ public class GameServer {
 	public GameServer()
 	{
 		current_game = new Game();
-		current_game.setInetPort(6621);
+		current_game.setInetPort(4321);
 		current_game.setName("JBomb!");
-		current_game.setMaxRounds(2);
-		current_game.setMaxGamePlayersAllowed(4);
+		current_game.setMaxRounds(1);
+		current_game.setMaxGamePlayersAllowed(2);
 	}
 	
 	public Game getGame()
@@ -41,7 +41,7 @@ public class GameServer {
 		} 
 		catch (IOException e)
 		{
-			System.out.println("No fue posible utilizar el puerto 6621");
+			System.out.println("No fue posible utilizar el puerto 4321");
 			System.exit(-1);
 		}
 		
@@ -57,7 +57,7 @@ public class GameServer {
 				}
 				catch (IOException e)
 				{
-					System.out.println("Fallo acept() en puerto 6621");
+					System.out.println("Fallo acept() en puerto 4321");
 					System.exit(-1);
 				}
 			}

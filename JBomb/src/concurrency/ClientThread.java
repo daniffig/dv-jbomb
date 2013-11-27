@@ -23,13 +23,13 @@ public class ClientThread implements Runnable {
 	@Override
 	public void run() {
 		System.out.println("Conexión establecida! Thread # " + Thread.currentThread().getName() + " creado");
-
+		this.processJoinGameRequest();
 	}
 
 	public void processJoinGameRequest()
 	{
 		String player_name = this.receiveStringFromClient();
-		
+
 		if(this.current_game.existPlayer(player_name))
 		{
 			this.sendStringToClient("El nombre de usuario ya existe en el juego");
@@ -66,7 +66,7 @@ public class ClientThread implements Runnable {
 		{
 			DataOutputStream outToClient = new DataOutputStream(this.client_socket.getOutputStream());
 		
-			outToClient.writeBytes(message);
+			outToClient.writeBytes(message + '\n');
 		}
 		catch(IOException e)
 		{
