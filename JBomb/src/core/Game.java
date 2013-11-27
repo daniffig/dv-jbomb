@@ -61,11 +61,11 @@ public class Game {
 		InetPort = inetPort;
 	}
 
-	public List<GamePlayer> getGamePlayers() {
+	public synchronized List<GamePlayer> getGamePlayers() {
 		return GamePlayers;
 	}
 
-	public void setGamePlayers(List<GamePlayer> gamePlayers) {
+	public synchronized void setGamePlayers(List<GamePlayer> gamePlayers) {
 		GamePlayers = gamePlayers;
 	}
 
@@ -77,11 +77,11 @@ public class Game {
 		MaxRounds = maxRounds;
 	}
 
-	public Integer getCurrentRound() {
+	public synchronized Integer getCurrentRound() {
 		return CurrentRound;
 	}
 
-	public void setCurrentRound(Integer currentRound) {
+	public synchronized void setCurrentRound(Integer currentRound) {
 		CurrentRound = currentRound;
 	}
 
@@ -101,11 +101,11 @@ public class Game {
 		RoundDuration = roundDuration;
 	}
 
-	public Bomb getBomb() {
+	public synchronized Bomb getBomb() {
 		return Bomb;
 	}
 
-	public void setBomb(Bomb bomb) {
+	public synchronized void setBomb(Bomb bomb) {
 		Bomb = bomb;
 	}
 
@@ -117,7 +117,7 @@ public class Game {
 		LinkageStrategy = linkageStrategy;
 	}
 
-	public Boolean addGamePlayer(GamePlayer p) {
+	public synchronized Boolean addGamePlayer(GamePlayer p) {
 		if (this.canAddPlayer()) {
 			this.getGamePlayers().add(p);
 
@@ -127,7 +127,7 @@ public class Game {
 		return false;
 	}
 
-	public Boolean canAddPlayer() {
+	public synchronized Boolean canAddPlayer() {
 		return this.getGamePlayers().size() <= this.getMaxGamePlayersAllowed();
 	}
 
