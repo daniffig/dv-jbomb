@@ -35,6 +35,11 @@ public class Quiz {
 		Filename = filename;
 	}
 
+	public QuizQuestion getRandomQuizQuestion()
+	{
+		return this.getQuizQuestions().get((int)(Math.random() * this.getQuizQuestions().size()));
+	}
+	
 	public Vector<QuizQuestion> getQuizQuestions() {
 		return QuizQuestions;
 	}
