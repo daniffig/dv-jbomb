@@ -129,7 +129,7 @@ public class JBombServerGameFormView extends JFrame {
 			    	InetAddress ipAddr = enumIpAddr.nextElement();
 			    	
 			    	// Que el Dios de los Objetos me perdone por esto...
-			    	if (ipAddr.getClass().getSimpleName().equals("Inet4Address") && !ipAddr.isLoopbackAddress())
+			    	if (ipAddr.getClass().getSimpleName().equals("Inet4Address"))
 			    	{
 			    		InetAddressVector.add(ipAddr);
 			    	}

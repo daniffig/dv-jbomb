@@ -222,6 +222,7 @@ public class Game {
 		v.add(this.getInetIPAddress());
 		v.add(this.getInetPort());
 		v.add(this.getMode());
+		v.add(this.getGamePlayersOverMaxGamePlayers());
 		
 		return v;
 	}
@@ -240,5 +241,10 @@ public class Game {
 
 	public void setMode(AbstractGameMode mode) {
 		Mode = mode;
+	}
+	
+	public String getGamePlayersOverMaxGamePlayers()
+	{
+		return this.getGamePlayers().size() + "/" + this.getMaxGamePlayersAllowed();
 	}
 }

@@ -35,11 +35,14 @@ public class GameClient {
 	
 	public String joinGame()
 	{
-		this.connectToServer();
+		if (this.connectToServer())
+		{			
+			this.sendStringToServer(this.username);
+			
+			return this.receiveStringFromServer();			
+		}
 		
-		this.sendStringToServer(this.username);
-		
-		return this.receiveStringFromServer();
+		return "Error!";
 	}
 	
 	public void receiveGameInformation()
@@ -101,7 +104,7 @@ public class GameClient {
 		}
 		catch(IOException e)
 		{
-			System.out.println("Fallo la recepción desde el Servidor.");
+			System.out.println("Fallo la recepciï¿½n desde el Servidor.");
 			
 			return null;
 		}
@@ -120,12 +123,16 @@ public class GameClient {
 		}
 	}
 	
-	public void connectToServer()
+	public Boolean connectToServer()
 	{
 		try	{
 			this.socket = new Socket(this.server_ip, this.server_port);
+			
+			return true;
 		}catch(IOException e){
 			System.out.println("Connection to server failed!");
+			
+			return false;
 		}
 	}
 	

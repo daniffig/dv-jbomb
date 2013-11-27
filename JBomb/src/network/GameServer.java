@@ -21,6 +21,11 @@ public class GameServer {
 		current_game.setMaxGamePlayersAllowed(2);
 	}
 	
+	public GameServer(Game Game)
+	{
+		this.current_game = Game;
+	}
+	
 	public Game getGame()
 	{
 		return this.current_game;
@@ -29,6 +34,46 @@ public class GameServer {
 	public void setGame(Game g)
 	{
 		this.current_game = g;
+	}
+	
+	public void listen()
+	{
+		JBombEventHandler event_handler = new JBombEventHandler(this.getGame().getMaxGamePlayersAllowed());
+		ServerSocket server = null;
+		System.out.println(this.getGame().getInetPort());
+		
+		try
+		{ 
+			server = new ServerSocket(4321);
+		} 
+		catch (IOException e)
+		{
+			System.out.println("No fue posible utilizar el puerto " + this.getGame().getInetPort());
+			
+			System.exit(-1);
+		}
+		
+		//while(game_server.getGame().canAddPlayer())
+		while(true)
+		{
+			if(server != null)
+			{
+				try
+				{
+					ClientThread stp = new ClientThread(server.accept(), this.current_game, event_handler);
+					Thread t = new Thread(stp);
+					t.start();
+				}
+				catch (IOException e)
+				{
+					System.out.println("Fallo acept() en puerto " + this.getGame().getInetPort());
+					
+					System.exit(-1);
+				}
+			}
+			else break;
+		}
+		
 	}
 	
 	public static void main(String[] args)

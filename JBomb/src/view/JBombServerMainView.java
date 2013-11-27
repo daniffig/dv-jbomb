@@ -16,6 +16,8 @@ import java.util.Vector;
 
 import javax.swing.JScrollPane;
 
+import network.GameServer;
+
 import java.awt.Toolkit;
 
 public class JBombServerMainView {
@@ -25,6 +27,7 @@ public class JBombServerMainView {
 	
 	private Vector<Game> GameVector = new Vector<Game>();
 	private Vector<Quiz> QuizVector = new Vector<Quiz>();
+	private Vector<GameServer> GameServerVector = new Vector<GameServer>();
 
 	/**
 	 * Launch the application.
@@ -67,6 +70,7 @@ public class JBombServerMainView {
 		GameFields.add("Dirección IP");
 		GameFields.add("Puerto");
 		GameFields.add("Modo");
+		GameFields.add("Jugadores");
 		
 		Vector<Vector<Object>> ObjectVector = new Vector<Vector<Object>>();
 		
@@ -121,6 +125,19 @@ public class JBombServerMainView {
 		JButton btnIniciar = new JButton("Iniciar");
 		btnIniciar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				JBombServerMainView JBSMV = JBombServerMainView.this;
+				
+				if (JBSMV.GamesTable.getSelectedRow() >= 0)
+				{
+					Game Game = JBSMV.GameVector.get(JBSMV.GamesTable.convertRowIndexToModel(JBSMV.GamesTable.getSelectedRow()));
+					
+					GameServer GameServer = new GameServer(Game);
+					
+					JBSMV.GameServerVector.add(GameServer);
+					
+					GameServer.listen();
+				}
+				
 			}
 		});
 		btnIniciar.setBounds(483, 294, 99, 25);

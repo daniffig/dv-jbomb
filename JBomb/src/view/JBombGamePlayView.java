@@ -53,9 +53,9 @@ public class JBombGamePlayView extends JFrame{
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel nombre_jugador = new JLabel("Jugador unNombre");
-		nombre_jugador.setBounds(275, 348, 150, 30);
-		contentPane.add(nombre_jugador);
+		JLabel lblGamePlayerName = new JLabel(gc.username);
+		lblGamePlayerName.setBounds(275, 298, 150, 30);
+		contentPane.add(lblGamePlayerName);
 		
 		JLabel jugador_derecha = new JLabel("Jugador 03 (derecha)");
 		jugador_derecha.setBounds(535, 363, 147, 15);
