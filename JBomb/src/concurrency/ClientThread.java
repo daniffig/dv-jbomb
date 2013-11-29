@@ -60,9 +60,9 @@ public class ClientThread implements Runnable {
 					//this.sendQuizQuestion();
 				}
 				break;
-			case QUIZ_ANSWER_REQUEST
+			//case QUIZ_ANSWER_REQUEST
 				//this.receiveQuizAnswer()
-			QUIZ_ANSWER_RESPONSE,
+			//QUIZ_ANSWER_RESPONSE,
 			case BOMB_DETONATED_REQUEST:
 				continue;
 			
