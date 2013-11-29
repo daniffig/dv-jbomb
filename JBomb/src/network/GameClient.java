@@ -11,6 +11,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import reference.AdjacentDirections;
 import annotations.Server;
 
 @Server("conf.properties.txt")

@@ -3,7 +3,7 @@ package concurrency;
 import java.util.ArrayList;
 import java.util.List;
 
-import network.JBombGameEvent;
+import reference.JBombGameEvent;
 
 
 public class JBombEventHandler {

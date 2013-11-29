@@ -9,7 +9,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Vector;
 
-import network.JBombGameEvent;
+import reference.JBombGameEvent;
 import core.Game;
 import core.GamePlayer;
 import core.QuizQuestion;

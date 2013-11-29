@@ -1,4 +1,4 @@
-package network;
+package reference;
 
 public enum AdjacentDirections {
 	FORWARD(0),

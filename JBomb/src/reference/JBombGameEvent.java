@@ -1,4 +1,4 @@
-package network;
+package reference;
 
 public enum JBombGameEvent {
 	CORRECT_ANSWER,
