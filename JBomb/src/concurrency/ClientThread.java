@@ -21,13 +21,9 @@ public class ClientThread implements Runnable {
 	private String client_player_name;
 	private Game current_game;
 	
-	public ClientThread(Socket s, Game g, JBombEventHandler eh)
+	public ClientThread(Socket s)
 	{
 		this.client_socket = s;
-		this.event_handler = eh;
-		this.current_game = g;
-		
-		this.event_handler.subscribe(this);
 	}
 	
 	@Override

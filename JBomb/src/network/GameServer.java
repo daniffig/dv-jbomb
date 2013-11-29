@@ -4,6 +4,7 @@ import view.*;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.Vector;
 
 import concurrency.ClientThread;
 import concurrency.JBombEventHandler;
@@ -11,48 +12,48 @@ import core.Game;
 
 public class GameServer implements Runnable{
 
-	private Game current_game;
+	private static GameServer instance;
+	
+	private Vector<Game> Games = new Vector<Game>();
+	private Vector<JBombEventHandler> EventHandlers = new Vector<JBombEventHandler>();
 	private JBombServerMainView JBombServerMainView;
+	private String InetIPAddress = "127.0.0.1";
+	private Integer InetPort = 4321;
+	
+	
+	public static GameServer Singleton()
+	{
+		if(instance.equals(null)) instance = new GameServer();
+		return instance;
+	}
 	
 	public GameServer()
 	{
-		current_game = new Game();
-		current_game.setInetPort(4321);
-		current_game.setName("JBomb!");
-		current_game.setMaxRounds(1);
-		current_game.setMaxGamePlayersAllowed(2);
 	}
 	
-	public GameServer(Game Game, JBombServerMainView JBombServerMainView)
+	public GameServer(JBombServerMainView JBombServerMainView)
 	{
-		this.current_game = Game;
 		this.JBombServerMainView = JBombServerMainView;
-		System.out.println("cree este thread");
 	}
 	
-	public Game getGame()
+	public GameServer(Vector<Game> Games, JBombServerMainView JBombServerMainView)
 	{
-		return this.current_game;
-	}
-	
-	public void setGame(Game g)
-	{
-		this.current_game = g;
+		this.Games = Games;
+		this.JBombServerMainView = JBombServerMainView;
 	}
 	
 	public void run()
 	{
-		JBombEventHandler event_handler = new JBombEventHandler(this.getGame().getMaxGamePlayersAllowed());
 		ServerSocket server = null;
-		System.out.println(this.getGame().getInetPort());
+		System.out.println(this.getInetPort());
 		
 		try
 		{ 
-			server = new ServerSocket(4321);
+			server = new ServerSocket(this.getInetPort());
 		} 
 		catch (IOException e)
 		{
-			System.out.println("No fue posible utilizar el puerto " + this.getGame().getInetPort());
+			System.out.println("No fue posible utilizar el puerto " + this.getInetPort());
 			
 			System.exit(-1);
 		}
@@ -64,7 +65,7 @@ public class GameServer implements Runnable{
 			{
 				try
 				{
-					ClientThread stp = new ClientThread(server.accept(), this.current_game, event_handler);
+					ClientThread stp = new ClientThread(server.accept());
 					Thread t = new Thread(stp);
 					t.start();
 					
@@ -72,7 +73,7 @@ public class GameServer implements Runnable{
 				}
 				catch (IOException e)
 				{
-					System.out.println("Fallo acept() en puerto " + this.getGame().getInetPort());
+					System.out.println("Fallo acept() en puerto " + this.getInetPort());
 					
 					System.exit(-1);
 				}
@@ -82,41 +83,70 @@ public class GameServer implements Runnable{
 		
 	}
 	
-	public static void main(String[] args)
+	public Vector<Game> getGames()
 	{
-		GameServer game_server = new GameServer();
-		JBombEventHandler event_handler = new JBombEventHandler(game_server.getGame().getMaxGamePlayersAllowed());
-		ServerSocket server = null;
-		
-		try
-		{ 
-			server = new ServerSocket(game_server.getGame().getInetPort());
-		} 
-		catch (IOException e)
-		{
-			System.out.println("No fue posible utilizar el puerto 4321");
-			System.exit(-1);
-		}
-		
-		//while(game_server.getGame().canAddPlayer())
-		while(true)
-		{
-			if(server != null)
-			{
-				try
-				{
-					ClientThread stp = new ClientThread(server.accept(), game_server.current_game, event_handler);
-					Thread t = new Thread(stp);
-					t.start();
-				}
-				catch (IOException e)
-				{
-					System.out.println("Fallo acept() en puerto 4321");
-					System.exit(-1);
-				}
-			}
-			else break;
-		}
+		return this.Games;
 	}
-
+	
+	public void setGames(Vector<Game> gs)
+	{
+		this.Games = gs;
+	}
+	
+	public void addGame(Game g)
+	{
+		this.addEventHandler(new JBombEventHandler(g.getMaxGamePlayersAllowed()));
+		this.Games.add(g);
+	}
+	
+	public void removeGame(Game g)
+	{
+		this.removeEventHandler(this.getEventHandlerOfGame(g));
+		this.Games.remove(g);
+	}
+	
+	public Vector<JBombEventHandler> getEventHandlers()
+	{
+		return this.EventHandlers;
+	}
+	
+	public void setEventHandlers(Vector<JBombEventHandler> event_handlers)
+	{
+		this.EventHandlers = event_handlers;
+	}
+	
+	public void addEventHandler(JBombEventHandler event_handler)
+	{
+		this.EventHandlers.add(event_handler);
+	}
+	
+	public void removeEventHandler(JBombEventHandler event_handler)
+	{
+		this.EventHandlers.remove(event_handler);
+	}
+	
+	public JBombEventHandler getEventHandlerOfGame(Game g)
+	{
+		return this.EventHandlers.get(this.Games.indexOf(g));
+	}
+	
+	public void setInetIPAddress(String ip)
+	{
+		this.InetIPAddress = ip;
+	}
+	
+	public String getInetIPAddress()
+	{
+		return this.InetIPAddress;
+	}
+	
+	public void setInetPort(Integer port_number)
+	{
+		this.InetPort = port_number;
+	}
+	
+	public Integer getInetPort()
+	{
+		return this.InetPort;
+	}
 }

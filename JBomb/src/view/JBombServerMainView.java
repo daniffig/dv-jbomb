@@ -174,7 +174,7 @@ public class JBombServerMainView {
 				{
 					Game Game = JBSMV.GameVector.get(JBSMV.GamesTable.convertRowIndexToModel(JBSMV.GamesTable.getSelectedRow()));
 					
-					GameServer GameServer = new GameServer(Game, JBSMV);
+					GameServer GameServer = new GameServer(JBSMV);
 					
 					JBSMV.GameServerVector.add(GameServer);
 					
