@@ -178,7 +178,8 @@ public class JBombServerMainView {
 					
 					JBSMV.GameServerVector.add(GameServer);
 					
-					GameServer.listen();
+					Thread t = new Thread(GameServer);
+					t.start();
 				}
 			}
 		});

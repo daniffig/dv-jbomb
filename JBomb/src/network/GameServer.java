@@ -9,7 +9,7 @@ import concurrency.ClientThread;
 import concurrency.JBombEventHandler;
 import core.Game;
 
-public class GameServer {
+public class GameServer implements Runnable{
 
 	private Game current_game;
 	private JBombServerMainView JBombServerMainView;
@@ -27,6 +27,7 @@ public class GameServer {
 	{
 		this.current_game = Game;
 		this.JBombServerMainView = JBombServerMainView;
+		System.out.println("cree este thread");
 	}
 	
 	public Game getGame()
@@ -39,7 +40,7 @@ public class GameServer {
 		this.current_game = g;
 	}
 	
-	public void listen()
+	public void run()
 	{
 		JBombEventHandler event_handler = new JBombEventHandler(this.getGame().getMaxGamePlayersAllowed());
 		ServerSocket server = null;
