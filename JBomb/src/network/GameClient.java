@@ -38,8 +38,6 @@ public class GameClient {
 	{
 		this.readConfigurationFile();
 		this.connectToServer();
-		this.sendRequestToServer(JBombRequestResponse.GAMES_INFORMATION_REQUEST);
-		this.receiveGamesInformationFromServer();
 	}	
 	
 	public String joinGame()
@@ -205,7 +203,7 @@ public class GameClient {
 	}
 	
 	public JBombRequestResponse receiveResponseFromServer()
-	{
+	{		
 		try
 		{
 			ObjectInputStream inFromClient = new ObjectInputStream(this.socket.getInputStream());
@@ -217,5 +215,11 @@ public class GameClient {
 			System.out.println("Fallo la recepcion del response del server");
 			return null;
 		}
+	}
+	
+	public void retrieveGamesInformation()
+	{
+		this.sendRequestToServer(JBombRequestResponse.GAMES_INFORMATION_REQUEST);
+		this.receiveGamesInformationFromServer();
 	}
 }

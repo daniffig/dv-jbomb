@@ -115,7 +115,16 @@ public class JBombServerMainView {
 		scrollPane.setBounds(12, 12, 570, 320);
 		frmJbombV.getContentPane().add(scrollPane);
 		
-		GamesTable = new JTable(new DefaultTableModel(ObjectVector, GameFields));
+		GamesTable = new JTable(new DefaultTableModel(ObjectVector, GameFields){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		        //all cells false
+		        return false;
+		    }
+		});
+		
 		GamesTable.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent evt) {
 				System.out.println(evt.getClass());
@@ -165,28 +174,6 @@ public class JBombServerMainView {
 		mnArchivo.addSeparator();
 		
 		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Iniciar");
-		mntmNewMenuItem_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				/*
-				JBombServerMainView JBSMV = JBombServerMainView.this;
-				
-				if (JBSMV.GamesTable.getSelectedRow() >= 0)
-				{
-					Game Game = JBSMV.GameVector.get(JBSMV.GamesTable.convertRowIndexToModel(JBSMV.GamesTable.getSelectedRow()));
-					
-					GameServer GameServer = new GameServer(JBSMV);
-					
-					JBSMV.GameServerVector.add(GameServer);
-					
-					Thread t = new Thread(GameServer);
-					
-					t.start();
-				}
-				
-				*/
-			}
-		});
 		buttonGroup_1.add(mntmNewMenuItem_3);
 		mnArchivo.add(mntmNewMenuItem_3);
 

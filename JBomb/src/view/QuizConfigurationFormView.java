@@ -112,7 +112,6 @@ public class QuizConfigurationFormView extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		
 
 		mnNewMenu.addSeparator();
 		
@@ -153,7 +152,15 @@ public class QuizConfigurationFormView extends JFrame {
 		QuizScrollPane.setBounds(12, 12, 560, 285);
 		panel.add(QuizScrollPane);
 		
-		QuizTable = new JTable(new DefaultTableModel(ObjectVector, QuizFields));
+		QuizTable = new JTable(new DefaultTableModel(ObjectVector, QuizFields) {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		        //all cells false
+		        return false;
+		    }			
+		});
 		QuizScrollPane.setViewportView(QuizTable);
 	}
 	

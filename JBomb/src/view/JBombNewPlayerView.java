@@ -73,10 +73,7 @@ public class JBombNewPlayerView extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public JBombNewPlayerView() {
-		
-		
-		
+	public JBombNewPlayerView() {		
 		setResizable(false);
 		setTitle("Nuevo Juego");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -153,7 +150,7 @@ public class JBombNewPlayerView extends JFrame {
 		GameClientGameInformationTable = new JTable();
 		scrollPane.setViewportView(GameClientGameInformationTable);
 
-		this.refreshGamesInformation();
+		//this.refreshGamesInformation();
 		
 		GameClientGameInformationTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			
@@ -222,14 +219,13 @@ public class JBombNewPlayerView extends JFrame {
 	
 	public void refreshGamesInformation()
 	{
-		this.game_client.receiveGamesInformationFromServer();
+		this.game_client.retrieveGamesInformation();
 		
 		Vector<String> GameInformationColumns = new Vector<String>();
 		
 		GameInformationColumns.add("Nombre");
 		GameInformationColumns.add("Jugadores");
-		GameInformationColumns.add("Estado");
-		
+		GameInformationColumns.add("Estado");		
 		
 		Vector<Vector<Object>> GameInformationVector = new Vector<Vector<Object>>();
 		
