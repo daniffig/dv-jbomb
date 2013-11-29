@@ -39,7 +39,6 @@ public class ClientThread implements Runnable {
 			switch (request){
 			
 			case GAMES_INFORMATION_REQUEST:
-				this.sendResponseToClient(JBombRequestResponse.GAMES_INFORMATION_RESPONSE);
 				this.sendGamesInformation();
 				break;
 			case JOIN_GAME_REQUEST:
@@ -61,6 +60,9 @@ public class ClientThread implements Runnable {
 					//this.sendQuizQuestion();
 				}
 				break;
+			case QUIZ_ANSWER_REQUEST
+				//this.receiveQuizAnswer()
+			QUIZ_ANSWER_RESPONSE,
 			case BOMB_DETONATED_REQUEST:
 				continue;
 			
