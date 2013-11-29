@@ -7,12 +7,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Vector;
 
 import reference.AdjacentDirections;
+import reference.JBombRequestResponse;
 import annotations.Server;
 
 @Server("conf.properties.txt")
@@ -36,6 +38,8 @@ public class GameClient {
 	{
 		this.readConfigurationFile();
 		this.connectToServer();
+		this.sendRequestToServer(JBombRequestResponse.GAMES_INFORMATION_REQUEST);
+		this.receiveGamesInformationFromServer();
 	}	
 	
 	public String joinGame()
@@ -184,5 +188,34 @@ public class GameClient {
 
 	public Vector<GameInformation> getGamesInformation() {
 		return GamesInformation;
+	}
+	
+	public void sendRequestToServer(JBombRequestResponse jbrr)
+	{
+		try
+		{
+			ObjectOutputStream outToClient = new ObjectOutputStream(this.socket.getOutputStream());
+			
+			outToClient.writeObject(jbrr);
+		}
+		catch(Exception e)
+		{
+			System.out.println("Fallo el envio del request");
+		}
+	}
+	
+	public JBombRequestResponse receiveResponseFromServer()
+	{
+		try
+		{
+			ObjectInputStream inFromClient = new ObjectInputStream(this.socket.getInputStream());
+		
+			return (JBombRequestResponse) inFromClient.readObject();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Fallo la recepcion del response del server");
+			return null;
+		}
 	}
 }
