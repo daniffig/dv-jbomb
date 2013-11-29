@@ -19,6 +19,22 @@ import javax.swing.JScrollPane;
 import network.GameServer;
 
 import java.awt.Toolkit;
+import javax.swing.JToolBar;
+import java.awt.Choice;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenuItem;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.JPopupMenu;
+import java.awt.Dimension;
+import javax.swing.JPanel;
+import javax.swing.ButtonGroup;
+import java.awt.Component;
+import javax.swing.Box;
 
 public class JBombServerMainView {
 
@@ -28,6 +44,8 @@ public class JBombServerMainView {
 	private Vector<Game> GameVector = new Vector<Game>();
 	private Vector<Quiz> QuizVector = new Vector<Quiz>();
 	private Vector<GameServer> GameServerVector = new Vector<GameServer>();
+	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private final ButtonGroup buttonGroup_1 = new ButtonGroup();
 
 	/**
 	 * Launch the application.
@@ -80,35 +98,32 @@ public class JBombServerMainView {
 		}
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(12, 39, 459, 280);
+		scrollPane.setBounds(12, 12, 570, 320);
 		frmJbombV.getContentPane().add(scrollPane);
 		
 		GamesTable = new JTable(new DefaultTableModel(ObjectVector, GameFields));
 		scrollPane.setViewportView(GamesTable);
 		
-		JLabel lblJuegosActivos = new JLabel("Listado de Juegos");
-		lblJuegosActivos.setBounds(12, 12, 127, 15);
-		frmJbombV.getContentPane().add(lblJuegosActivos);
+		JMenuBar menuBar = new JMenuBar();
+		frmJbombV.setJMenuBar(menuBar);
 		
-		JButton btnNewButton = new JButton("Nuevo");
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		JMenu mnArchivo = new JMenu("Juego");
+		menuBar.add(mnArchivo);
+		
+		JMenuItem mntmNewMenuItem = new JMenuItem("Nuevo");
+		buttonGroup.add(mntmNewMenuItem);
+		mntmNewMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				JBombServerGameFormView GameFormWindow = new JBombServerGameFormView(JBombServerMainView.this, new Game());
 				
 				GameFormWindow.setVisible(true);
 			}
 		});
-		btnNewButton.setBounds(483, 39, 99, 25);
-		frmJbombV.getContentPane().add(btnNewButton);
+		mnArchivo.add(mntmNewMenuItem);
 		
-		JButton btnEliminar = new JButton("Eliminar");
-		btnEliminar.setBounds(483, 113, 99, 25);
-		frmJbombV.getContentPane().add(btnEliminar);
-		
-		JButton btnNewButton_1 = new JButton("Modificar");
-		btnNewButton_1.setEnabled(false);
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+		JMenuItem mntmEditar = new JMenuItem("Editar");
+		mntmEditar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
 				JBombServerMainView JBSMV = JBombServerMainView.this;
 				
 				if (GamesTable.getSelectedRow() >= 0)
@@ -119,11 +134,17 @@ public class JBombServerMainView {
 				}
 			}
 		});
-		btnNewButton_1.setBounds(483, 76, 99, 25);
-		frmJbombV.getContentPane().add(btnNewButton_1);
+		buttonGroup.add(mntmEditar);
+		mnArchivo.add(mntmEditar);
 		
-		JButton btnIniciar = new JButton("Iniciar");
-		btnIniciar.addActionListener(new ActionListener() {
+		JMenuItem mntmEliminar = new JMenuItem("Eliminar");
+		buttonGroup.add(mntmEliminar);
+		mnArchivo.add(mntmEliminar);
+		
+		mnArchivo.addSeparator();
+		
+		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Iniciar");
+		mntmNewMenuItem_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JBombServerMainView JBSMV = JBombServerMainView.this;
 				
@@ -137,22 +158,44 @@ public class JBombServerMainView {
 					
 					GameServer.listen();
 				}
-				
 			}
 		});
-		btnIniciar.setBounds(483, 294, 99, 25);
-		frmJbombV.getContentPane().add(btnIniciar);
+		buttonGroup_1.add(mntmNewMenuItem_3);
+		mnArchivo.add(mntmNewMenuItem_3);
+
+		mnArchivo.addSeparator();
 		
-		JButton btnConfigurarPreguntas = new JButton("Administrar Cuestionarios");
-		btnConfigurarPreguntas.addActionListener(new ActionListener() {
+		JMenuItem mntmNewMenuItem_4 = new JMenuItem("Cerrar");
+		mnArchivo.add(mntmNewMenuItem_4);
+		
+		JMenu mnNewMenu = new JMenu("Cuestionario");
+		menuBar.add(mnNewMenu);
+		
+		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Administración");
+		mntmNewMenuItem_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				QuizConfigurationFormView QuizConfigurationFormView = new QuizConfigurationFormView(JBombServerMainView.this);
 				
 				QuizConfigurationFormView.setVisible(true);
 			}
 		});
-		btnConfigurarPreguntas.setBounds(12, 331, 219, 25);
-		frmJbombV.getContentPane().add(btnConfigurarPreguntas);
+		mnNewMenu.add(mntmNewMenuItem_1);
+		
+		JMenu mnNewMenu_1 = new JMenu("Servidor");
+		menuBar.add(mnNewMenu_1);
+		
+		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Configuración");
+		mntmNewMenuItem_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JBombServerInetConfigurationFormView JBombServerInetConfigurationFormView = new JBombServerInetConfigurationFormView();
+				
+				JBombServerInetConfigurationFormView.setVisible(true);			
+			}
+		});
+		mnNewMenu_1.add(mntmNewMenuItem_2);
+		
+		JMenu mnNewMenu_2 = new JMenu("Ayuda");
+		menuBar.add(mnNewMenu_2);
 	}
 	
 	public void addGame(Game Game)
@@ -184,5 +227,13 @@ public class JBombServerMainView {
 	public void refresh()
 	{
 		((DefaultTableModel)this.GamesTable.getModel()).fireTableDataChanged();
+	}
+	private class SwingAction extends AbstractAction {
+		public SwingAction() {
+			putValue(NAME, "SwingAction");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+		}
 	}
 }
