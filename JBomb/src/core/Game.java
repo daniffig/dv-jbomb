@@ -9,6 +9,7 @@ import java.util.Vector;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
 import gameModes.AbstractGameMode;
+import gameStates.*;
 import linkageStrategies.AbstractLinkageStrategy;
 
 public class Game {
@@ -23,11 +24,17 @@ public class Game {
 	private AbstractLinkageStrategy LinkageStrategy;
 	private Quiz Quiz;
 	private AbstractGameMode Mode;
+	private AbstractGameState State;
 	
-	public Game(){}
+	public Game()
+	{
+		this.setState(new NewGameState());		
+	}
 	
 	public Game (String name)
 	{
+		this();
+		
 		this.setName(name);
 	}
 	
@@ -226,5 +233,13 @@ public class Game {
 	public String getGamePlayersOverMaxGamePlayers()
 	{
 		return this.getGamePlayers().size() + "/" + this.getMaxGamePlayersAllowed();
+	}
+
+	public AbstractGameState getState() {
+		return State;
+	}
+
+	public void setState(AbstractGameState state) {
+		State = state;
 	}
 }

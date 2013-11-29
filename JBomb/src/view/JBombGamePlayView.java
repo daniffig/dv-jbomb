@@ -16,6 +16,8 @@ import javax.swing.SwingConstants;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class JBombGamePlayView extends JFrame{
 	
@@ -133,14 +135,24 @@ public class JBombGamePlayView extends JFrame{
 		JButton button_3 = new JButton("");
 		button_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JBombClientAnswerQuestionFormView JBombClientAnswerQuestionFormView = new JBombClientAnswerQuestionFormView(JBombGamePlayView.this);
-				
-				JBombClientAnswerQuestionFormView.setVisible(true);
 			}
 		});
 		button_3.setIcon(new ImageIcon(JBombGamePlayView.class.getResource("/images/UpArrow.png")));
 		button_3.setToolTipText("Pasar al Jugador 02");
 		button_3.setBounds(275, 126, 92, 92);
 		contentPane.add(button_3);
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				JBombClientAnswerQuestionFormView JBombClientAnswerQuestionFormView = new JBombClientAnswerQuestionFormView(JBombGamePlayView.this);
+				
+				JBombClientAnswerQuestionFormView.setVisible(true);
+			}
+		});
+		lblNewLabel.setIcon(new ImageIcon(JBombGamePlayView.class.getResource("/images/UpArrow.png")));
+		lblNewLabel.setBounds(37, 97, 90, 90);
+		contentPane.add(lblNewLabel);
 	}
 }
