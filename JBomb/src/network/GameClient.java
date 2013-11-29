@@ -35,6 +35,7 @@ public class GameClient {
 	public GameClient()
 	{
 		this.readConfigurationFile();
+		this.connectToServer();
 	}
 	
 	
