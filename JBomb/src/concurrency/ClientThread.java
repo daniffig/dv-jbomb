@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -86,65 +87,6 @@ public class ClientThread implements Runnable {
 		this.Game.start();
 	}
 	
-	public void sendQuizQuestion(QuizQuestion qq)
-	{
-		try{
-			ObjectOutputStream outToClient = new ObjectOutputStream(this.ClientSocket.getOutputStream());
-		
-			Vector<String> quiz = new Vector<String>();
-			quiz.add(qq.getQuestion());
-			
-			for(String s : qq.getAnswers())
-			{
-				quiz.add(s);
-			}
-			
-			outToClient.writeObject(quiz);
-		}
-		catch(Exception e)
-		{
-			System.out.println("The QuizQuestion couldn't be send to the client");
-		}
-	}
-	
-	public void sendCurrentGameInformation()
-	{
-		try{
-			ObjectOutputStream outToClient = new ObjectOutputStream(this.ClientSocket.getOutputStream());
-		
-			ArrayList<String> game_info = new ArrayList<String>();
-			game_info.add(this.Game.getName());
-			game_info.add(this.Game.getMaxGamePlayersAllowed().toString());
-			game_info.add(this.Game.getMaxRounds().toString());
-			//TODO Mando vecinos(nombre) en sentido horario comenzando por arriba, si no existe pongo en null.
-			
-			outToClient.writeObject(game_info);
-		}
-		catch(Exception e)
-		{}
-	}
-	
-	public void processJoinGameRequest()
-	{
-		String player_name = this.receiveStringFromClient();
-
-		if(this.Game.existPlayer(player_name))
-		{
-			this.sendStringToClient("El nombre de usuario ya existe en el juego");
-		}
-		else
-		{
-			GamePlayer gp = new GamePlayer(player_name);
-			
-			if(!this.Game.addGamePlayer(gp))
-				this.sendStringToClient("Juego completo! no se pueden agregar mas jugadores");
-			else
-			{
-				this.PlayerName = player_name;
-				this.sendStringToClient("ACCEPTED");
-			}
-		}
-	}
 	
 	public String receiveStringFromClient()
 	{
@@ -174,7 +116,11 @@ public class ClientThread implements Runnable {
 			System.out.println("Fallo el envio de datos al cliente");
 		}
 	}
+	
+	
 	/*NUEVAS COSAS*/
+	
+	
 	public Vector<GameInformation> getGamesInformation()
 	{		
 		Vector<GameInformation> games_information = new Vector<GameInformation>();
@@ -205,6 +151,65 @@ public class ClientThread implements Runnable {
 		catch(Exception e)
 		{
 			System.out.println("Fallo el envio de información de juegos");
+		}
+	}
+	
+	public Vector<String> receiveJoinGameRequest()
+	{
+		try
+		{
+			ObjectInputStream inFromClient = new ObjectInputStream(this.ClientSocket.getInputStream());
+		
+			return (Vector<String>) inFromClient.readObject();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Fallo la recepcion de datos del cliente");
+			return null;
+		}
+	}
+	
+	public String processJoinGameRequest(Vector<String> joinGameRequest)
+	{
+		String GameName = joinGameRequest.get(0);
+		String PlayerName = joinGameRequest.get(1);
+		
+		Game RequestedGame = GameServer.getInstance().getGameByName(GameName);
+		
+		String result;
+		
+		if(RequestedGame == null) result = "El juego requerido no existe";
+		else
+		{
+			if(RequestedGame.existPlayer(PlayerName))
+				result = "El nombre de jugador ya existe en el juego " + GameName;
+			else
+			{
+				if(!RequestedGame.addGamePlayer(new GamePlayer(PlayerName)))
+					result = "Juego Completo! no se pueden agregar más jugadores";
+				else
+				{
+					this.Game = RequestedGame;
+					this.EventHandler = GameServer.getInstance().getEventHandlerOfGame(RequestedGame);
+					this.PlayerName = PlayerName;
+					result = "ACCEPTED";
+				}
+			}
+		}
+		return result;
+	}
+	
+	public void sendJoinGameRequestResponse(String result)
+	{
+		try
+		{
+			DataOutputStream outToClient = new DataOutputStream(this.ClientSocket.getOutputStream());
+		
+			outToClient.writeBytes(result + '\n');
+		}
+		catch(IOException e)
+		{
+			System.out.println("Fallo el envio de datos al cliente");
 		}
 	}
 }

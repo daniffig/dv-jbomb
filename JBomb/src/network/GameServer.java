@@ -103,6 +103,14 @@ public class GameServer implements Runnable{
 		this.Games.remove(g);
 	}
 	
+	public synchronized Game getGameByName(String name)
+	{
+		for(Game g : this.Games)
+			if(g.getName().equals(name)) return g;
+		
+		return null;
+	}
+	
 	public synchronized Vector<JBombEventHandler> getEventHandlers()
 	{
 		return this.EventHandlers;
