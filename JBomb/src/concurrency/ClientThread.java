@@ -9,6 +9,8 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Vector;
 
+import network.GameInformation;
+import network.GameServer;
 import reference.JBombGameEvent;
 import core.Game;
 import core.GamePlayer;
@@ -16,76 +18,78 @@ import core.QuizQuestion;
 
 public class ClientThread implements Runnable {
 
-	private Socket client_socket;
-	private JBombEventHandler event_handler;
-	private String client_player_name;
-	private Game current_game;
+	private Socket ClientSocket;
+	private JBombEventHandler EventHandler;
+	private Game Game;
+	private String PlayerName;
 	
 	public ClientThread(Socket s)
 	{
-		this.client_socket = s;
+		this.ClientSocket = s;
 	}
 	
 	@Override
 	public void run() {
-		System.out.println("Conexiï¿½n establecida! Thread # " + Thread.currentThread().getName() + " creado");
+		System.out.println("Conexion establecida! Thread # " + Thread.currentThread().getName() + " creado");
 		
+		this.sendGamesInformation();
+		/*this.sendGamesInformation();
 		this.processJoinGameRequest();
 		
 		this.sendCurrentGameInformation();
 		
-		this.event_handler.joinBarrier(this); //esperos a que todos tengan la informaciï¿½n del juego, el ultimo inicia el juego.
+		this.EventHandler.joinBarrier(this); //esperos a que todos tengan la informaciï¿½n del juego, el ultimo inicia el juego.
 		
 		
-		while(!this.current_game.getBomb().isDetonated())
+		while(!this.Game.getBomb().isDetonated())
 		{
 			//pregunto quien tiene la bomba
-			String player_with_bomb = this.current_game.getBomb().getCurrentPlayer().getName();
+			String player_with_bomb = this.Game.getBomb().getCurrentPlayer().getName();
 		
 			this.sendStringToClient(player_with_bomb);
 		
-			if(!player_with_bomb.equals(client_player_name))
+			if(!player_with_bomb.equals(PlayerName))
 			{
 				//si no soy yo, me voy a dormir
-				this.event_handler.waitForMove();
+				this.EventHandler.waitForMove();
 			}
 			else
 			{
-				QuizQuestion qq = this.current_game.getQuiz().getRandomQuizQuestion();
+				QuizQuestion qq = this.Game.getQuiz().getRandomQuizQuestion();
 			
 				this.sendQuizQuestion(qq);
-				this.current_game.getBomb().activate();
+				this.Game.getBomb().activate();
 				String answer = this.receiveStringFromClient();//TODO falta siguiente jugador
-				this.current_game.getBomb().deactivate();
+				this.Game.getBomb().deactivate();
 			
-				if(!this.current_game.getBomb().isDetonated())
+				if(!this.Game.getBomb().isDetonated())
 				{	
 					if(qq.getCorrectAnswer().equals(answer))
 					{
-						this.event_handler.setEvent(JBombGameEvent.CORRECT_ANSWER);
+						this.EventHandler.setEvent(JBombGameEvent.CORRECT_ANSWER);
 						//TODO paso la bomba
 					}
 					else
-						this.event_handler.setEvent(JBombGameEvent.WRONG_ANSWER);
+						this.EventHandler.setEvent(JBombGameEvent.WRONG_ANSWER);
 				}
 				else
-					this.event_handler.setEvent(JBombGameEvent.BOMB_EXPLODED);
+					this.EventHandler.setEvent(JBombGameEvent.BOMB_EXPLODED);
 				
-				this.event_handler.wakeUpAll();
+				this.EventHandler.wakeUpAll();
 			}
 		}
-		
+		*/
 	}
 	
 	public void startGame()
 	{
-		this.current_game.start();
+		this.Game.start();
 	}
 	
 	public void sendQuizQuestion(QuizQuestion qq)
 	{
 		try{
-			ObjectOutputStream outToClient = new ObjectOutputStream(this.client_socket.getOutputStream());
+			ObjectOutputStream outToClient = new ObjectOutputStream(this.ClientSocket.getOutputStream());
 		
 			Vector<String> quiz = new Vector<String>();
 			quiz.add(qq.getQuestion());
@@ -106,12 +110,12 @@ public class ClientThread implements Runnable {
 	public void sendCurrentGameInformation()
 	{
 		try{
-			ObjectOutputStream outToClient = new ObjectOutputStream(this.client_socket.getOutputStream());
+			ObjectOutputStream outToClient = new ObjectOutputStream(this.ClientSocket.getOutputStream());
 		
 			ArrayList<String> game_info = new ArrayList<String>();
-			game_info.add(this.current_game.getName());
-			game_info.add(this.current_game.getMaxGamePlayersAllowed().toString());
-			game_info.add(this.current_game.getMaxRounds().toString());
+			game_info.add(this.Game.getName());
+			game_info.add(this.Game.getMaxGamePlayersAllowed().toString());
+			game_info.add(this.Game.getMaxRounds().toString());
 			//TODO Mando vecinos(nombre) en sentido horario comenzando por arriba, si no existe pongo en null.
 			
 			outToClient.writeObject(game_info);
@@ -124,7 +128,7 @@ public class ClientThread implements Runnable {
 	{
 		String player_name = this.receiveStringFromClient();
 
-		if(this.current_game.existPlayer(player_name))
+		if(this.Game.existPlayer(player_name))
 		{
 			this.sendStringToClient("El nombre de usuario ya existe en el juego");
 		}
@@ -132,11 +136,11 @@ public class ClientThread implements Runnable {
 		{
 			GamePlayer gp = new GamePlayer(player_name);
 			
-			if(!this.current_game.addGamePlayer(gp))
+			if(!this.Game.addGamePlayer(gp))
 				this.sendStringToClient("Juego completo! no se pueden agregar mas jugadores");
 			else
 			{
-				this.client_player_name = player_name;
+				this.PlayerName = player_name;
 				this.sendStringToClient("ACCEPTED");
 			}
 		}
@@ -146,7 +150,7 @@ public class ClientThread implements Runnable {
 	{
 		try
 		{
-			BufferedReader inFromClient = new BufferedReader(new InputStreamReader(this.client_socket.getInputStream()));
+			BufferedReader inFromClient = new BufferedReader(new InputStreamReader(this.ClientSocket.getInputStream()));
 		
 			return inFromClient.readLine();
 		}
@@ -161,7 +165,7 @@ public class ClientThread implements Runnable {
 	{
 		try
 		{
-			DataOutputStream outToClient = new DataOutputStream(this.client_socket.getOutputStream());
+			DataOutputStream outToClient = new DataOutputStream(this.ClientSocket.getOutputStream());
 		
 			outToClient.writeBytes(message + '\n');
 		}
@@ -170,5 +174,37 @@ public class ClientThread implements Runnable {
 			System.out.println("Fallo el envio de datos al cliente");
 		}
 	}
+	/*NUEVAS COSAS*/
+	public Vector<GameInformation> getGamesInformation()
+	{		
+		Vector<GameInformation> games_information = new Vector<GameInformation>();
+		
+		for(Game g :GameServer.getInstance().getGames())
+		{
+			GameInformation gi = new GameInformation();
+			gi.setName(g.getName());
+			gi.setGamePlayersOverMaxGamePlayers(g.getGamePlayersOverMaxGamePlayers());
+			gi.setRoundDuration(g.getRoundDuration());
+			gi.setMaxRounds(g.getMaxRounds());
+			gi.setGameMode(g.getMode().toString());
+			
+			games_information.add(gi);
+		}
+		
+		return games_information;
+	}
 	
+	public void sendGamesInformation()
+	{
+		try
+		{
+			ObjectOutputStream outToClient = new ObjectOutputStream(this.ClientSocket.getOutputStream());
+			
+			outToClient.writeObject(this.getGamesInformation());
+		}
+		catch(Exception e)
+		{
+			System.out.println("Fallo el envio de información de juegos");
+		}
+	}
 }

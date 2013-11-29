@@ -9,8 +9,7 @@ public class GameInformation implements Serializable {
 	private String  Name;
 	private Integer CurrentRound;
 	private Integer MaxRounds;
-	private Integer TotalPlayers;
-	private Integer MaxGamePlayersAllowed;
+	private String GamePlayersOverMaxGamePlayers;	
 	private Integer RoundDuration;
 	private String  GameMode;
 	
@@ -40,23 +39,16 @@ public class GameInformation implements Serializable {
 	public void setMaxRounds(Integer maxRounds) {
 		MaxRounds = maxRounds;
 	}
-
-	public Integer getTotalPlayers() {
-		return TotalPlayers;
+	
+	public String getGamePlayersOverMaxGamePlayers() {
+		return GamePlayersOverMaxGamePlayers;
 	}
 
-	public void setTotalPlayers(Integer totalPlayers) {
-		TotalPlayers = totalPlayers;
+	public void setGamePlayersOverMaxGamePlayers(
+			String gamePlayersOverMaxGamePlayers) {
+		GamePlayersOverMaxGamePlayers = gamePlayersOverMaxGamePlayers;
 	}
-
-	public Integer getMaxGamePlayersAllowed() {
-		return MaxGamePlayersAllowed;
-	}
-
-	public void setMaxGamePlayersAllowed(Integer maxGamePlayersAllowed) {
-		MaxGamePlayersAllowed = maxGamePlayersAllowed;
-	}
-
+	
 	public Integer getRoundDuration() {
 		return RoundDuration;
 	}
