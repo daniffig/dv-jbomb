@@ -100,8 +100,6 @@ public class JBombServerMainView {
 		Vector<String> GameFields = new Vector<String>();
 		
 		GameFields.add("Nombre");
-		GameFields.add("Dirección IP");
-		GameFields.add("Puerto");
 		GameFields.add("Modo");
 		GameFields.add("Jugadores");
 		
@@ -222,10 +220,7 @@ public class JBombServerMainView {
 	}
 	
 	public void addGame(Game Game)
-	{
-		Game.setInetIPAddress(this.InetIPAddress);
-		Game.setInetPort(this.InetPort);
-		
+	{		
 		if (!this.GameVector.contains(Game))
 		{
 			this.GameVector.add(Game);

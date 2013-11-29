@@ -1,6 +1,5 @@
 package core;
 
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -15,8 +14,6 @@ import linkageStrategies.AbstractLinkageStrategy;
 public class Game {
 
 	private String Name;
-	private String InetIPAddress;
-	private	Integer InetPort;
 	private List<GamePlayer> GamePlayers = new ArrayList<GamePlayer>();
 	private Integer MaxRounds = 0;
 	private Integer CurrentRound;
@@ -45,22 +42,6 @@ public class Game {
 
 	public void setName(String name) {
 		this.Name = name;
-	}
-	
-	public String getInetIPAddress() {
-		return InetIPAddress;
-	}
-
-	public void setInetIPAddress(String inetIPAddress) {
-		InetIPAddress = inetIPAddress;
-	}
-
-	public Integer getInetPort() {
-		return InetPort;
-	}
-
-	public void setInetPort(Integer inetPort) {
-		InetPort = inetPort;
 	}
 
 	public synchronized List<GamePlayer> getGamePlayers() {
@@ -220,8 +201,6 @@ public class Game {
 		Vector<Object> v = new Vector<Object>();
 		
 		v.add(this.getName());
-		v.add(this.getInetIPAddress());
-		v.add(this.getInetPort());
 		v.add(this.getMode());
 		v.add(this.getGamePlayersOverMaxGamePlayers());
 		

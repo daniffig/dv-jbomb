@@ -19,9 +19,8 @@ public class GameServer implements Runnable{
 	private JBombServerMainView JBombServerMainView;
 	private String InetIPAddress = "127.0.0.1";
 	private Integer InetPort = 4321;
-	
-	
-	public static GameServer Singleton()
+		
+	public static GameServer getInstance()
 	{
 		if(instance.equals(null)) instance = new GameServer();
 		return instance;
@@ -45,7 +44,7 @@ public class GameServer implements Runnable{
 	public void run()
 	{
 		ServerSocket server = null;
-		System.out.println("Comienzo de ejecución del JBomb Game Server en el puerto " + this.getInetPort());
+		System.out.println("Comienzo de ejecuciï¿½n del JBomb Game Server en el puerto " + this.getInetPort());
 		
 		try
 		{ 
