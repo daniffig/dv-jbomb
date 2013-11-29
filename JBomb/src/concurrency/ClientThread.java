@@ -48,10 +48,16 @@ public class ClientThread implements Runnable {
 				break;
 			case BOMB_DETONATED_RESPONSE:
 				continue;
+			
+			default:
+				System.out.println("NO HICE UN CASE PARA ESE REQUEST TODAVIA");
+				break;
 			}
 			
 			request = this.receiveRequestFromClient();
 		}
+		
+		this.ClientSocket.close();
 		
 		/*this.sendGamesInformation();
 		this.processJoinGameRequest();
@@ -105,40 +111,6 @@ public class ClientThread implements Runnable {
 	{
 		this.Game.start();
 	}
-	
-	
-	public String receiveStringFromClient()
-	{
-		try
-		{
-			BufferedReader inFromClient = new BufferedReader(new InputStreamReader(this.ClientSocket.getInputStream()));
-		
-			return inFromClient.readLine();
-		}
-		catch(IOException e)
-		{
-			System.out.println("Fallo la recepci�n de datos del cliente");
-			return null;
-		}
-	}
-	
-	public void sendStringToClient(String message)
-	{
-		try
-		{
-			DataOutputStream outToClient = new DataOutputStream(this.ClientSocket.getOutputStream());
-		
-			outToClient.writeBytes(message + '\n');
-		}
-		catch(IOException e)
-		{
-			System.out.println("Fallo el envio de datos al cliente");
-		}
-	}
-	
-	
-	/*NUEVAS COSAS*/
-	
 	
 	public Vector<GameInformation> getGamesInformation()
 	{		
