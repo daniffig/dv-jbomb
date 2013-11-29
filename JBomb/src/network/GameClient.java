@@ -52,6 +52,7 @@ public class GameClient {
 		return "Error!";
 	}
 	
+	@Deprecated
 	public void receiveGameInformation()
 	{
 		try{

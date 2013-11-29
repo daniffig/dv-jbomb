@@ -75,7 +75,7 @@ public class JBombNewPlayerView extends JFrame {
 	 */
 	public JBombNewPlayerView() {		
 		setResizable(false);
-		setTitle("Nuevo Juego");
+		setTitle("JBomb v0.2.1 - Cliente");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 334);
 		
@@ -150,7 +150,7 @@ public class JBombNewPlayerView extends JFrame {
 		GameClientGameInformationTable = new JTable();
 		scrollPane.setViewportView(GameClientGameInformationTable);
 
-		//this.refreshGamesInformation();
+		this.refreshGamesInformation();
 		
 		GameClientGameInformationTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			
