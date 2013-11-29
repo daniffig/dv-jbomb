@@ -34,7 +34,7 @@ public class ClientThread implements Runnable {
 		System.out.println("Conexion establecida! Thread # " + Thread.currentThread().getName() + " creado");
 		
 		JBombRequestResponse request = this.receiveRequestFromClient();
-		while(!request.equals(JBombRequestResponse.BOMB_DETONATED_RESPONSE))
+		while(!request.equals(JBombRequestResponse.BOMB_DETONATED_REQUEST))
 		{
 			switch (request){
 			
@@ -43,10 +43,25 @@ public class ClientThread implements Runnable {
 				this.sendGamesInformation();
 				break;
 			case JOIN_GAME_REQUEST:
+				String joinGameResult = this.processJoinGameRequest(this.receiveJoinGameRequest());
+				
 				this.sendResponseToClient(JBombRequestResponse.JOIN_GAME_RESPONSE);
-				this.sendJoinGameRequestResponse(this.processJoinGameRequest(this.receiveJoinGameRequest()));
+				this.sendJoinGameRequestResponse(joinGameResult);
+				
+				if(joinGameResult.equals("ACCEPTED"))
+				{
+					this.sendResponseToClient(JBombRequestResponse.GAMEPLAY_INFORMATION_RESPONSE);
+					//this.sendGamePlayInformation();
+					this.EventHandler.joinBarrier(this);
+					//if bombOwner==me
+					this.sendResponseToClient(JBombRequestResponse.BOMB_OWNER_RESPONSE);
+					//this.sendBombOwner();
+					//else
+					this.sendResponseToClient(JBombRequestResponse.QUIZ_QUESTION_RESPONSE);
+					//this.sendQuizQuestion();
+				}
 				break;
-			case BOMB_DETONATED_RESPONSE:
+			case BOMB_DETONATED_REQUEST:
 				continue;
 			
 			default:
@@ -56,8 +71,6 @@ public class ClientThread implements Runnable {
 			
 			request = this.receiveRequestFromClient();
 		}
-		
-		this.ClientSocket.close();
 		
 		/*this.sendGamesInformation();
 		this.processJoinGameRequest();
