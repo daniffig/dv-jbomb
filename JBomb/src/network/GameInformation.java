@@ -72,4 +72,14 @@ public class GameInformation implements Serializable {
 	public void setAdjacentPlayers(Vector<String> adjacentPlayers) {
 		AdjacentPlayers = adjacentPlayers;
 	}
+	
+	public Vector<Object> toVector()
+	{
+		Vector<Object> v = new Vector<Object>();
+		
+		v.add(this.getName());
+		v.add(this.getGamePlayersOverMaxGamePlayers());
+		
+		return v;
+	}
 }

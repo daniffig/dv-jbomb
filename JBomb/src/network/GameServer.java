@@ -22,7 +22,7 @@ public class GameServer implements Runnable{
 		
 	public static GameServer getInstance()
 	{
-		if(instance.equals(null)) instance = new GameServer();
+		if(instance == null) instance = new GameServer();
 		return instance;
 	}
 	
@@ -67,7 +67,7 @@ public class GameServer implements Runnable{
 					Thread t = new Thread(stp);
 					t.start();
 					
-					this.JBombServerMainView.refresh();
+//					this.JBombServerMainView.refresh();
 				}
 				catch (IOException e)
 				{

@@ -36,8 +36,7 @@ public class GameClient {
 	{
 		this.readConfigurationFile();
 		this.connectToServer();
-	}
-	
+	}	
 	
 	public String joinGame()
 	{
@@ -171,10 +170,19 @@ public class GameClient {
 		{
 			ObjectInputStream inFromClient = new ObjectInputStream(this.socket.getInputStream());
 			this.GamesInformation = (Vector<GameInformation>) inFromClient.readObject();
+			
+			for (GameInformation gi : this.getGamesInformation())
+			{
+				System.out.println(gi.getName());
+			}
 		}
 		catch(Exception e)
 		{
-			System.out.println("Falló la recepcion de la informacion de juegos");
+			System.out.println("Fallï¿½ la recepcion de la informacion de juegos");
 		}	
+	}
+
+	public Vector<GameInformation> getGamesInformation() {
+		return GamesInformation;
 	}
 }

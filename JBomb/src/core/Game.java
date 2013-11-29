@@ -209,6 +209,7 @@ public class Game {
 		
 		v.add(this.getName());
 		v.add(this.getMode());
+		v.add(this.getState());
 		v.add(this.getGamePlayersOverMaxGamePlayers());
 		
 		return v;

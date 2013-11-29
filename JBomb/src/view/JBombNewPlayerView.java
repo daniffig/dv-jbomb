@@ -1,12 +1,10 @@
 package view;
 
+import network.GameInformation;
+
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-
-
-
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -15,17 +13,31 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import network.GameClient;
-import javax.swing.border.TitledBorder;
-import javax.swing.border.LineBorder;
-import java.awt.Color;
+
 import java.awt.BorderLayout;
+
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+
 import java.awt.FlowLayout;
+
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+
+import java.util.Vector;
+
 import javax.swing.JScrollPane;
+
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.AutoBinding;
+import org.jdesktop.beansbinding.Bindings;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 public class JBombNewPlayerView extends JFrame {
 	/**
@@ -35,8 +47,13 @@ public class JBombNewPlayerView extends JFrame {
 	private JPanel contentPane;
 	private JTextField PlayerNameInput;
 	private GameClient game_client = new GameClient();
-	private JTextField GameServerInetIPAddressTextField;
-	private JTextField GameServerInetPortTextField;
+//	private JTextField GameServerInetIPAddressTextField;
+//	private JTextField GameServerInetPortTextField;
+	private JTable GameClientGameInformationTable;
+	
+	private GameInformation selectedGameInformation;
+	private JButton btnQuizSave;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -57,6 +74,10 @@ public class JBombNewPlayerView extends JFrame {
 	 * Create the frame.
 	 */
 	public JBombNewPlayerView() {
+		
+		
+		
+		setResizable(false);
 		setTitle("Nuevo Juego");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 334);
@@ -74,13 +95,20 @@ public class JBombNewPlayerView extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
-		JPanel panel = new JPanel();
-		contentPane.add(panel, BorderLayout.CENTER);
-		panel.setLayout(null);
+		game_client.receiveGamesInformationFromServer();
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 7, 412, 193);
-		panel.add(scrollPane);
+		Vector<String> columnNames = new Vector<String>();
+		
+		columnNames.add("Nombre");
+		columnNames.add("Jugadores");
+		columnNames.add("Estado");
+		
+		Vector<Vector<Object>> ObjectVector = new Vector<Vector<Object>>();
+		
+		for (GameInformation gi : game_client.getGamesInformation())
+		{
+			ObjectVector.add(gi.toVector());
+		}
 		
 		JPanel panel_1 = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) panel_1.getLayout();
@@ -94,7 +122,8 @@ public class JBombNewPlayerView extends JFrame {
 		panel_1.add(PlayerNameInput);
 		PlayerNameInput.setColumns(10);
 		
-		JButton btnQuizSave = new JButton("Conectar");
+		btnQuizSave = new JButton("Conectar");
+		btnQuizSave.setEnabled(false);
 		panel_1.add(btnQuizSave);
 		btnQuizSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -127,6 +156,40 @@ public class JBombNewPlayerView extends JFrame {
 		
 		JLabel info_server = new JLabel("Servidor " + this.game_client.server_ip + ":" + this.game_client.server_port);
 		panel_2.add(info_server);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		contentPane.add(scrollPane, BorderLayout.CENTER);
+		
+		GameClientGameInformationTable = new JTable();
+		scrollPane.setViewportView(GameClientGameInformationTable);
+		GameClientGameInformationTable.setModel(new DefaultTableModel(
+				ObjectVector,
+				columnNames
+		) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -569683951481313495L;
+			
+			Class[] columnTypes = new Class[] {
+				String.class, String.class, Object.class
+			};
+			
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
+		});
+		
+			
+			GameClientGameInformationTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			
+			GameClientGameInformationTable.getSelectionModel().addListSelectionListener(new ListSelectionListener()	{
+					public void valueChanged(ListSelectionEvent e)
+					{
+						JBombNewPlayerView.this.getBtnQuizSave().setEnabled(!((ListSelectionModel)e.getSource()).isSelectionEmpty());
+					}	
+			});
+			
 	}
 	
 	public Boolean isFormValid()
@@ -168,5 +231,18 @@ public class JBombNewPlayerView extends JFrame {
 		}
 		
 		return true;
+	}
+
+	public GameInformation getSelectedGameInformation() {
+		return selectedGameInformation;
+	}
+
+	public void setSelectedGameInformation(GameInformation selectedGameInformation) {
+		this.selectedGameInformation = selectedGameInformation;
+	}
+	protected void initDataBindings() {
+	}
+	public JButton getBtnQuizSave() {
+		return btnQuizSave;
 	}
 }

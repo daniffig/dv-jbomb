@@ -101,6 +101,7 @@ public class JBombServerMainView {
 		
 		GameFields.add("Nombre");
 		GameFields.add("Modo");
+		GameFields.add("Estado");
 		GameFields.add("Jugadores");
 		
 		Vector<Vector<Object>> ObjectVector = new Vector<Vector<Object>>();
@@ -166,6 +167,8 @@ public class JBombServerMainView {
 		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Iniciar");
 		mntmNewMenuItem_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				/*
 				JBombServerMainView JBSMV = JBombServerMainView.this;
 				
 				if (JBSMV.GamesTable.getSelectedRow() >= 0)
@@ -177,8 +180,11 @@ public class JBombServerMainView {
 					JBSMV.GameServerVector.add(GameServer);
 					
 					Thread t = new Thread(GameServer);
+					
 					t.start();
 				}
+				
+				*/
 			}
 		});
 		buttonGroup_1.add(mntmNewMenuItem_3);
@@ -217,10 +223,16 @@ public class JBombServerMainView {
 		
 		JMenu mnNewMenu_2 = new JMenu("Ayuda");
 		menuBar.add(mnNewMenu_2);
+
+		Thread t = new Thread(GameServer.getInstance());
+		
+		t.start();
 	}
 	
 	public void addGame(Game Game)
-	{		
+	{
+		GameServer.getInstance().addGame(Game);
+		
 		if (!this.GameVector.contains(Game))
 		{
 			this.GameVector.add(Game);
