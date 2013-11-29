@@ -3,13 +3,13 @@ package concurrency;
 import java.util.ArrayList;
 import java.util.List;
 
-import reference.JBombGameEvent;
+import reference.JBombRequestResponse;
 
 
 public class JBombEventHandler {
 	private int current_barrier_size;
 	private int barrier_size;
-	private JBombGameEvent event;
+	private JBombRequestResponse event;
 	private List<ClientThread> suscriptors = new ArrayList<ClientThread>();
 
 	public JBombEventHandler(int cant)
@@ -68,12 +68,12 @@ public class JBombEventHandler {
 		}
 	}
 		
-	public void setEvent(JBombGameEvent e)
+	public void setEvent(JBombRequestResponse e)
 	{
 		this.event = e;
 	}
 	
-	public JBombGameEvent getEvent()
+	public JBombRequestResponse getEvent()
 	{
 		return this.event;
 	}

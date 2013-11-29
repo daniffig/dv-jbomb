@@ -12,7 +12,7 @@ import java.util.Vector;
 
 import network.GameInformation;
 import network.GameServer;
-import reference.JBombGameEvent;
+import reference.JBombRequestResponse;
 import core.Game;
 import core.GamePlayer;
 import core.QuizQuestion;
