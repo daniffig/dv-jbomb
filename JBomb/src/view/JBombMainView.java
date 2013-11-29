@@ -38,6 +38,7 @@ import linkageStrategies.RingLinkageStrategy;
 
 import javax.swing.JComboBox;
 
+@Deprecated
 public class JBombMainView {
 
 	private JFrame frmJbombV;

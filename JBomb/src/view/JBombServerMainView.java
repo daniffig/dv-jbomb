@@ -12,6 +12,7 @@ import core.*;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.net.InetAddress;
 import java.util.Vector;
 
 import javax.swing.JScrollPane;
@@ -19,22 +20,33 @@ import javax.swing.JScrollPane;
 import network.GameServer;
 
 import java.awt.Toolkit;
+
 import javax.swing.JToolBar;
+
 import java.awt.Choice;
+
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.JPopupMenu;
+
 import java.awt.Dimension;
+
 import javax.swing.JPanel;
 import javax.swing.ButtonGroup;
+
 import java.awt.Component;
+
 import javax.swing.Box;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 public class JBombServerMainView {
 
@@ -46,6 +58,9 @@ public class JBombServerMainView {
 	private Vector<GameServer> GameServerVector = new Vector<GameServer>();
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private final ButtonGroup buttonGroup_1 = new ButtonGroup();
+	
+	private String InetIPAddress = "127.0.0.1";
+	private Integer InetPort = 4321;
 
 	/**
 	 * Launch the application.
@@ -102,6 +117,11 @@ public class JBombServerMainView {
 		frmJbombV.getContentPane().add(scrollPane);
 		
 		GamesTable = new JTable(new DefaultTableModel(ObjectVector, GameFields));
+		GamesTable.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent evt) {
+				System.out.println(evt.getClass());
+			}
+		});
 		scrollPane.setViewportView(GamesTable);
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -122,6 +142,7 @@ public class JBombServerMainView {
 		mnArchivo.add(mntmNewMenuItem);
 		
 		JMenuItem mntmEditar = new JMenuItem("Editar");
+		mntmEditar.setEnabled(false);
 		mntmEditar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JBombServerMainView JBSMV = JBombServerMainView.this;
@@ -138,6 +159,7 @@ public class JBombServerMainView {
 		mnArchivo.add(mntmEditar);
 		
 		JMenuItem mntmEliminar = new JMenuItem("Eliminar");
+		mntmEliminar.setEnabled(false);
 		buttonGroup.add(mntmEliminar);
 		mnArchivo.add(mntmEliminar);
 		
@@ -187,7 +209,7 @@ public class JBombServerMainView {
 		JMenuItem mntmNewMenuItem_2 = new JMenuItem("Configuración");
 		mntmNewMenuItem_2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				JBombServerInetConfigurationFormView JBombServerInetConfigurationFormView = new JBombServerInetConfigurationFormView();
+				JBombServerInetConfigurationFormView JBombServerInetConfigurationFormView = new JBombServerInetConfigurationFormView(JBombServerMainView.this);
 				
 				JBombServerInetConfigurationFormView.setVisible(true);			
 			}
@@ -200,6 +222,9 @@ public class JBombServerMainView {
 	
 	public void addGame(Game Game)
 	{
+		Game.setInetIPAddress(this.InetIPAddress);
+		Game.setInetPort(this.InetPort);
+		
 		if (!this.GameVector.contains(Game))
 		{
 			this.GameVector.add(Game);
@@ -235,5 +260,18 @@ public class JBombServerMainView {
 		}
 		public void actionPerformed(ActionEvent e) {
 		}
+	}
+	public String getInetIPAddress() {
+		return InetIPAddress;
+	}
+
+	public Integer getInetPort() {
+		return InetPort;
+	}
+	
+	public void updateInetData(String InetIPAddress, String InetPort)
+	{
+		this.InetIPAddress = InetIPAddress;
+		this.InetPort = Integer.parseInt(InetPort);
 	}
 }

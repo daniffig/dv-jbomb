@@ -15,7 +15,7 @@ import linkageStrategies.AbstractLinkageStrategy;
 public class Game {
 
 	private String Name;
-	private InetAddress InetIPAddress;
+	private String InetIPAddress;
 	private	Integer InetPort;
 	private List<GamePlayer> GamePlayers = new ArrayList<GamePlayer>();
 	private Integer MaxRounds = 0;
@@ -47,11 +47,11 @@ public class Game {
 		this.Name = name;
 	}
 	
-	public InetAddress getInetIPAddress() {
+	public String getInetIPAddress() {
 		return InetIPAddress;
 	}
 
-	public void setInetIPAddress(InetAddress inetIPAddress) {
+	public void setInetIPAddress(String inetIPAddress) {
 		InetIPAddress = inetIPAddress;
 	}
 

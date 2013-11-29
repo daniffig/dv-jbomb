@@ -20,6 +20,12 @@ import network.GameClient;
 import javax.swing.border.TitledBorder;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
+import java.awt.BorderLayout;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import java.awt.FlowLayout;
+import javax.swing.JScrollPane;
 
 public class JBombNewPlayerView extends JFrame {
 	/**
@@ -53,26 +59,43 @@ public class JBombNewPlayerView extends JFrame {
 	public JBombNewPlayerView() {
 		setTitle("Nuevo Juego");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 450, 200);
+		setBounds(100, 100, 450, 334);
+		
+		JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		
+		JMenu mnServidor = new JMenu("Servidor");
+		menuBar.add(mnServidor);
+		
+		JMenuItem mntmActualizar = new JMenuItem("Actualizar");
+		mnServidor.add(mntmActualizar);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
-		contentPane.setLayout(null);
+		contentPane.setLayout(new BorderLayout(0, 0));
 		
-		JLabel info_server = new JLabel("Servidor " + this.game_client.server_ip + ":" + this.game_client.server_port);
-		info_server.setBounds(10, 10, 200, 15);
-		contentPane.add(info_server);
+		JPanel panel = new JPanel();
+		contentPane.add(panel, BorderLayout.CENTER);
+		panel.setLayout(null);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 7, 412, 193);
+		panel.add(scrollPane);
+		
+		JPanel panel_1 = new JPanel();
+		FlowLayout flowLayout = (FlowLayout) panel_1.getLayout();
+		flowLayout.setAlignment(FlowLayout.TRAILING);
+		contentPane.add(panel_1, BorderLayout.SOUTH);
 		
 		JLabel nombre_jugador = new JLabel("Nombre del jugador:");
-		nombre_jugador.setBounds(12, 70, 145, 15);
-		contentPane.add(nombre_jugador);
+		panel_1.add(nombre_jugador);
 		
 		PlayerNameInput = new JTextField();
-		PlayerNameInput.setBounds(150, 70, 250, 19);
-		contentPane.add(PlayerNameInput);
+		panel_1.add(PlayerNameInput);
 		PlayerNameInput.setColumns(10);
 		
-		JButton btnQuizSave = new JButton("Sumarme al juego!");
+		JButton btnQuizSave = new JButton("Conectar");
+		panel_1.add(btnQuizSave);
 		btnQuizSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JBombNewPlayerView JBNPV = JBombNewPlayerView.this;
@@ -96,8 +119,14 @@ public class JBombNewPlayerView extends JFrame {
 				}
 			}
 		});
-		btnQuizSave.setBounds(210, 120, 200, 25);
-		contentPane.add(btnQuizSave);
+		
+		JPanel panel_2 = new JPanel();
+		FlowLayout flowLayout_1 = (FlowLayout) panel_2.getLayout();
+		flowLayout_1.setAlignment(FlowLayout.TRAILING);
+		contentPane.add(panel_2, BorderLayout.NORTH);
+		
+		JLabel info_server = new JLabel("Servidor " + this.game_client.server_ip + ":" + this.game_client.server_port);
+		panel_2.add(info_server);
 	}
 	
 	public Boolean isFormValid()

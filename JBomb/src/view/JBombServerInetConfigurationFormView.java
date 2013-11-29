@@ -13,6 +13,8 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.factories.FormFactory;
 import com.jgoodies.forms.layout.RowSpec;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class JBombServerInetConfigurationFormView extends JDialog {
 
@@ -21,29 +23,22 @@ public class JBombServerInetConfigurationFormView extends JDialog {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	private JBombServerMainView parentWindow;
+	
 	private final JPanel contentPanel = new JPanel();
-	private JTextField textField;
-	private JTextField textField_1;
-	private JLabel lblNewLabel;
-	private JLabel lblNewLabel_1;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			JBombServerInetConfigurationFormView dialog = new JBombServerInetConfigurationFormView();
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	private JTextField ServerInetIPAddressTextField;
+	private JTextField ServerInetPortTextField;
+	private JLabel lblServerInetIPAddress;
+	private JLabel lblServerInetPort;
 
 	/**
 	 * Create the dialog.
 	 */
-	public JBombServerInetConfigurationFormView() {
+	public JBombServerInetConfigurationFormView(JBombServerMainView JBombServerMainView) {
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+		
+		this.parentWindow = JBombServerMainView;
+		
 		setTitle("Configuración del Servidor");
 		setBounds(100, 100, 450, 110);
 		getContentPane().setLayout(new BorderLayout());
@@ -51,45 +46,76 @@ public class JBombServerInetConfigurationFormView extends JDialog {
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
 		{
-			lblNewLabel = new JLabel("Dirección IP");
-			lblNewLabel.setBounds(12, 18, 82, 15);
-			contentPanel.add(lblNewLabel);
+			lblServerInetIPAddress = new JLabel("Dirección IP");
+			lblServerInetIPAddress.setBounds(12, 18, 82, 15);
+			contentPanel.add(lblServerInetIPAddress);
 		}
 		{
-			textField = new JTextField();
-			textField.setBounds(112, 16, 114, 19);
-			lblNewLabel.setLabelFor(textField);
-			contentPanel.add(textField);
-			textField.setColumns(10);
+			ServerInetIPAddressTextField = new JTextField();
+			ServerInetIPAddressTextField.setBounds(112, 16, 114, 19);
+			lblServerInetIPAddress.setLabelFor(ServerInetIPAddressTextField);
+			contentPanel.add(ServerInetIPAddressTextField);
+			ServerInetIPAddressTextField.setColumns(10);
+			
+			ServerInetIPAddressTextField.setText(this.parentWindow.getInetIPAddress());
 		}
 		{
-			lblNewLabel_1 = new JLabel("Puerto");
-			lblNewLabel_1.setBounds(244, 18, 48, 15);
-			contentPanel.add(lblNewLabel_1);
+			lblServerInetPort = new JLabel("Puerto");
+			lblServerInetPort.setBounds(244, 18, 48, 15);
+			contentPanel.add(lblServerInetPort);
 		}
-		lblNewLabel_1.setLabelFor(textField_1);
 		{
-			textField_1 = new JTextField();
-			textField_1.setBounds(310, 16, 114, 19);
-			contentPanel.add(textField_1);
-			textField_1.setColumns(10);
+			ServerInetPortTextField = new JTextField();
+			lblServerInetPort.setLabelFor(ServerInetPortTextField);
+			ServerInetPortTextField.setBounds(310, 16, 114, 19);
+			contentPanel.add(ServerInetPortTextField);
+			ServerInetPortTextField.setColumns(10);
+			
+			ServerInetPortTextField.setText(this.parentWindow.getInetPort().toString());
 		}
 		{
 			JPanel buttonPane = new JPanel();
 			buttonPane.setLayout(new FlowLayout(FlowLayout.RIGHT));
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
-				JButton okButton = new JButton("Guardar");
-				okButton.setActionCommand("OK");
-				buttonPane.add(okButton);
-				getRootPane().setDefaultButton(okButton);
+				JButton btnServerConfigurationSave = new JButton("Guardar");
+				btnServerConfigurationSave.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						
+						if (JBombServerInetConfigurationFormView.this.isFormValid())
+						{
+							JBombServerInetConfigurationFormView.this.parentWindow.updateInetData(
+									JBombServerInetConfigurationFormView.this.ServerInetIPAddressTextField.getText(),
+									JBombServerInetConfigurationFormView.this.ServerInetPortTextField.getText()
+							);
+						
+							JBombServerInetConfigurationFormView.this.dispose();
+						}						
+						
+					}
+				});
+				btnServerConfigurationSave.setActionCommand("OK");
+				buttonPane.add(btnServerConfigurationSave);
+				getRootPane().setDefaultButton(btnServerConfigurationSave);
 			}
 			{
-				JButton cancelButton = new JButton("Cancelar");
-				cancelButton.setActionCommand("Cancel");
-				buttonPane.add(cancelButton);
+				JButton btnServerConfigurationCancel = new JButton("Cancelar");
+				btnServerConfigurationCancel.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						JBombServerInetConfigurationFormView.this.dispose();
+					}
+				});
+				btnServerConfigurationCancel.setActionCommand("Cancel");
+				buttonPane.add(btnServerConfigurationCancel);
 			}
 		}
+	}
+	
+	private Boolean isFormValid()
+	{
+		// TODO: Falta validación.
+		
+		return true;
 	}
 
 }
