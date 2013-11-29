@@ -55,13 +55,19 @@ public class ClientThread implements Runnable {
 					//if bombOwner==me
 					this.sendResponseToClient(JBombRequestResponse.BOMB_OWNER_RESPONSE);
 					//this.sendBombOwner();
+					//me voy a dormirla
+					//si la respuesta fue incorrecta mando respuesta
 					//else
 					this.sendResponseToClient(JBombRequestResponse.QUIZ_QUESTION_RESPONSE);
 					//this.sendQuizQuestion();
+					//PRENDER BOMBA
 				}
 				break;
 			//case QUIZ_ANSWER_REQUEST
+				//APAGAR BOMBA
 				//this.receiveQuizAnswer()
+				//this.sendResponseToClient(JBombRequestResponse.QUIZ_ANSWER_RESPONSE);
+				//this.sendQuizAnswerResponse()
 			//QUIZ_ANSWER_RESPONSE,
 			case BOMB_DETONATED_REQUEST:
 				continue;
@@ -73,53 +79,6 @@ public class ClientThread implements Runnable {
 			
 			request = this.receiveRequestFromClient();
 		}
-		
-		/*this.sendGamesInformation();
-		this.processJoinGameRequest();
-		
-		this.sendCurrentGameInformation();
-		
-		this.EventHandler.joinBarrier(this); //esperos a que todos tengan la informaci�n del juego, el ultimo inicia el juego.
-		
-		
-		while(!this.Game.getBomb().isDetonated())
-		{
-			//pregunto quien tiene la bomba
-			String player_with_bomb = this.Game.getBomb().getCurrentPlayer().getName();
-		
-			this.sendStringToClient(player_with_bomb);
-		
-			if(!player_with_bomb.equals(PlayerName))
-			{
-				//si no soy yo, me voy a dormir
-				this.EventHandler.waitForMove();
-			}
-			else
-			{
-				QuizQuestion qq = this.Game.getQuiz().getRandomQuizQuestion();
-			
-				this.sendQuizQuestion(qq);
-				this.Game.getBomb().activate();
-				String answer = this.receiveStringFromClient();//TODO falta siguiente jugador
-				this.Game.getBomb().deactivate();
-			
-				if(!this.Game.getBomb().isDetonated())
-				{	
-					if(qq.getCorrectAnswer().equals(answer))
-					{
-						this.EventHandler.setEvent(JBombGameEvent.CORRECT_ANSWER);
-						//TODO paso la bomba
-					}
-					else
-						this.EventHandler.setEvent(JBombGameEvent.WRONG_ANSWER);
-				}
-				else
-					this.EventHandler.setEvent(JBombGameEvent.BOMB_EXPLODED);
-				
-				this.EventHandler.wakeUpAll();
-			}
-		}
-		*/
 	}
 	
 	public void startGame()
