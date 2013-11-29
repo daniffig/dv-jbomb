@@ -10,6 +10,7 @@ import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Vector;
 
 import reference.AdjacentDirections;
 import annotations.Server;
@@ -22,6 +23,8 @@ public class GameClient {
 	public int server_port;
 	private Socket socket;
 	
+	private Vector<GameInformation> GamesInformation = new Vector<GameInformation>();
+	/*Esto deberia ser deprecated dentro de poco*/
 	public String notification;
 	public String gameName;
 	public int currentRound;
@@ -96,6 +99,7 @@ public class GameClient {
 		
 		System.out.println("Servidor " + this.server_ip + ":" + this.server_port);
 	}
+	
 	public String receiveStringFromServer()
 	{
 		try
@@ -156,5 +160,20 @@ public class GameClient {
 	public String getPlayer(AdjacentDirections direction)
 	{
 		return this.adjacentPlayers[direction.index()];
+	}
+	
+	/*NUEVO*/
+	
+	public void receiveGamesInformationFromServer()
+	{
+		try
+		{
+			ObjectInputStream inFromClient = new ObjectInputStream(this.socket.getInputStream());
+			this.GamesInformation = (Vector<GameInformation>) inFromClient.readObject();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Falló la recepcion de la informacion de juegos");
+		}	
 	}
 }
