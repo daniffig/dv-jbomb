@@ -45,7 +45,7 @@ public class GameServer implements Runnable{
 	public void run()
 	{
 		ServerSocket server = null;
-		System.out.println(this.getInetPort());
+		System.out.println("Comienzo de ejecución del JBomb Game Server en el puerto " + this.getInetPort());
 		
 		try
 		{ 
@@ -57,8 +57,7 @@ public class GameServer implements Runnable{
 			
 			System.exit(-1);
 		}
-		
-		//while(game_server.getGame().canAddPlayer())
+
 		while(true)
 		{
 			if(server != null)
@@ -83,49 +82,49 @@ public class GameServer implements Runnable{
 		
 	}
 	
-	public Vector<Game> getGames()
+	public synchronized Vector<Game> getGames()
 	{
 		return this.Games;
 	}
 	
-	public void setGames(Vector<Game> gs)
+	public synchronized void setGames(Vector<Game> gs)
 	{
 		this.Games = gs;
 	}
 	
-	public void addGame(Game g)
+	public synchronized void addGame(Game g)
 	{
 		this.addEventHandler(new JBombEventHandler(g.getMaxGamePlayersAllowed()));
 		this.Games.add(g);
 	}
 	
-	public void removeGame(Game g)
+	public synchronized void removeGame(Game g)
 	{
 		this.removeEventHandler(this.getEventHandlerOfGame(g));
 		this.Games.remove(g);
 	}
 	
-	public Vector<JBombEventHandler> getEventHandlers()
+	public synchronized Vector<JBombEventHandler> getEventHandlers()
 	{
 		return this.EventHandlers;
 	}
 	
-	public void setEventHandlers(Vector<JBombEventHandler> event_handlers)
+	public synchronized void setEventHandlers(Vector<JBombEventHandler> event_handlers)
 	{
 		this.EventHandlers = event_handlers;
 	}
 	
-	public void addEventHandler(JBombEventHandler event_handler)
+	public synchronized void addEventHandler(JBombEventHandler event_handler)
 	{
 		this.EventHandlers.add(event_handler);
 	}
 	
-	public void removeEventHandler(JBombEventHandler event_handler)
+	public synchronized void removeEventHandler(JBombEventHandler event_handler)
 	{
 		this.EventHandlers.remove(event_handler);
 	}
 	
-	public JBombEventHandler getEventHandlerOfGame(Game g)
+	public synchronized JBombEventHandler getEventHandlerOfGame(Game g)
 	{
 		return this.EventHandlers.get(this.Games.indexOf(g));
 	}
