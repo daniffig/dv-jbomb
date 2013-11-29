@@ -89,26 +89,16 @@ public class JBombNewPlayerView extends JFrame {
 		menuBar.add(mnServidor);
 		
 		JMenuItem mntmActualizar = new JMenuItem("Actualizar");
+		mntmActualizar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				JBombNewPlayerView.this.refreshGamesInformation();
+			}
+		});
 		mnServidor.add(mntmActualizar);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
-		
-		game_client.receiveGamesInformationFromServer();
-		
-		Vector<String> columnNames = new Vector<String>();
-		
-		columnNames.add("Nombre");
-		columnNames.add("Jugadores");
-		columnNames.add("Estado");
-		
-		Vector<Vector<Object>> ObjectVector = new Vector<Vector<Object>>();
-		
-		for (GameInformation gi : game_client.getGamesInformation())
-		{
-			ObjectVector.add(gi.toVector());
-		}
 		
 		JPanel panel_1 = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) panel_1.getLayout();
@@ -162,33 +152,17 @@ public class JBombNewPlayerView extends JFrame {
 		
 		GameClientGameInformationTable = new JTable();
 		scrollPane.setViewportView(GameClientGameInformationTable);
-		GameClientGameInformationTable.setModel(new DefaultTableModel(
-				ObjectVector,
-				columnNames
-		) {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = -569683951481313495L;
-			
-			Class[] columnTypes = new Class[] {
-				String.class, String.class, Object.class
-			};
-			
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-		});
+
+		this.refreshGamesInformation();
 		
+		GameClientGameInformationTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			
-			GameClientGameInformationTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-			
-			GameClientGameInformationTable.getSelectionModel().addListSelectionListener(new ListSelectionListener()	{
-					public void valueChanged(ListSelectionEvent e)
-					{
-						JBombNewPlayerView.this.getBtnQuizSave().setEnabled(!((ListSelectionModel)e.getSource()).isSelectionEmpty());
-					}	
-			});
+		GameClientGameInformationTable.getSelectionModel().addListSelectionListener(new ListSelectionListener()	{
+			public void valueChanged(ListSelectionEvent e)
+			{
+				JBombNewPlayerView.this.getBtnQuizSave().setEnabled(!((ListSelectionModel)e.getSource()).isSelectionEmpty());
+			}	
+		});
 			
 	}
 	
@@ -245,4 +219,43 @@ public class JBombNewPlayerView extends JFrame {
 	public JButton getBtnQuizSave() {
 		return btnQuizSave;
 	}
+	
+	public void refreshGamesInformation()
+	{
+		this.game_client.receiveGamesInformationFromServer();
+		
+		Vector<String> GameInformationColumns = new Vector<String>();
+		
+		GameInformationColumns.add("Nombre");
+		GameInformationColumns.add("Jugadores");
+		GameInformationColumns.add("Estado");
+		
+		
+		Vector<Vector<Object>> GameInformationVector = new Vector<Vector<Object>>();
+		
+		for (GameInformation gi : game_client.getGamesInformation())
+		{
+			GameInformationVector.add(gi.toVector());
+		}
+		
+		this.GameClientGameInformationTable.setModel(this.getGameInformationTableModel(GameInformationVector, GameInformationColumns));
+	}
+	
+	public DefaultTableModel getGameInformationTableModel(Vector<Vector<Object>> GameInformationVector, Vector<String> GameInformationColumns)
+	{
+		return new DefaultTableModel(
+				GameInformationVector,
+				GameInformationColumns
+		) {
+			private static final long serialVersionUID = -569683951481313495L;
+			
+			Class[] columnTypes = new Class[] {
+				String.class, String.class, Object.class
+			};
+			
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
+		};
+	}	
 }
