@@ -21,6 +21,8 @@ import annotations.Server;
 public class GameClient {
 
 	public String username;
+	public GameInformation GameInformation;	
+	
 	public String server_ip;
 	public int server_port;
 	private Socket socket;
@@ -43,8 +45,15 @@ public class GameClient {
 	public String joinGame()
 	{
 		if (this.connectToServer())
-		{			
-			this.sendStringToServer(this.username);
+		{
+			this.sendRequestToServer(JBombRequestResponse.JOIN_GAME_REQUEST);
+			
+			Vector<Object> JoinGameInformation = new Vector<Object>();
+
+			JoinGameInformation.add(this.GameInformation.getName());
+			JoinGameInformation.add(this.username);
+			
+			this.sendObjectToServer(JoinGameInformation);
 			
 			return this.receiveStringFromServer();			
 		}
@@ -222,5 +231,20 @@ public class GameClient {
 	{
 		this.sendRequestToServer(JBombRequestResponse.GAMES_INFORMATION_REQUEST);
 		this.receiveGamesInformationFromServer();
+	}
+	
+	// Magia arcana.
+	public void sendObjectToServer(Object Object)
+	{
+		try
+		{
+			ObjectOutputStream outToClient = new ObjectOutputStream(this.socket.getOutputStream());
+			
+			outToClient.writeObject(Object);
+		}
+		catch(Exception e)
+		{
+			System.out.println("Object not sent!");
+		}		
 	}
 }

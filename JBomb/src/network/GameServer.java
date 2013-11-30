@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.util.Vector;
 
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
 import concurrency.ClientThread;
 import concurrency.JBombEventHandler;
 import core.Game;
@@ -154,5 +157,10 @@ public class GameServer implements Runnable{
 	public Integer getInetPort()
 	{
 		return this.InetPort;
+	}
+	
+	public void refreshGamesTable()
+	{
+		
 	}
 }

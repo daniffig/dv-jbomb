@@ -124,12 +124,7 @@ public class JBombServerMainView {
 		        return false;
 		    }
 		});
-		
-		GamesTable.addPropertyChangeListener(new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent evt) {
-				System.out.println(evt.getClass());
-			}
-		});
+
 		scrollPane.setViewportView(GamesTable);
 		
 		JMenuBar menuBar = new JMenuBar();

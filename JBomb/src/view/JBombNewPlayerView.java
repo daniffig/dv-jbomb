@@ -52,7 +52,7 @@ public class JBombNewPlayerView extends JFrame {
 	private JTable GameClientGameInformationTable;
 	
 	private GameInformation selectedGameInformation;
-	private JButton btnQuizSave;
+	private JButton btnGameJoin;
 	
 	/**
 	 * Launch the application.
@@ -109,21 +109,24 @@ public class JBombNewPlayerView extends JFrame {
 		panel_1.add(PlayerNameInput);
 		PlayerNameInput.setColumns(10);
 		
-		btnQuizSave = new JButton("Conectar");
-		btnQuizSave.setEnabled(false);
-		panel_1.add(btnQuizSave);
-		btnQuizSave.addActionListener(new ActionListener() {
+		btnGameJoin = new JButton("Conectar");
+		btnGameJoin.setEnabled(false);
+		panel_1.add(btnGameJoin);
+		btnGameJoin.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JBombNewPlayerView JBNPV = JBombNewPlayerView.this;
 				
 				if (JBNPV.isFormValid())
 				{					
 					game_client.username = PlayerNameInput.getText();
+					game_client.GameInformation = JBombNewPlayerView.this.getSelectedGameInformation();
 					
 					String connection_result = game_client.joinGame();
 					System.out.println("recibi " + connection_result);
 					if(connection_result.equals("ACCEPTED"))
 					{
+						JBombNewPlayerView.this.refreshGamesInformation();
+						
 						JBombGamePlayView gameplayview = new JBombGamePlayView(game_client);
 						gameplayview.setVisible(true);
 						dispose();			
@@ -157,12 +160,23 @@ public class JBombNewPlayerView extends JFrame {
 		GameClientGameInformationTable.getSelectionModel().addListSelectionListener(new ListSelectionListener()	{
 			public void valueChanged(ListSelectionEvent e)
 			{
-				JBombNewPlayerView.this.getBtnQuizSave().setEnabled(!((ListSelectionModel)e.getSource()).isSelectionEmpty());
+				JBombNewPlayerView JBNPV = JBombNewPlayerView.this;
+				
+				JBNPV.getBtnQuizSave().setEnabled(!((ListSelectionModel)e.getSource()).isSelectionEmpty());
+				
+				if (!((ListSelectionModel)e.getSource()).isSelectionEmpty())
+				{
+					JBNPV.setSelectedGameInformation(JBNPV.getGame_client().getGamesInformation().get(JBNPV.getGameClientGameInformationTable().convertRowIndexToModel(JBNPV.getGameClientGameInformationTable().getSelectedRow())));
+				}
+				else
+				{
+					JBNPV.setSelectedGameInformation(null);
+				}
 			}	
 		});
 			
 	}
-	
+
 	public Boolean isFormValid()
 	{
 		/*
@@ -214,7 +228,7 @@ public class JBombNewPlayerView extends JFrame {
 	protected void initDataBindings() {
 	}
 	public JButton getBtnQuizSave() {
-		return btnQuizSave;
+		return btnGameJoin;
 	}
 	
 	public void refreshGamesInformation()
@@ -224,6 +238,7 @@ public class JBombNewPlayerView extends JFrame {
 		Vector<String> GameInformationColumns = new Vector<String>();
 		
 		GameInformationColumns.add("Nombre");
+		GameInformationColumns.add("Modo");
 		GameInformationColumns.add("Jugadores");
 		GameInformationColumns.add("Estado");		
 		
@@ -246,12 +261,28 @@ public class JBombNewPlayerView extends JFrame {
 			private static final long serialVersionUID = -569683951481313495L;
 			
 			Class[] columnTypes = new Class[] {
-				String.class, String.class, Object.class
 			};
 			
 			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
+				return String.class;
 			}
 		};
+	}
+
+	public JTable getGameClientGameInformationTable() {
+		return GameClientGameInformationTable;
+	}
+
+	public void setGameClientGameInformationTable(
+			JTable gameClientGameInformationTable) {
+		GameClientGameInformationTable = gameClientGameInformationTable;
+	}
+
+	public GameClient getGame_client() {
+		return game_client;
+	}
+
+	public void setGame_client(GameClient game_client) {
+		this.game_client = game_client;
 	}	
 }

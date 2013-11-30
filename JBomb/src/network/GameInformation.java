@@ -12,6 +12,7 @@ public class GameInformation implements Serializable {
 	private String GamePlayersOverMaxGamePlayers;	
 	private Integer RoundDuration;
 	private String  GameMode;
+	private String	GameState;
 	
 	private Vector<String> AdjacentPlayers = new Vector<String>();
 	
@@ -78,8 +79,18 @@ public class GameInformation implements Serializable {
 		Vector<Object> v = new Vector<Object>();
 		
 		v.add(this.getName());
+		v.add(this.getGameMode());
 		v.add(this.getGamePlayersOverMaxGamePlayers());
+		v.add(this.getGameState());
 		
 		return v;
+	}
+
+	public String getGameState() {
+		return GameState;
+	}
+
+	public void setGameState(String gameState) {
+		GameState = gameState;
 	}
 }

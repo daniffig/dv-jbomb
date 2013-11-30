@@ -34,6 +34,7 @@ public class ClientThread implements Runnable {
 		System.out.println("Conexion establecida! Thread # " + Thread.currentThread().getName() + " creado");
 		
 		JBombRequestResponse request = this.receiveRequestFromClient();
+		
 		while(!request.equals(JBombRequestResponse.BOMB_DETONATED_REQUEST))
 		{
 			switch (request){
@@ -98,6 +99,7 @@ public class ClientThread implements Runnable {
 			gi.setRoundDuration(g.getRoundDuration());
 			gi.setMaxRounds(g.getMaxRounds());
 			gi.setGameMode(g.getMode().toString());
+			gi.setGameState(g.getState().toString());
 			
 			games_information.add(gi);
 		}
@@ -115,7 +117,7 @@ public class ClientThread implements Runnable {
 		}
 		catch(Exception e)
 		{
-			System.out.println("Fallo el envio de información de juegos");
+			System.out.println("Fallo el envio de informaciï¿½n de juegos");
 		}
 	}
 	
@@ -135,33 +137,43 @@ public class ClientThread implements Runnable {
 	}
 	
 	public String processJoinGameRequest(Vector<String> joinGameRequest)
-	{
-		String GameName = joinGameRequest.get(0);
-		String PlayerName = joinGameRequest.get(1);
-		
-		Game RequestedGame = GameServer.getInstance().getGameByName(GameName);
-		
-		String result;
-		
-		if(RequestedGame == null) result = "El juego requerido no existe";
-		else
+	{		
+		try
 		{
-			if(RequestedGame.existPlayer(PlayerName))
-				result = "El nombre de jugador ya existe en el juego " + GameName;
+			String GameName = joinGameRequest.get(0);
+			String PlayerName = joinGameRequest.get(1);
+			
+			Game RequestedGame = GameServer.getInstance().getGameByName(GameName);
+			
+			String result;
+			
+			if(RequestedGame == null) result = "El juego requerido no existe";
 			else
 			{
-				if(!RequestedGame.addGamePlayer(new GamePlayer(PlayerName)))
-					result = "Juego Completo! no se pueden agregar más jugadores";
+				if(RequestedGame.existPlayer(PlayerName))
+					result = "El nombre de jugador ya existe en el juego " + GameName;
 				else
 				{
-					this.Game = RequestedGame;
-					this.EventHandler = GameServer.getInstance().getEventHandlerOfGame(RequestedGame);
-					this.PlayerName = PlayerName;
-					result = "ACCEPTED";
+					if(!RequestedGame.addGamePlayer(new GamePlayer(PlayerName)))
+						result = "Juego Completo! no se pueden agregar mï¿½s jugadores";
+					else
+					{
+						this.Game = RequestedGame;
+						this.EventHandler = GameServer.getInstance().getEventHandlerOfGame(RequestedGame);
+						this.PlayerName = PlayerName;
+						result = "ACCEPTED";
+						
+						GameServer.getInstance().refreshGamesTable();
+					}
 				}
 			}
+
+			return result;
 		}
-		return result;
+		catch (Exception e)
+		{
+			return "Game join request failed!";
+		}
 	}
 	
 	public void sendJoinGameRequestResponse(String result)
