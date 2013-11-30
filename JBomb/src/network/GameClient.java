@@ -42,7 +42,7 @@ public class GameClient {
 		this.connectToServer();
 	}	
 	
-	public String joinGame()
+	public Boolean joinGame()
 	{
 		if (this.connectToServer())
 		{
@@ -55,10 +55,12 @@ public class GameClient {
 			
 			this.sendObjectToServer(JoinGameInformation);
 			
-			return this.receiveStringFromServer();			
+			JBombRequestResponse resp = this.receiveResponseFromServer();
+			
+			return (!(resp == null) && resp.equals(JBombRequestResponse.GAMEPLAY_INFORMATION_RESPONSE));
 		}
 		
-		return "Error!";
+		return false;
 	}
 	
 	@Deprecated
@@ -192,6 +194,22 @@ public class GameClient {
 		{
 			System.out.println("Fall� la recepcion de la informacion de juegos");
 		}	
+	}	
+	
+	public Object receiveObjectFromServer()
+	{
+		try
+		{
+			ObjectInputStream inFromClient = new ObjectInputStream(this.socket.getInputStream());
+			
+			return inFromClient.readObject();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Fall� la recepcion de la informacion de juegos");
+		}
+		
+		return null;
 	}
 
 	public Vector<GameInformation> getGamesInformation() {

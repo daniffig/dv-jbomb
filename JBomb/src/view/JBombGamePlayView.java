@@ -56,7 +56,7 @@ public class JBombGamePlayView extends JFrame{
 		contentPane.setLayout(null);
 		
 		JLabel lblGamePlayerName = new JLabel(gc.username);
-		lblGamePlayerName.setBounds(275, 298, 150, 30);
+		lblGamePlayerName.setBounds(290, 298, 150, 30);
 		contentPane.add(lblGamePlayerName);
 		
 		JLabel jugador_derecha = new JLabel("Jugador 03 (derecha)");
@@ -64,7 +64,7 @@ public class JBombGamePlayView extends JFrame{
 		contentPane.add(jugador_derecha);
 		
 		JLabel jugador_abajo = new JLabel("Jugador 04 (abajo)");
-		jugador_abajo.setBounds(275, 531, 150, 30);
+		jugador_abajo.setBounds(290, 531, 150, 30);
 		contentPane.add(jugador_abajo);
 		
 		JLabel jugador_izquierda = new JLabel("Jugador 05 (izquierda)");
@@ -90,60 +90,11 @@ public class JBombGamePlayView extends JFrame{
 		panel.add(cant_jugadores);
 		
 		JLabel lblJugador = new JLabel("Jugador 02 (arriba)");
-		lblJugador.setBounds(275, 97, 132, 15);
+		lblJugador.setBounds(290, 97, 132, 15);
 		contentPane.add(lblJugador);
 		
-		JButton button = new JButton("");
-		button.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JBombClientAnswerQuestionFormView JBombClientAnswerQuestionFormView = new JBombClientAnswerQuestionFormView(JBombGamePlayView.this);
-				
-				JBombClientAnswerQuestionFormView.setVisible(true);
-			}
-		});
-		button.setIcon(new ImageIcon(JBombGamePlayView.class.getResource("/images/LeftArrow.png")));
-		button.setToolTipText("Pasar al Jugador 02");
-		button.setBounds(12, 259, 92, 92);
-		contentPane.add(button);
-		
-		JButton button_1 = new JButton("");
-		button_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JBombClientAnswerQuestionFormView JBombClientAnswerQuestionFormView = new JBombClientAnswerQuestionFormView(JBombGamePlayView.this);
-				
-				JBombClientAnswerQuestionFormView.setVisible(true);
-			}
-		});
-		button_1.setIcon(new ImageIcon(JBombGamePlayView.class.getResource("/images/RightArrow.png")));
-		button_1.setToolTipText("Pasar al Jugador 02");
-		button_1.setBounds(590, 259, 92, 92);
-		contentPane.add(button_1);
-		
-		JButton button_2 = new JButton("");
-		button_2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JBombClientAnswerQuestionFormView JBombClientAnswerQuestionFormView = new JBombClientAnswerQuestionFormView(JBombGamePlayView.this);
-				
-				JBombClientAnswerQuestionFormView.setVisible(true);
-			}
-		});
-		button_2.setIcon(new ImageIcon(JBombGamePlayView.class.getResource("/images/DownArrow.png")));
-		button_2.setToolTipText("Pasar al Jugador 02");
-		button_2.setBounds(275, 427, 92, 92);
-		contentPane.add(button_2);
-		
-		JButton button_3 = new JButton("");
-		button_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		button_3.setIcon(new ImageIcon(JBombGamePlayView.class.getResource("/images/UpArrow.png")));
-		button_3.setToolTipText("Pasar al Jugador 02");
-		button_3.setBounds(275, 126, 92, 92);
-		contentPane.add(button_3);
-		
-		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.addMouseListener(new MouseAdapter() {
+		JLabel sendUp = new JLabel("");
+		sendUp.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				JBombClientAnswerQuestionFormView JBombClientAnswerQuestionFormView = new JBombClientAnswerQuestionFormView(JBombGamePlayView.this);
@@ -151,8 +102,48 @@ public class JBombGamePlayView extends JFrame{
 				JBombClientAnswerQuestionFormView.setVisible(true);
 			}
 		});
-		lblNewLabel.setIcon(new ImageIcon(JBombGamePlayView.class.getResource("/images/UpArrow.png")));
-		lblNewLabel.setBounds(37, 97, 90, 90);
-		contentPane.add(lblNewLabel);
+		sendUp.setIcon(new ImageIcon(JBombGamePlayView.class.getResource("/images/UpArrow.png")));
+		sendUp.setBounds(290, 124, 90, 90);
+		contentPane.add(sendUp);
+		
+		JLabel sendLeft = new JLabel("");
+		sendLeft.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				JBombClientAnswerQuestionFormView JBombClientAnswerQuestionFormView = new JBombClientAnswerQuestionFormView(JBombGamePlayView.this);
+				
+				JBombClientAnswerQuestionFormView.setVisible(true);
+			}
+		});
+		sendLeft.setIcon(new ImageIcon(JBombGamePlayView.class.getResource("/images/LeftArrow.png")));
+		sendLeft.setBounds(78, 261, 90, 90);
+		contentPane.add(sendLeft);
+		
+		JLabel sendRight = new JLabel("");
+		sendRight.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				JBombClientAnswerQuestionFormView JBombClientAnswerQuestionFormView = new JBombClientAnswerQuestionFormView(JBombGamePlayView.this);
+				
+				JBombClientAnswerQuestionFormView.setVisible(true);
+			}
+		});
+		sendRight.setIcon(new ImageIcon(JBombGamePlayView.class.getResource("/images/RightArrow.png")));
+		sendRight.setHorizontalAlignment(SwingConstants.CENTER);
+		sendRight.setBounds(535, 261, 90, 90);
+		contentPane.add(sendRight);
+		
+		JLabel sendDown = new JLabel("");
+		sendDown.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				JBombClientAnswerQuestionFormView JBombClientAnswerQuestionFormView = new JBombClientAnswerQuestionFormView(JBombGamePlayView.this);
+				
+				JBombClientAnswerQuestionFormView.setVisible(true);
+			}
+		});
+		sendDown.setIcon(new ImageIcon(JBombGamePlayView.class.getResource("/images/DownArrow.png")));
+		sendDown.setBounds(290, 429, 90, 90);
+		contentPane.add(sendDown);
 	}
 }

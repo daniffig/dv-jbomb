@@ -39,6 +39,8 @@ import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
+import reference.JBombRequestResponse;
+
 public class JBombNewPlayerView extends JFrame {
 	/**
 	 * 
@@ -121,19 +123,19 @@ public class JBombNewPlayerView extends JFrame {
 					game_client.username = PlayerNameInput.getText();
 					game_client.GameInformation = JBombNewPlayerView.this.getSelectedGameInformation();
 					
-					String connection_result = game_client.joinGame();
-					System.out.println("recibi " + connection_result);
-					if(connection_result.equals("ACCEPTED"))
+					if(game_client.joinGame())
 					{
 						JBombNewPlayerView.this.refreshGamesInformation();
 						
 						JBombGamePlayView gameplayview = new JBombGamePlayView(game_client);
+						
 						gameplayview.setVisible(true);
-						dispose();			
+						
+						JBombNewPlayerView.this.dispose();			
 					}
 					else
 					{
-						JOptionPane.showMessageDialog(contentPane, connection_result);
+						JOptionPane.showMessageDialog(contentPane, "Ocurrió un error al intentar conectarse");
 					}					
 				}
 			}
