@@ -253,43 +253,6 @@ public class ClientThread implements Runnable {
 		}
 	}
 	
-	public void sendGamePlayInformation()
-	{
-		GameInformation GamePlayInformation = new GameInformation();
-		
-		GamePlayInformation.setName(this.Game.getName());
-		//GamePlayInformation.setCurrentRound(this.Game.getCurrentRound()); NO LO ENVIO porque tiene que haberse iniciaod el juego
-		GamePlayInformation.setMaxRounds(this.Game.getMaxRounds());
-		GamePlayInformation.setGamePlayersOverMaxGamePlayers(this.Game.getGamePlayersOverMaxGamePlayers());
-		GamePlayInformation.setRoundDuration(this.Game.getRoundDuration());
-		GamePlayInformation.setGameMode(this.Game.getMode().toString());
-		//falta el envio de vecinos
-		try
-		{
-			ObjectOutputStream outToClient = new ObjectOutputStream(this.ClientSocket.getOutputStream());
-			
-			outToClient.writeObject(GamePlayInformation);
-		}
-		catch(Exception e)
-		{
-			System.out.println("Fallo el envio de informaci�n de juego elegido");
-		}
-	}
-	
-	public void sendBombOwner(String bombOwner)
-	{
-		try
-		{
-			DataOutputStream outToClient = new DataOutputStream(this.ClientSocket.getOutputStream());
-		
-			outToClient.writeBytes(bombOwner + '\n');
-		}
-		catch(IOException e)
-		{
-			System.out.println("Fallo el envio del propietario de la bomba");
-		}
-	}
-	
 	public void sendResponseToClient(JBombRequestResponse jbrr)
 	{
 		try
