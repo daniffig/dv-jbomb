@@ -1,16 +1,15 @@
 package concurrency;
 
-import java.io.BufferedReader;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
 import java.util.Vector;
 
 import network.GameInformation;
+import network.GamePlayQuiz;
 import network.GameServer;
 import reference.JBombRequestResponse;
 import core.Game;
@@ -23,6 +22,7 @@ public class ClientThread implements Runnable {
 	private JBombEventHandler EventHandler;
 	private Game Game;
 	private String PlayerName;
+	private Integer CurrentQuestionAnswer;
 	
 	public ClientThread(Socket s)
 	{
@@ -51,13 +51,16 @@ public class ClientThread implements Runnable {
 				{
 					this.sendResponseToClient(JBombRequestResponse.GAMEPLAY_INFORMATION_RESPONSE);
 					this.sendGamePlayInformation();
+					//Barrera, el ultimo inicia el juego
 					this.EventHandler.joinBarrier(this);
 					String BombOwner = this.Game.getBomb().getCurrentPlayer().getName();
-					if(BombOwner.equals(this.PlayerName))
+					if(!BombOwner.equals(this.PlayerName))
 					{
-					  this.sendResponseToClient(JBombRequestResponse.BOMB_OWNER_RESPONSE);
-					  this.sendBombOwner(BombOwner);
+					  //si no tengo la bomba, me duermo 
+					  //this.sendResponseToClient(JBombRequestResponse.BOMB_OWNER_RESPONSE);
+					  //this.sendBombOwner(BombOwner);
 					  this.EventHandler.waitForMove();
+					  //si me desperte es o porque exploto la bomba o porque me la pasaron
 					  if(this.Game.getBomb().isDetonated())
 					  {
 						  this.sendResponseToClient(JBombRequestResponse.BOMB_DETONATED_RESPONSE);
@@ -66,21 +69,21 @@ public class ClientThread implements Runnable {
 					  else
 					  {
 						  this.sendResponseToClient(JBombRequestResponse.QUIZ_QUESTION_RESPONSE);
-					  //  this.sendQuizQuestion();
-					  //  PRENDER BOMBA
+					      this.sendQuizQuestion();
+					      this.Game.getBomb().activate();
 					  }
 					}
 					else
 					{
 					  this.sendResponseToClient(JBombRequestResponse.QUIZ_QUESTION_RESPONSE);
-					  //this.sendQuizQuestion();
-					  //PRENDER BOMBA
+					  this.sendQuizQuestion();
+					  this.Game.getBomb().activate();
 					}
 				}
 				break;
 			case QUIZ_ANSWER_REQUEST:
-				//APAGAR BOMBA
-				//this.receiveQuizAnswer()
+				this.Game.getBomb().deactivate();
+				Vector<String> QuizAnswer = this.receiveQuizAnswer();
 				if(this.Game.getBomb().isDetonated())
 				{
 				    this.EventHandler.notifyAll();
@@ -89,13 +92,26 @@ public class ClientThread implements Runnable {
 				}
 				else
 				{
-				  //proceso respuesta 
-				  this.sendResponseToClient(JBombRequestResponse.QUIZ_ANSWER_RESPONSE);
-				  //this.sendQuizAnswerResponse()
+				  if(this.CurrentQuestionAnswer.toString() == QuizAnswer.get(0))
+				  {
+					  if(this.Game.getMode().toString().equals("Rebote"))
+					  {
+						  //this.Game.sendBomb(yo,this.Game.getBomb.previousUser());
+						  //despierto a previousUser()
+					  }
+					  else
+					  {
+						  //this.Game.sendBomb(yo,QuizAnswer.get(1));
+						  //despierto a get(1)
+					  }
+				  }
+				  else
+				  {
+					  this.sendResponseToClient(JBombRequestResponse.QUIZ_QUESTION_RESPONSE);
+					  this.sendQuizQuestion();
+					  this.Game.getBomb().activate();
+				  }
 				}
-			case CHANGE_BOMB_OWNER_REQUEST:
-				//espero nombre jugador
-				//lo despierto y yo me voy a dormir
 			case BOMB_DETONATED_REQUEST:
 				continue;
 			
@@ -250,6 +266,37 @@ public class ClientThread implements Runnable {
 		catch(IOException e)
 		{
 			System.out.println("Fallo el envio del propietario de la bomba");
+		}
+	}
+	
+	public void sendQuizQuestion()
+	{
+		QuizQuestion quiz_question  = this.Game.getQuiz().getRandomQuizQuestion();
+		this.CurrentQuestionAnswer = quiz_question.getCorrectAnswer();
+		try
+		{
+			ObjectOutputStream outToClient = new ObjectOutputStream(this.ClientSocket.getOutputStream());
+			
+			outToClient.writeObject(new GamePlayQuiz(quiz_question.getQuestion(),(Vector<String>)quiz_question.getAnswers()));
+		}
+		catch(Exception e)
+		{
+			System.out.println("Fallo el envio del response");
+		}
+	}
+	
+	public Vector<String> receiveQuizAnswer()
+	{
+		try
+		{
+			ObjectInputStream inFromClient = new ObjectInputStream(this.ClientSocket.getInputStream());
+		
+			return (Vector<String>) inFromClient.readObject();
+		}
+		catch(Exception e)
+		{
+			System.out.println("Fallo la recepcion del request del cliente");
+			return null;
 		}
 	}
 	
