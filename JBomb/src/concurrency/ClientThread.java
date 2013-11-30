@@ -50,37 +50,50 @@ public class ClientThread implements Runnable {
 				if(joinGameResult.equals("ACCEPTED"))
 				{
 					this.sendResponseToClient(JBombRequestResponse.GAMEPLAY_INFORMATION_RESPONSE);
-					//this.sendGamePlayInformation();
+					this.sendGamePlayInformation();
 					this.EventHandler.joinBarrier(this);
-					//if bombOwner==me
+					String BombOwner = this.Game.getBomb().getCurrentPlayer().getName();
+					if(BombOwner.equals(this.PlayerName))
+					{
 					  this.sendResponseToClient(JBombRequestResponse.BOMB_OWNER_RESPONSE);
-					  //this.sendBombOwner();
-					  //me voy a dormirla
-					  //si detono la bomba
-					  //  mando bomb_detonated_response
-					  //  mando perdedor
-					  //else
-					  //  this.sendResponseToClient(JBombRequestResponse.QUIZ_QUESTION_RESPONSE);
+					  this.sendBombOwner(BombOwner);
+					  this.EventHandler.waitForMove();
+					  if(this.Game.getBomb().isDetonated())
+					  {
+						  this.sendResponseToClient(JBombRequestResponse.BOMB_DETONATED_RESPONSE);
+						  this.sendBombOwner(this.Game.getBomb().getCurrentPlayer().getName());
+					  }
+					  else
+					  {
+						  this.sendResponseToClient(JBombRequestResponse.QUIZ_QUESTION_RESPONSE);
 					  //  this.sendQuizQuestion();
 					  //  PRENDER BOMBA
-					//else
+					  }
+					}
+					else
+					{
 					  this.sendResponseToClient(JBombRequestResponse.QUIZ_QUESTION_RESPONSE);
 					  //this.sendQuizQuestion();
 					  //PRENDER BOMBA
+					}
 				}
 				break;
 			case QUIZ_ANSWER_REQUEST:
 				//APAGAR BOMBA
 				//this.receiveQuizAnswer()
-				//Si la bomba detono
-				//  Despierto a todos
-				//  mando BOMB_DETONATED_RESPONSE
-				//  mando perdedor
-				//else
+				if(this.Game.getBomb().isDetonated())
+				{
+				    this.EventHandler.notifyAll();
+					this.sendResponseToClient(JBombRequestResponse.BOMB_DETONATED_RESPONSE);
+					this.sendBombOwner(this.Game.getBomb().getCurrentPlayer().getName());
+				}
+				else
+				{
 				  //proceso respuesta 
-				  //this.sendResponseToClient(JBombRequestResponse.QUIZ_ANSWER_RESPONSE);
+				  this.sendResponseToClient(JBombRequestResponse.QUIZ_ANSWER_RESPONSE);
 				  //this.sendQuizAnswerResponse()
-			//case CHANGE_BOMB_OWNER_REQUEST
+				}
+			case CHANGE_BOMB_OWNER_REQUEST:
 				//espero nombre jugador
 				//lo despierto y yo me voy a dormir
 			case BOMB_DETONATED_REQUEST:
@@ -170,6 +183,7 @@ public class ClientThread implements Runnable {
 				{
 					this.Game = RequestedGame;
 					this.EventHandler = GameServer.getInstance().getEventHandlerOfGame(RequestedGame);
+					this.EventHandler.subscribe(this);
 					this.PlayerName = PlayerName;
 					result = "ACCEPTED";
 				}
@@ -189,6 +203,43 @@ public class ClientThread implements Runnable {
 		catch(IOException e)
 		{
 			System.out.println("Fallo el envio de datos al cliente");
+		}
+	}
+	
+	public void sendGamePlayInformation()
+	{
+		GameInformation GamePlayInformation = new GameInformation();
+		
+		GamePlayInformation.setName(this.Game.getName());
+		//GamePlayInformation.setCurrentRound(this.Game.getCurrentRound()); NO LO ENVIO porque tiene que haberse iniciaod el juego
+		GamePlayInformation.setMaxRounds(this.Game.getMaxRounds());
+		GamePlayInformation.setGamePlayersOverMaxGamePlayers(this.Game.getGamePlayersOverMaxGamePlayers());
+		GamePlayInformation.setRoundDuration(this.Game.getRoundDuration());
+		GamePlayInformation.setGameMode(this.Game.getMode().toString());
+		//falta el envio de vecinos
+		try
+		{
+			ObjectOutputStream outToClient = new ObjectOutputStream(this.ClientSocket.getOutputStream());
+			
+			outToClient.writeObject(GamePlayInformation);
+		}
+		catch(Exception e)
+		{
+			System.out.println("Fallo el envio de información de juego elegido");
+		}
+	}
+	
+	public void sendBombOwner(String bombOwner)
+	{
+		try
+		{
+			DataOutputStream outToClient = new DataOutputStream(this.ClientSocket.getOutputStream());
+		
+			outToClient.writeBytes(bombOwner + '\n');
+		}
+		catch(IOException e)
+		{
+			System.out.println("Fallo el envio del propietario de la bomba");
 		}
 	}
 	
