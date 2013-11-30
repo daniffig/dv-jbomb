@@ -53,22 +53,36 @@ public class ClientThread implements Runnable {
 					//this.sendGamePlayInformation();
 					this.EventHandler.joinBarrier(this);
 					//if bombOwner==me
-					this.sendResponseToClient(JBombRequestResponse.BOMB_OWNER_RESPONSE);
-					//this.sendBombOwner();
-					//me voy a dormirla
-					//si la respuesta fue incorrecta mando respuesta
+					  this.sendResponseToClient(JBombRequestResponse.BOMB_OWNER_RESPONSE);
+					  //this.sendBombOwner();
+					  //me voy a dormirla
+					  //si detono la bomba
+					  //  mando bomb_detonated_response
+					  //  mando perdedor
+					  //else
+					  //  this.sendResponseToClient(JBombRequestResponse.QUIZ_QUESTION_RESPONSE);
+					  //  this.sendQuizQuestion();
+					  //  PRENDER BOMBA
 					//else
-					this.sendResponseToClient(JBombRequestResponse.QUIZ_QUESTION_RESPONSE);
-					//this.sendQuizQuestion();
-					//PRENDER BOMBA
+					  this.sendResponseToClient(JBombRequestResponse.QUIZ_QUESTION_RESPONSE);
+					  //this.sendQuizQuestion();
+					  //PRENDER BOMBA
 				}
 				break;
-			//case QUIZ_ANSWER_REQUEST
+			case QUIZ_ANSWER_REQUEST:
 				//APAGAR BOMBA
 				//this.receiveQuizAnswer()
-				//this.sendResponseToClient(JBombRequestResponse.QUIZ_ANSWER_RESPONSE);
-				//this.sendQuizAnswerResponse()
-			//QUIZ_ANSWER_RESPONSE,
+				//Si la bomba detono
+				//  Despierto a todos
+				//  mando BOMB_DETONATED_RESPONSE
+				//  mando perdedor
+				//else
+				  //proceso respuesta 
+				  //this.sendResponseToClient(JBombRequestResponse.QUIZ_ANSWER_RESPONSE);
+				  //this.sendQuizAnswerResponse()
+			//case CHANGE_BOMB_OWNER_REQUEST
+				//espero nombre jugador
+				//lo despierto y yo me voy a dormir
 			case BOMB_DETONATED_REQUEST:
 				continue;
 			
