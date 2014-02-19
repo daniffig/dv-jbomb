@@ -1,8 +1,10 @@
 package concurrency;
 
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -33,6 +35,7 @@ public class ClientThread implements Runnable {
 	public void run() {
 		System.out.println("Conexion establecida! Thread # " + Thread.currentThread().getName() + " creado");
 		
+
 		JBombRequestResponse request = this.receiveRequestFromClient();
 		while(!request.equals(JBombRequestResponse.BOMB_DETONATED_REQUEST))
 		{
