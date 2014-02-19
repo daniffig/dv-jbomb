@@ -35,8 +35,28 @@ public class ClientThread implements Runnable {
 	public void run() {
 		System.out.println("Conexion establecida! Thread # " + Thread.currentThread().getName() + " creado");
 		
-
-		JBombRequestResponse request = this.receiveRequestFromClient();
+		try
+   		{
+   			BufferedReader inFromServer = new BufferedReader(new InputStreamReader(ClientSocket.getInputStream()));
+   			  
+   			System.out.println(inFromServer.readLine());
+   		}
+   		catch(IOException e)
+   		{
+   			System.out.println("fallo la recibida papa");
+  		}
+		
+		try
+		{
+			DataOutputStream outToClient = new DataOutputStream(ClientSocket.getOutputStream());
+		
+			outToClient.writeBytes("Hola Android! \n");
+		}
+		catch(IOException e)
+		{
+			System.out.println("fallo el envio papa");
+		}
+		/*JBombRequestResponse request = this.receiveRequestFromClient();
 		while(!request.equals(JBombRequestResponse.BOMB_DETONATED_REQUEST))
 		{
 			switch (request){
@@ -124,7 +144,7 @@ public class ClientThread implements Runnable {
 			}
 			
 			request = this.receiveRequestFromClient();
-		}
+		}*/
 	}
 	
 	public void startGame()
