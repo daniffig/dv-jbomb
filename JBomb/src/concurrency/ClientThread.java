@@ -1,22 +1,17 @@
 package concurrency;
 
 
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Vector;
 
-import network.GameInformation;
-import network.GamePlayQuiz;
+
 import network.GameServer;
-import reference.JBombRequestResponse;
+import network.JBombComunicationObject;
+
 import core.Game;
 import core.GamePlayer;
-import core.QuizQuestion;
 
 public class ClientThread implements Runnable {
 
@@ -35,27 +30,7 @@ public class ClientThread implements Runnable {
 	public void run() {
 		System.out.println("Conexion establecida! Thread # " + Thread.currentThread().getName() + " creado");
 		
-		try
-   		{
-   			BufferedReader inFromServer = new BufferedReader(new InputStreamReader(ClientSocket.getInputStream()));
-   			  
-   			System.out.println(inFromServer.readLine());
-   		}
-   		catch(IOException e)
-   		{
-   			System.out.println("fallo la recibida papa");
-  		}
 		
-		try
-		{
-			DataOutputStream outToClient = new DataOutputStream(ClientSocket.getOutputStream());
-		
-			outToClient.writeBytes("Hola Android! \n");
-		}
-		catch(IOException e)
-		{
-			System.out.println("fallo el envio papa");
-		}
 		/*JBombRequestResponse request = this.receiveRequestFromClient();
 		while(!request.equals(JBombRequestResponse.BOMB_DETONATED_REQUEST))
 		{
@@ -152,54 +127,8 @@ public class ClientThread implements Runnable {
 		this.Game.start();
 	}
 	
-	public Vector<GameInformation> getGamesInformation()
-	{		
-		Vector<GameInformation> games_information = new Vector<GameInformation>();
-		
-		for(Game g :GameServer.getInstance().getGames())
-		{
-			GameInformation gi = new GameInformation();
-			gi.setName(g.getName());
-			gi.setGamePlayersOverMaxGamePlayers(g.getGamePlayersOverMaxGamePlayers());
-			gi.setRoundDuration(g.getRoundDuration());
-			gi.setMaxRounds(g.getMaxRounds());
-			gi.setGameMode(g.getMode().toString());
-			gi.setGameState(g.getState().toString());
-			
-			games_information.add(gi);
-		}
-		
-		return games_information;
-	}
 	
-	public void sendGamesInformation()
-	{
-		try
-		{
-			ObjectOutputStream outToClient = new ObjectOutputStream(this.ClientSocket.getOutputStream());
-			
-			outToClient.writeObject(this.getGamesInformation());
-		}
-		catch(Exception e)
-		{
-			System.out.println("Fallo el envio de informaci�n de juegos");
-		}
-	}
 	
-	public Vector<String> receiveJoinGameRequest()
-	{
-		try
-		{
-			ObjectInputStream inFromClient = new ObjectInputStream(this.ClientSocket.getInputStream());
-		
-			return (Vector<String>) inFromClient.readObject();
-		}
-		catch(Exception e)
-		{
-			System.out.println("Fallo la recepcion de datos del cliente");
-			return null;
-		}
-	}
 	
 	public String processJoinGameRequest(Vector<String> joinGameRequest)
 	{		
@@ -241,66 +170,13 @@ public class ClientThread implements Runnable {
 		}
 	}
 	
-	public void sendJoinGameRequestResponse(String result)
+	public void sendResponseToClient(JBombComunicationObject jbco)
 	{
-		try
-		{
-			DataOutputStream outToClient = new DataOutputStream(this.ClientSocket.getOutputStream());
-		
-			outToClient.writeBytes(result + '\n');
-		}
-		catch(IOException e)
-		{
-			System.out.println("Fallo el envio de datos al cliente");
-		}
-	}
-	
-	public void sendGamePlayInformation()
-	{
-		GameInformation GamePlayInformation = new GameInformation();
-		
-		GamePlayInformation.setName(this.Game.getName());
-		//GamePlayInformation.setCurrentRound(this.Game.getCurrentRound()); NO LO ENVIO porque tiene que haberse iniciaod el juego
-		GamePlayInformation.setMaxRounds(this.Game.getMaxRounds());
-		GamePlayInformation.setGamePlayersOverMaxGamePlayers(this.Game.getGamePlayersOverMaxGamePlayers());
-		GamePlayInformation.setRoundDuration(this.Game.getRoundDuration());
-		GamePlayInformation.setGameMode(this.Game.getMode().toString());
-		//falta el envio de vecinos
 		try
 		{
 			ObjectOutputStream outToClient = new ObjectOutputStream(this.ClientSocket.getOutputStream());
 			
-			outToClient.writeObject(GamePlayInformation);
-		}
-		catch(Exception e)
-		{
-			System.out.println("Fallo el envio de informaci�n de juego elegido");
-		}
-	}
-	
-	public void sendBombOwner(String bombOwner)
-	{
-		try
-		{
-			DataOutputStream outToClient = new DataOutputStream(this.ClientSocket.getOutputStream());
-		
-			outToClient.writeBytes(bombOwner + '\n');
-		}
-		catch(IOException e)
-		{
-			System.out.println("Fallo el envio del propietario de la bomba");
-		}
-	}
-	
-	public void sendQuizQuestion()
-	{
-		QuizQuestion quiz_question  = this.Game.getQuiz().getRandomQuizQuestion();
-		this.CurrentQuestionAnswer = quiz_question.getCorrectAnswer();
-		try
-		{
-			ObjectOutputStream outToClient = new ObjectOutputStream(this.ClientSocket.getOutputStream());
-			
-			outToClient.writeObject(new GamePlayQuiz(quiz_question.getQuestion(),(Vector<String>)quiz_question.getAnswers()));
+			outToClient.writeObject(jbco);
 		}
 		catch(Exception e)
 		{
@@ -308,46 +184,18 @@ public class ClientThread implements Runnable {
 		}
 	}
 	
-	public Vector<String> receiveQuizAnswer()
+	public JBombComunicationObject receiveRequestFromClient()
 	{
 		try
 		{
 			ObjectInputStream inFromClient = new ObjectInputStream(this.ClientSocket.getInputStream());
 		
-			return (Vector<String>) inFromClient.readObject();
+			return (JBombComunicationObject) inFromClient.readObject();
 		}
 		catch(Exception e)
 		{
 			System.out.println("Fallo la recepcion del request del cliente");
-			return null;
-		}
-	}
-	
-	public void sendResponseToClient(JBombRequestResponse jbrr)
-	{
-		try
-		{
-			ObjectOutputStream outToClient = new ObjectOutputStream(this.ClientSocket.getOutputStream());
 			
-			outToClient.writeObject(jbrr);
-		}
-		catch(Exception e)
-		{
-			System.out.println("Fallo el envio del response");
-		}
-	}
-	
-	public JBombRequestResponse receiveRequestFromClient()
-	{
-		try
-		{
-			ObjectInputStream inFromClient = new ObjectInputStream(this.ClientSocket.getInputStream());
-		
-			return (JBombRequestResponse) inFromClient.readObject();
-		}
-		catch(Exception e)
-		{
-			System.out.println("Fallo la recepcion del request del cliente");
 			return null;
 		}
 	}

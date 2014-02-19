@@ -17,17 +17,18 @@ import reference.AdjacentDirections;
 import reference.JBombRequestResponse;
 import annotations.Server;
 
+@Deprecated //hora de usar el cliente de android
 @Server("conf.properties.txt")
 public class GameClient {
 
 	public String username;
-	public GameInformation GameInformation;	
+	//public GameInformation GameInformation;	
 	
 	public String server_ip;
 	public int server_port;
 	private Socket socket;
 	
-	private Vector<GameInformation> GamesInformation = new Vector<GameInformation>();
+	//private Vector<GameInformation> GamesInformation = new Vector<GameInformation>();
 	/*Esto deberia ser deprecated dentro de poco*/
 	public String notification;
 	public String gameName;
@@ -50,7 +51,7 @@ public class GameClient {
 			
 			Vector<Object> JoinGameInformation = new Vector<Object>();
 
-			JoinGameInformation.add(this.GameInformation.getName());
+	//		JoinGameInformation.add(this.GameInformation.getName());
 			JoinGameInformation.add(this.username);
 			
 			this.sendObjectToServer(JoinGameInformation);
@@ -183,12 +184,12 @@ public class GameClient {
 		try
 		{
 			ObjectInputStream inFromClient = new ObjectInputStream(this.socket.getInputStream());
-			this.GamesInformation = (Vector<GameInformation>) inFromClient.readObject();
+		//	this.GamesInformation = (Vector<GameInformation>) inFromClient.readObject();
 			
-			for (GameInformation gi : this.getGamesInformation())
-			{
-				System.out.println(gi.getName());
-			}
+	//		for (GameInformation gi : this.getGamesInformation())
+		//	{
+			//	System.out.println(gi.getName());
+		//	}
 		}
 		catch(Exception e)
 		{
@@ -212,9 +213,9 @@ public class GameClient {
 		return null;
 	}
 
-	public Vector<GameInformation> getGamesInformation() {
+	/*public Vector<GameInformation> getGamesInformation() {
 		return GamesInformation;
-	}
+	}*/
 	
 	public void sendRequestToServer(JBombRequestResponse jbrr)
 	{

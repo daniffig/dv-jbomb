@@ -1,7 +1,5 @@
 package view;
 
-import network.GameInformation;
-
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -40,12 +38,12 @@ import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 
 import reference.JBombRequestResponse;
-
+@Deprecated
 public class JBombNewPlayerView extends JFrame {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
+/*	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField PlayerNameInput;
 	private GameClient game_client = new GameClient();
@@ -59,7 +57,7 @@ public class JBombNewPlayerView extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -75,7 +73,7 @@ public class JBombNewPlayerView extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public JBombNewPlayerView() {		
+	/*public JBombNewPlayerView() {		
 		setResizable(false);
 		setTitle("JBomb v0.2.1 - Cliente");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -208,7 +206,7 @@ public class JBombNewPlayerView extends JFrame {
 				return false;
 			}
 		}
-		*/
+		
 		
 		if (this.PlayerNameInput.getText().equals(""))
 		{
@@ -286,5 +284,5 @@ public class JBombNewPlayerView extends JFrame {
 
 	public void setGame_client(GameClient game_client) {
 		this.game_client = game_client;
-	}	
+	}	*/
 }
