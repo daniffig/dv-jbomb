@@ -6,7 +6,10 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Vector;
 
+import reference.JBombRequestResponse;
 
+
+import network.GameInformation;
 import network.GameServer;
 import network.JBombComunicationObject;
 
@@ -30,6 +33,11 @@ public class ClientThread implements Runnable {
 	public void run() {
 		System.out.println("Conexion establecida! Thread # " + Thread.currentThread().getName() + " creado");
 		
+		JBombComunicationObject request = this.receiveRequestFromClient();
+		
+		if(request.getType().equals(JBombRequestResponse.GAME_LIST_REQUEST)){
+			this.sendGameListInformation();
+		}
 		
 		/*JBombRequestResponse request = this.receiveRequestFromClient();
 		while(!request.equals(JBombRequestResponse.BOMB_DETONATED_REQUEST))
@@ -66,7 +74,7 @@ public class ClientThread implements Runnable {
 					  }
 					  else
 					  {
-						  this.sendResponseToClient(JBombRequestResponse.QUIZ_QUESTION_RESPONSE);
+						  this.sendRsponseToClient(JBombRequestResponse.QUIZ_QUESTION_RESPONSE);
 					      this.sendQuizQuestion();
 					      this.Game.getBomb().activate();
 					  }
@@ -170,8 +178,25 @@ public class ClientThread implements Runnable {
 		}
 	}
 	
-	public void sendResponseToClient(JBombComunicationObject jbco)
-	{
+	//LO NUEVOOOOOO
+	public void sendGameListInformation(){
+		JBombComunicationObject response = new JBombComunicationObject();
+		
+		for(Game g :GameServer.getInstance().getGames())
+		{
+			GameInformation gi = new GameInformation();
+			gi.setName(g.getName());
+			gi.setMode(g.getMode().toString());
+			gi.setGamePlayersOverMaxGamePlayers(g.getGamePlayersOverMaxGamePlayers());
+
+			response.addGameInformation(gi);
+		}
+
+		this.sendResponseToClient(response);
+	}
+	
+	
+	public void sendResponseToClient(JBombComunicationObject jbco){
 		try
 		{
 			ObjectOutputStream outToClient = new ObjectOutputStream(this.ClientSocket.getOutputStream());
@@ -184,8 +209,7 @@ public class ClientThread implements Runnable {
 		}
 	}
 	
-	public JBombComunicationObject receiveRequestFromClient()
-	{
+	public JBombComunicationObject receiveRequestFromClient(){
 		try
 		{
 			ObjectInputStream inFromClient = new ObjectInputStream(this.ClientSocket.getInputStream());
