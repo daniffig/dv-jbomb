@@ -36,6 +36,7 @@ public class ClientThread implements Runnable {
 		JBombComunicationObject request = this.receiveRequestFromClient();
 		
 		if(request.getType().equals(JBombRequestResponse.GAME_LIST_REQUEST)){
+			System.out.println("recibi game_list_request from client");
 			this.sendGameListInformation();
 		}
 		
