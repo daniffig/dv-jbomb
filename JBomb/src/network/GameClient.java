@@ -20,7 +20,7 @@ import annotations.Server;
 @Deprecated //hora de usar el cliente de android
 @Server("conf.properties.txt")
 public class GameClient {
-
+/*
 	public String username;
 	//public GameInformation GameInformation;	
 	
@@ -29,7 +29,7 @@ public class GameClient {
 	private Socket socket;
 	
 	//private Vector<GameInformation> GamesInformation = new Vector<GameInformation>();
-	/*Esto deberia ser deprecated dentro de poco*/
+	Esto deberia ser deprecated dentro de poco
 	public String notification;
 	public String gameName;
 	public int currentRound;
@@ -177,8 +177,7 @@ public class GameClient {
 		return this.adjacentPlayers[direction.index()];
 	}
 	
-	/*NUEVO*/
-	
+
 	public void receiveGamesInformationFromServer()
 	{
 		try
@@ -213,9 +212,7 @@ public class GameClient {
 		return null;
 	}
 
-	/*public Vector<GameInformation> getGamesInformation() {
-		return GamesInformation;
-	}*/
+
 	
 	public void sendRequestToServer(JBombRequestResponse jbrr)
 	{
@@ -265,5 +262,5 @@ public class GameClient {
 		{
 			System.out.println("Object not sent!");
 		}		
-	}
+	}*/
 }

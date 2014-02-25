@@ -18,13 +18,11 @@ import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+@Deprecated //Ahora se usa el cliente android
 
 public class JBombGamePlayView extends JFrame{
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+/*	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private GameClient game_client = new GameClient();
 
@@ -145,5 +143,5 @@ public class JBombGamePlayView extends JFrame{
 		sendDown.setIcon(new ImageIcon(JBombGamePlayView.class.getResource("/images/DownArrow.png")));
 		sendDown.setBounds(290, 429, 90, 90);
 		contentPane.add(sendDown);
-	}
+	}*/
 }

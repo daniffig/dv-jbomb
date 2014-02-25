@@ -28,17 +28,16 @@ import core.Game;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
+@Deprecated //Utilizando el cliente android
 public class JBombClientAnswerQuestionFormView extends JFrame {
-
+/*
 	private JPanel contentPane;
 	
 	private JBombGamePlayView parentWindow;
 	
 	private JComboBox<String> QuizAnswerComboBox;
 
-	/**
-	 * Launch the application.
-	 */
+
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -52,9 +51,6 @@ public class JBombClientAnswerQuestionFormView extends JFrame {
 		});
 	}
 
-	/**
-	 * Create the frame.
-	 */
 	public JBombClientAnswerQuestionFormView(JBombGamePlayView JBombGamePlayView) {
 		
 		this.parentWindow = JBombGamePlayView;
@@ -124,5 +120,5 @@ public class JBombClientAnswerQuestionFormView extends JFrame {
 		}
 		
 		return true;
-	}
+	}*/
 }
