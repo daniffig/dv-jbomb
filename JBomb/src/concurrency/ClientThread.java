@@ -206,14 +206,13 @@ public class ClientThread implements Runnable {
 					return true;
 				}
 				this.sendResponseToClient(jbco);
-				return false;
-
 			}
 		}
 		catch (Exception e)
 		{
 			System.out.println("Game Join Process Request FAILED " + e.toString());
 		}
+		return false;
 	}
 	
 	//LO NUEVOOOOOO
