@@ -215,12 +215,12 @@ public class JBombServerMainView {
 	
 	public void addGame(Game Game)
 	{
+		Game.setId(this.IncrementalGameId);
+		this.IncrementalGameId++;
 		GameServer.getInstance().addGame(Game);
 		
 		if (!this.GameVector.contains(Game))
 		{
-			Game.setId(this.IncrementalGameId);
-			this.IncrementalGameId++;
 			this.GameVector.add(Game);
 			((DefaultTableModel)this.GamesTable.getModel()).addRow(Game.toVector());			
 		}
