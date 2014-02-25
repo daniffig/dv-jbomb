@@ -118,6 +118,13 @@ public class GameServer implements Runnable{
 		return null;
 	}
 	
+	public synchronized Game getGameById(Integer Id)
+	{
+		for(Game g: this.Games)
+			if(g.getId().equals(Id)) return g;
+		return null;
+	}	
+	
 	public synchronized Vector<JBombEventHandler> getEventHandlers()
 	{
 		return this.EventHandlers;

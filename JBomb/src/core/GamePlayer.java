@@ -14,7 +14,7 @@ public class GamePlayer {
 	 * 
 	 * public void setPlayer(Player player) { Player = player; }
 	 */
-
+	private Integer Id;
 	private String Name;
 	private List<GamePlayer> Neighbours = new ArrayList<GamePlayer>();
 
@@ -27,6 +27,14 @@ public class GamePlayer {
 
 	public String toString() {
 		return this.getName();
+	}
+
+	public Integer getId() {
+		return Id;
+	}
+
+	public void setId(Integer id) {
+		Id = id;
 	}
 
 	public String getName() {

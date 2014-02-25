@@ -10,6 +10,7 @@ import reference.JBombRequestResponse;
 
 
 import network.GameInformation;
+import network.GamePlayInformation;
 import network.GameServer;
 import network.JBombComunicationObject;
 
@@ -21,7 +22,11 @@ public class ClientThread implements Runnable {
 	private Socket ClientSocket;
 	private JBombEventHandler EventHandler;
 	private Game Game;
-	private String PlayerName;
+	private Integer PlayerId;
+	
+	private JBombComunicationObject request;
+	private JBombComunicationObject response;
+	
 	private Integer CurrentQuestionAnswer;
 	
 	public ClientThread(Socket s)
@@ -33,11 +38,17 @@ public class ClientThread implements Runnable {
 	public void run() {
 		System.out.println("Conexion establecida! Thread # " + Thread.currentThread().getName() + " creado");
 		
-		JBombComunicationObject request = this.receiveRequestFromClient();
+		request = this.receiveRequestFromClient();
 		
 		if(request.getType().equals(JBombRequestResponse.GAME_LIST_REQUEST)){
-			System.out.println("recibi game_list_request from client");
+			System.out.println("I received a game list request from the client");
 			this.sendGameListInformation();
+		}
+		
+		request = this.receiveRequestFromClient();
+		if(request.getType().equals(JBombRequestResponse.JOIN_GAME_REQUEST)){
+			System.out.println("I received a game join request from the client");
+			this.processJoinGameRequest();
 		}
 		
 		/*JBombRequestResponse request = this.receiveRequestFromClient();
@@ -139,43 +150,54 @@ public class ClientThread implements Runnable {
 	
 	
 	
-	public String processJoinGameRequest(Vector<String> joinGameRequest)
+	public void processJoinGameRequest()
 	{		
+		JBombComunicationObject jbco = new JBombComunicationObject();
 		try
-		{
-			String GameName = joinGameRequest.get(0);
-			String PlayerName = joinGameRequest.get(1);
+		{			
+			Game RequestedGame = GameServer.getInstance().getGameById(request.getRequestedGameId());
 			
-			Game RequestedGame = GameServer.getInstance().getGameByName(GameName);
-			
-			String result;
-			
-			if(RequestedGame == null) result = "El juego requerido no existe";
+			if(RequestedGame == null)
+			{	
+				jbco.setType(JBombRequestResponse.ERROR_FLASH);
+				jbco.setFlash("El juego requerido no existe");
+			}
 			else
 			{
-				if(RequestedGame.existPlayer(PlayerName))
-					result = "El nombre de jugador ya existe en el juego " + GameName;
-				else
-				{
-					if(!RequestedGame.addGamePlayer(new GamePlayer(PlayerName)))
-						result = "Juego Completo! no se pueden agregar m�s jugadores";
-					else
-					{
-						this.Game = RequestedGame;
-						this.EventHandler = GameServer.getInstance().getEventHandlerOfGame(RequestedGame);
-						this.PlayerName = PlayerName;
-						result = "ACCEPTED";
-						
-						GameServer.getInstance().refreshGamesTable();
-					}
+				Integer player_id = RequestedGame.addGamePlayer(new GamePlayer(request.getMyPlayerName()));
+				if(player_id.equals(-1)){
+					jbco.setType(JBombRequestResponse.ERROR_FLASH);
+					jbco.setFlash("Juego Completo! no se pueden agregar m�s jugadores");
 				}
+				else{
+					this.Game = RequestedGame;
+					this.EventHandler = GameServer.getInstance().getEventHandlerOfGame(RequestedGame);
+					this.PlayerId = player_id;
+						
+					GameServer.getInstance().refreshGamesTable();
+					
+					//esto es lo que voy a enviarle al chambon
+					
+					GamePlayInformation gpi = new GamePlayInformation();
+					gpi.setId(this.Game.getId());
+					gpi.setName(this.Game.getName());
+					gpi.setGamePlayersOverMaxGamePlayers(this.Game.getGamePlayersOverMaxGamePlayers());
+					gpi.setCurrentRound(this.Game.getCurrentRound());
+					gpi.setMaxRounds(this.Game.getMaxRounds());
+					
+					
+					jbco.setType(JBombRequestResponse.GAMEPLAY_INFORMATION_RESPONSE);
+					jbco.setGamePlayInformation(gpi);
+					jbco.setMyPlayerId(player_id);
+				}
+
 			}
 
-			return result;
+			this.sendResponseToClient(jbco);
 		}
 		catch (Exception e)
 		{
-			return "Game join request failed!";
+			System.out.println("Game Join Process Request FAILED");
 		}
 	}
 	

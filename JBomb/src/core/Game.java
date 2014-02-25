@@ -117,14 +117,15 @@ public class Game {
 		LinkageStrategy = linkageStrategy;
 	}
 
-	public synchronized Boolean addGamePlayer(GamePlayer p) {
+	public synchronized Integer addGamePlayer(GamePlayer p) {
 		if (this.canAddPlayer()) {
+			p.setId(this.getGamePlayers().size()+1);
 			this.getGamePlayers().add(p);
 
-			return true;
+			return p.getId();
 		}
 
-		return false;
+		return -1;
 	}
 
 	public synchronized Boolean canAddPlayer() {
