@@ -163,10 +163,11 @@ public class ClientThread implements Runnable {
 		{			
 			Game RequestedGame = GameServer.getInstance().getGameById(request.getRequestedGameId());
 			
-			if(RequestedGame == null)
+			if(RequestedGame.equals(null))
 			{	
 				jbco.setType(JBombRequestResponse.ERROR_FLASH);
 				jbco.setFlash("El juego requerido no existe");
+				System.out.println("mando error porque el juego requerido no existe");
 			}
 			else
 			{
@@ -174,6 +175,7 @@ public class ClientThread implements Runnable {
 				if(player_id.equals(-1)){
 					jbco.setType(JBombRequestResponse.ERROR_FLASH);
 					jbco.setFlash("Juego Completo! no se pueden agregar m�s jugadores");
+					System.out.println("mando error porque el juego esta completo");
 				}
 				else{
 					this.Game = RequestedGame;
@@ -195,10 +197,12 @@ public class ClientThread implements Runnable {
 					jbco.setType(JBombRequestResponse.GAMEPLAY_INFORMATION_RESPONSE);
 					jbco.setGamePlayInformation(gpi);
 					jbco.setMyPlayerId(this.PlayerId);
+					
+					System.out.println("nombre del juego " + jbco.getGamePlayInformation().getName());
+					System.out.println("player_id " + jbco.getMyPlayerId());
 				}
 
 			}
-
 			this.sendResponseToClient(jbco);
 		}
 		catch (Exception e)
