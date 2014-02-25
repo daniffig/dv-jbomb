@@ -162,7 +162,7 @@ public class ClientThread implements Runnable {
 		try
 		{			
 			Game RequestedGame = GameServer.getInstance().getGameById(request.getRequestedGameId());
-			System.out.println("El flaco de los jueguito' me devolvio el " + RequestedGame.getName());
+
 			if(RequestedGame.equals(null))
 			{	
 				jbco.setType(JBombRequestResponse.ERROR_FLASH);

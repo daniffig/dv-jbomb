@@ -120,13 +120,9 @@ public class GameServer implements Runnable{
 	
 	public synchronized Game getGameById(Integer Id)
 	{
-		for(Game g: this.Games){
-			System.out.println("pido id = " + Id + " y tengo " + g.getUID());
-			if(g.getUID() == Id ){
-				System.out.println("voy a devolver el juego " + g.getName() + " con id " + g.getUID());
+		for(Game g: this.Games)
+			if(g.getUID().equals(Id))
 				return g;
-				}
-			}
 		return null;
 	}	
 	
