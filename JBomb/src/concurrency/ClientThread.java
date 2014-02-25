@@ -162,7 +162,7 @@ public class ClientThread implements Runnable {
 		try
 		{			
 			Game RequestedGame = GameServer.getInstance().getGameById(request.getRequestedGameId());
-			
+			System.out.println("El flaco de los jueguito' me devolvio el " + RequestedGame.getName());
 			if(RequestedGame.equals(null))
 			{	
 				jbco.setType(JBombRequestResponse.ERROR_FLASH);
@@ -172,7 +172,7 @@ public class ClientThread implements Runnable {
 			else
 			{
 				Integer player_id = RequestedGame.addGamePlayer(new GamePlayer(request.getMyPlayerName()));
-				if(player_id.equals(-1)){
+				if(player_id == -1){
 					jbco.setType(JBombRequestResponse.ERROR_FLASH);
 					jbco.setFlash("Juego Completo! no se pueden agregar m�s jugadores");
 					System.out.println("mando error porque el juego esta completo");
@@ -207,7 +207,7 @@ public class ClientThread implements Runnable {
 		}
 		catch (Exception e)
 		{
-			System.out.println("Game Join Process Request FAILED");
+			System.out.println("Game Join Process Request FAILED " + e.toString());
 		}
 	}
 	
