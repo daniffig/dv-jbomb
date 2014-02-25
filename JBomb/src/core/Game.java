@@ -69,6 +69,12 @@ public class Game {
 		GamePlayers = gamePlayers;
 	}
 
+	public synchronized GamePlayer getGamePlayerById(Integer Id){
+		for(GamePlayer gp: this.GamePlayers)
+			if(gp.getId().equals(Id)) return gp;
+		return null;
+	}
+	
 	public Integer getMaxRounds() {
 		return MaxRounds;
 	}

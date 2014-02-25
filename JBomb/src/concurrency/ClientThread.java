@@ -48,7 +48,9 @@ public class ClientThread implements Runnable {
 				break;
 				case JOIN_GAME_REQUEST:
 					System.out.println("I received a game join request from the client");
-					this.processJoinGameRequest();
+					if(this.processJoinGameRequest()){
+						
+					}
 				default:
 				break;
 				
@@ -156,7 +158,7 @@ public class ClientThread implements Runnable {
 	
 	
 	
-	public void processJoinGameRequest()
+	public boolean processJoinGameRequest()
 	{		
 		JBombComunicationObject jbco = new JBombComunicationObject();
 		try
@@ -200,10 +202,13 @@ public class ClientThread implements Runnable {
 					
 					System.out.println("nombre del juego " + jbco.getGamePlayInformation().getName());
 					System.out.println("player_id " + jbco.getMyPlayerId());
+					this.sendResponseToClient(jbco);
+					return true;
 				}
+				this.sendResponseToClient(jbco);
+				return false;
 
 			}
-			this.sendResponseToClient(jbco);
 		}
 		catch (Exception e)
 		{

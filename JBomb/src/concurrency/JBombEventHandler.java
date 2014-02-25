@@ -3,19 +3,20 @@ package concurrency;
 import java.util.ArrayList;
 import java.util.List;
 
+import reference.GameEvent;
 import reference.JBombRequestResponse;
 
 
 public class JBombEventHandler {
 	private int current_barrier_size;
 	private int barrier_size;
-	private JBombRequestResponse event;
+	private GameEvent event;
 	private List<ClientThread> suscriptors = new ArrayList<ClientThread>();
 
 	public JBombEventHandler(int cant)
 	{
 		this.barrier_size = cant;
-		this.current_barrier_size =0;
+		this.current_barrier_size = 0;
 	}
 	
 	public synchronized void subscribe(ClientThread  ct)
@@ -45,20 +46,22 @@ public class JBombEventHandler {
 		this.notifyAll();
 	}
 	
+	public void goToSleep()
+	{
+		try{
+			this.wait();
+		}catch(InterruptedException e){
+			System.out.println("El thread salió del wait() por una interrupción");
+		}
+	}
+	
 	public synchronized void joinBarrier(ClientThread ct)
 	{
 		this.current_barrier_size++;
 		
 		if(this.barrier_size != this.current_barrier_size)
 		{
-			try
-			{
-				this.wait();
-			}
-			catch(InterruptedException e)
-			{
-				System.out.println("El thread salió del wait() por una interrupción");
-			}
+			this.goToSleep();
 		}
 		else
 		{
@@ -68,12 +71,12 @@ public class JBombEventHandler {
 		}
 	}
 		
-	public void setEvent(JBombRequestResponse e)
+	public void setEvent(GameEvent e)
 	{
 		this.event = e;
 	}
 	
-	public JBombRequestResponse getEvent()
+	public GameEvent getEvent()
 	{
 		return this.event;
 	}
