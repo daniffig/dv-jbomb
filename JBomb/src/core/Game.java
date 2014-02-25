@@ -14,6 +14,7 @@ import linkageStrategies.AbstractLinkageStrategy;
 
 public class Game {
 
+	private Integer Id;
 	private String Name;
 	private List<GamePlayer> GamePlayers = new ArrayList<GamePlayer>();
 	private Integer MaxRounds = 0;
@@ -25,6 +26,7 @@ public class Game {
 	private Quiz Quiz;
 	private AbstractGameMode Mode;
 	private AbstractGameState State;
+	
 	
 	public Game()
 	{
@@ -41,6 +43,14 @@ public class Game {
 	public Game (Game Game)
 	{
 		this.setName(Game.getName());
+	}
+	
+	public Integer getId() {
+		return Id;
+	}
+
+	public void setId(Integer id) {
+		Id = id;
 	}
 	
 	public String getName() {

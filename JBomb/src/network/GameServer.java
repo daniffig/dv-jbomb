@@ -22,6 +22,7 @@ public class GameServer implements Runnable{
 	private JBombServerMainView JBombServerMainView;
 	private String InetIPAddress = "127.0.0.1";
 	private Integer InetPort = 4321;
+	private Integer IncrementalGameId = 1;
 		
 	public static GameServer getInstance()
 	{
@@ -96,6 +97,9 @@ public class GameServer implements Runnable{
 	
 	public synchronized void addGame(Game g)
 	{
+		g.setId(this.IncrementalGameId);
+		this.IncrementalGameId++;
+		
 		this.addEventHandler(new JBombEventHandler(g.getMaxGamePlayersAllowed()));
 		this.Games.add(g);
 	}
