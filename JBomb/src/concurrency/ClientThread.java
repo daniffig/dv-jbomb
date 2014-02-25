@@ -188,6 +188,7 @@ public class ClientThread implements Runnable {
 		for(Game g :GameServer.getInstance().getGames())
 		{
 			GameInformation gi = new GameInformation();
+			gi.setId(g.getId());
 			gi.setName(g.getName());
 			gi.setMode(g.getMode().toString());
 			gi.setGamePlayersOverMaxGamePlayers(g.getGamePlayersOverMaxGamePlayers());
