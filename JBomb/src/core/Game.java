@@ -147,6 +147,10 @@ public class Game {
 		return false;
 	}
 	
+	public Integer getTotalGamePlayers(){
+		return this.getGamePlayers().size();
+	}
+	
 	public Boolean canSendBomb(GamePlayer sourceGamePlayer,
 			GamePlayer destinationGamePlayer) {
 		// TODO

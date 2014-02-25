@@ -48,7 +48,9 @@ public class ClientThread implements Runnable {
 				break;
 				case JOIN_GAME_REQUEST:
 					System.out.println("I received a game join request from the client");
-					if(this.processJoinGameRequest()){
+					if(this.processJoinGameRequest())
+					{
+						this.EventHandler.joinBarrier(this);
 						
 					}
 				default:
@@ -191,7 +193,8 @@ public class ClientThread implements Runnable {
 					GamePlayInformation gpi = new GamePlayInformation();
 					gpi.setId(this.Game.getUID());
 					gpi.setName(this.Game.getName());
-					gpi.setGamePlayersOverMaxGamePlayers(this.Game.getGamePlayersOverMaxGamePlayers());
+					gpi.setMaxPlayers(this.Game.getMaxGamePlayersAllowed());
+					gpi.setTotalPlayers(this.Game.getTotalGamePlayers());
 					gpi.setCurrentRound(this.Game.getCurrentRound());
 					gpi.setMaxRounds(this.Game.getMaxRounds());
 					
@@ -227,7 +230,8 @@ public class ClientThread implements Runnable {
 			gi.setUID(g.getUID());
 			gi.setName(g.getName());
 			gi.setMode(g.getMode().toString());
-			gi.setGamePlayersOverMaxGamePlayers(g.getGamePlayersOverMaxGamePlayers());
+			gi.setMaxPlayers(g.getMaxGamePlayersAllowed());
+			gi.setTotalPlayers(g.getTotalGamePlayers());
 			System.out.println("Mande el game con id " + gi.getUID());
 			response.addGameInformation(gi);
 		}
