@@ -39,16 +39,22 @@ public class ClientThread implements Runnable {
 		System.out.println("Conexion establecida! Thread # " + Thread.currentThread().getName() + " creado");
 		
 		request = this.receiveRequestFromClient();
-		
-		if(request.getType().equals(JBombRequestResponse.GAME_LIST_REQUEST)){
-			System.out.println("I received a game list request from the client");
-			this.sendGameListInformation();
-		}
-		
-		request = this.receiveRequestFromClient();
-		if(request.getType().equals(JBombRequestResponse.JOIN_GAME_REQUEST)){
-			System.out.println("I received a game join request from the client");
-			this.processJoinGameRequest();
+		while(!request.getType().equals(JBombRequestResponse.FINISH_CONNECTION_REQUEST))
+		{
+			switch(request.getType()){
+				case GAME_LIST_REQUEST:
+					System.out.println("I received a game list request from the client");
+					this.sendGameListInformation();
+				break;
+				case JOIN_GAME_REQUEST:
+					System.out.println("I received a game join request from the client");
+					this.processJoinGameRequest();
+				default:
+				break;
+				
+			}
+			
+			request = this.receiveRequestFromClient();
 		}
 		
 		/*JBombRequestResponse request = this.receiveRequestFromClient();
@@ -188,7 +194,7 @@ public class ClientThread implements Runnable {
 					
 					jbco.setType(JBombRequestResponse.GAMEPLAY_INFORMATION_RESPONSE);
 					jbco.setGamePlayInformation(gpi);
-					jbco.setMyPlayerId(player_id);
+					jbco.setMyPlayerId(this.PlayerId);
 				}
 
 			}

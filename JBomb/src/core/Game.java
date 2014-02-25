@@ -119,10 +119,11 @@ public class Game {
 
 	public synchronized Integer addGamePlayer(GamePlayer p) {
 		if (this.canAddPlayer()) {
-			p.setId(this.getGamePlayers().size()+1);
+			Integer new_player_id = this.getGamePlayers().size()+1;
+			p.setId(new_player_id);
 			this.getGamePlayers().add(p);
 
-			return p.getId();
+			return new_player_id;
 		}
 
 		return -1;
