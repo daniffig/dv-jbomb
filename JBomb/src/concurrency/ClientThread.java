@@ -51,105 +51,14 @@ public class ClientThread implements Runnable {
 					if(this.processJoinGameRequest())
 					{
 						this.EventHandler.joinBarrier(this);
-						
+						this.handleEvent();
 					}
 				default:
 				break;
 				
 			}
-			
 			request = this.receiveRequestFromClient();
 		}
-		
-		/*JBombRequestResponse request = this.receiveRequestFromClient();
-		while(!request.equals(JBombRequestResponse.BOMB_DETONATED_REQUEST))
-		{
-			switch (request){
-			
-			case GAMES_INFORMATION_REQUEST:
-				this.sendGamesInformation();
-				break;
-			case JOIN_GAME_REQUEST:
-				String joinGameResult = this.processJoinGameRequest(this.receiveJoinGameRequest());
-				
-				this.sendResponseToClient(JBombRequestResponse.JOIN_GAME_RESPONSE);
-				this.sendJoinGameRequestResponse(joinGameResult);
-				
-				if(joinGameResult.equals("ACCEPTED"))
-				{
-					this.sendResponseToClient(JBombRequestResponse.GAMEPLAY_INFORMATION_RESPONSE);
-					this.sendGamePlayInformation();
-					//Barrera, el ultimo inicia el juego
-					this.EventHandler.joinBarrier(this);
-					String BombOwner = this.Game.getBomb().getCurrentPlayer().getName();
-					if(!BombOwner.equals(this.PlayerName))
-					{
-					  //si no tengo la bomba, me duermo 
-					  //this.sendResponseToClient(JBombRequestResponse.BOMB_OWNER_RESPONSE);
-					  //this.sendBombOwner(BombOwner);
-					  this.EventHandler.waitForMove();
-					  //si me desperte es o porque exploto la bomba o porque me la pasaron
-					  if(this.Game.getBomb().isDetonated())
-					  {
-						  this.sendResponseToClient(JBombRequestResponse.BOMB_DETONATED_RESPONSE);
-						  this.sendBombOwner(this.Game.getBomb().getCurrentPlayer().getName());
-					  }
-					  else
-					  {
-						  this.sendRsponseToClient(JBombRequestResponse.QUIZ_QUESTION_RESPONSE);
-					      this.sendQuizQuestion();
-					      this.Game.getBomb().activate();
-					  }
-					}
-					else
-					{
-					  this.sendResponseToClient(JBombRequestResponse.QUIZ_QUESTION_RESPONSE);
-					  this.sendQuizQuestion();
-					  this.Game.getBomb().activate();
-					}
-				}
-				break;
-			case QUIZ_ANSWER_REQUEST:
-				this.Game.getBomb().deactivate();
-				Vector<String> QuizAnswer = this.receiveQuizAnswer();
-				if(this.Game.getBomb().isDetonated())
-				{
-				    this.EventHandler.notifyAll();
-					this.sendResponseToClient(JBombRequestResponse.BOMB_DETONATED_RESPONSE);
-					this.sendBombOwner(this.Game.getBomb().getCurrentPlayer().getName());
-				}
-				else
-				{
-				  if(this.CurrentQuestionAnswer.toString() == QuizAnswer.get(0))
-				  {
-					  if(this.Game.getMode().toString().equals("Rebote"))
-					  {
-						  //this.Game.sendBomb(yo,this.Game.getBomb.previousUser());
-						  //despierto a previousUser()
-					  }
-					  else
-					  {
-						  //this.Game.sendBomb(yo,QuizAnswer.get(1));
-						  //despierto a get(1)
-					  }
-				  }
-				  else
-				  {
-					  this.sendResponseToClient(JBombRequestResponse.QUIZ_QUESTION_RESPONSE);
-					  this.sendQuizQuestion();
-					  this.Game.getBomb().activate();
-				  }
-				}
-			case BOMB_DETONATED_REQUEST:
-				continue;
-			
-			default:
-				System.out.println("NO HICE UN CASE PARA ESE REQUEST TODAVIA");
-				break;
-			}
-			
-			request = this.receiveRequestFromClient();
-		}*/
 	}
 	
 	public void startGame()
@@ -158,7 +67,35 @@ public class ClientThread implements Runnable {
 	}
 	
 	
+	public void handleEvent()
+	{
+		switch(this.EventHandler.getEvent())
+		{
+			case PLAYER_JOINED_GAME:
+				this.sendPlayerJoinGameNotification();
+			break;
+			case GAME_STARTED:
+			break;
+			case BOMB_OWNER_CHANGED:
+			break;
+			case BOMB_OWNER_ANSWER_RIGHT:
+			break;
+			case BOMB_OWNER_ANSWER_WRONG:
+			break;
+			case BOMB_EXPLODED:
+			break;
+		}
+	}
 	
+	public void sendPlayerJoinGameNotification()
+	{
+		JBombComunicationObject jbco = new JBombComunicationObject(JBombRequestResponse.PLAYER_ADDED);
+		
+		jbco.setFlash(this.Game.getGamePlayerById(this.EventHandler.getEventTriggererId()).getName());
+	
+		this.sendResponseToClient(jbco);
+		this.EventHandler.goToSleep();
+	}
 	
 	public boolean processJoinGameRequest()
 	{		
@@ -218,7 +155,6 @@ public class ClientThread implements Runnable {
 		return false;
 	}
 	
-	//LO NUEVOOOOOO
 	public void sendGameListInformation(){
 		JBombComunicationObject response = new JBombComunicationObject();
 		
@@ -273,4 +209,13 @@ public class ClientThread implements Runnable {
 			return null;
 		}
 	}
+
+	public Integer getPlayerId() {
+		return PlayerId;
+	}
+
+	public void setPlayerId(Integer playerId) {
+		PlayerId = playerId;
+	}
+	
 }

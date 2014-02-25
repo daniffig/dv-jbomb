@@ -11,6 +11,7 @@ public class JBombEventHandler {
 	private int current_barrier_size;
 	private int barrier_size;
 	private GameEvent event;
+	private int eventTriggererId;
 	private List<ClientThread> suscriptors = new ArrayList<ClientThread>();
 
 	public JBombEventHandler(int cant)
@@ -61,6 +62,9 @@ public class JBombEventHandler {
 		
 		if(this.barrier_size != this.current_barrier_size)
 		{
+			this.setEvent(GameEvent.PLAYER_JOINED_GAME);
+			this.eventTriggererId = ct.getPlayerId();
+			this.notifyAll();
 			this.goToSleep();
 		}
 		else
@@ -80,4 +84,13 @@ public class JBombEventHandler {
 	{
 		return this.event;
 	}
+
+	public int getEventTriggererId() {
+		return eventTriggererId;
+	}
+
+	public void setEventTriggererId(int eventTriggererId) {
+		this.eventTriggererId = eventTriggererId;
+	}
+	
 }
