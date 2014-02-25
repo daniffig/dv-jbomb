@@ -62,6 +62,8 @@ public class JBombServerMainView {
 	private String InetIPAddress = "127.0.0.1";
 	private Integer InetPort = 4321;
 
+	private Integer IncrementalGameId=0;
+	
 	/**
 	 * Launch the application.
 	 */
@@ -217,6 +219,8 @@ public class JBombServerMainView {
 		
 		if (!this.GameVector.contains(Game))
 		{
+			Game.setId(this.IncrementalGameId);
+			this.IncrementalGameId++;
 			this.GameVector.add(Game);
 			((DefaultTableModel)this.GamesTable.getModel()).addRow(Game.toVector());			
 		}

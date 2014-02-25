@@ -224,7 +224,7 @@ public class ClientThread implements Runnable {
 			gi.setName(g.getName());
 			gi.setMode(g.getMode().toString());
 			gi.setGamePlayersOverMaxGamePlayers(g.getGamePlayersOverMaxGamePlayers());
-
+			System.out.println("Mande el game con id " + g.getId());
 			response.addGameInformation(gi);
 		}
 
