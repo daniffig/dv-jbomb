@@ -187,7 +187,7 @@ public class ClientThread implements Runnable {
 					//esto es lo que voy a enviarle al chambon
 					
 					GamePlayInformation gpi = new GamePlayInformation();
-					gpi.setId(this.Game.getId());
+					gpi.setId(this.Game.getUID());
 					gpi.setName(this.Game.getName());
 					gpi.setGamePlayersOverMaxGamePlayers(this.Game.getGamePlayersOverMaxGamePlayers());
 					gpi.setCurrentRound(this.Game.getCurrentRound());
@@ -220,14 +220,18 @@ public class ClientThread implements Runnable {
 		for(Game g :GameServer.getInstance().getGames())
 		{
 			GameInformation gi = new GameInformation();
-			gi.setId(g.getId());
+			gi.setUID(g.getUID());
 			gi.setName(g.getName());
 			gi.setMode(g.getMode().toString());
 			gi.setGamePlayersOverMaxGamePlayers(g.getGamePlayersOverMaxGamePlayers());
-			System.out.println("Mande el game con id " + g.getId());
+			System.out.println("Mande el game con id " + gi.getUID());
 			response.addGameInformation(gi);
 		}
 
+		for(GameInformation gi: response.getAvailableGames())
+		{
+			System.out.println("Juego disponible id " + gi.getUID());
+		}
 		this.sendResponseToClient(response);
 	}
 	

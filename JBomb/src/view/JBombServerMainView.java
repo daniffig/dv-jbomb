@@ -61,8 +61,6 @@ public class JBombServerMainView {
 	
 	private String InetIPAddress = "127.0.0.1";
 	private Integer InetPort = 4321;
-
-	private Integer IncrementalGameId=0;
 	
 	/**
 	 * Launch the application.
@@ -215,8 +213,6 @@ public class JBombServerMainView {
 	
 	public void addGame(Game Game)
 	{
-		Game.setId(this.IncrementalGameId);
-		this.IncrementalGameId++;
 		GameServer.getInstance().addGame(Game);
 		
 		if (!this.GameVector.contains(Game))

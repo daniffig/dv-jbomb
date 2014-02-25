@@ -97,7 +97,7 @@ public class GameServer implements Runnable{
 	
 	public synchronized void addGame(Game g)
 	{
-		g.setId(this.IncrementalGameId);
+		g.setUID(this.IncrementalGameId);
 		this.IncrementalGameId++;
 		
 		this.addEventHandler(new JBombEventHandler(g.getMaxGamePlayersAllowed()));
@@ -121,9 +121,9 @@ public class GameServer implements Runnable{
 	public synchronized Game getGameById(Integer Id)
 	{
 		for(Game g: this.Games){
-			System.out.println("pido id = " + Id + " y tengo " + g.getId());
-			if(g.getId() == Id ){
-				System.out.println("voy a devolver el juego " + g.getName() + " con id " + g.getId());
+			System.out.println("pido id = " + Id + " y tengo " + g.getUID());
+			if(g.getUID() == Id ){
+				System.out.println("voy a devolver el juego " + g.getName() + " con id " + g.getUID());
 				return g;
 				}
 			}

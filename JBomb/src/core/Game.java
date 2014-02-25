@@ -14,7 +14,7 @@ import linkageStrategies.AbstractLinkageStrategy;
 
 public class Game {
 
-	private Integer Id;
+	private Integer UID;
 	private String Name;
 	private List<GamePlayer> GamePlayers = new ArrayList<GamePlayer>();
 	private Integer MaxRounds = 0;
@@ -45,14 +45,14 @@ public class Game {
 		this.setName(Game.getName());
 	}
 	
-	public Integer getId() {
-		return Id;
+	public Integer getUID() {
+		return UID;
 	}
 
-	public void setId(Integer id) {
-		Id = id;
+	public void setUID(Integer uID) {
+		UID = uID;
 	}
-	
+
 	public String getName() {
 		return Name;
 	}
