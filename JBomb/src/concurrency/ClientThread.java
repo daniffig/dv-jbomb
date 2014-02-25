@@ -183,6 +183,8 @@ public class ClientThread implements Runnable {
 	public void sendGameListInformation(){
 		JBombComunicationObject response = new JBombComunicationObject();
 		
+		response.setType(JBombRequestResponse.GAME_LIST_RESPONSE);
+		
 		for(Game g :GameServer.getInstance().getGames())
 		{
 			GameInformation gi = new GameInformation();
@@ -203,6 +205,8 @@ public class ClientThread implements Runnable {
 			ObjectOutputStream outToClient = new ObjectOutputStream(this.ClientSocket.getOutputStream());
 			
 			outToClient.writeObject(jbco);
+			
+			System.out.println("Envie el response al cliente");
 		}
 		catch(Exception e)
 		{
