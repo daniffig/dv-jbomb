@@ -81,14 +81,12 @@ public class JBombEventHandler {
 		
 		if(this.barrier_size != this.current_barrier_size)
 		{
-			this.setEvent(GameEvent.PLAYER_JOINED_GAME);
-			this.eventTriggererId = ct.getPlayerId();
-			this.notifyAll();
 			this.goToSleep();
 		}
 		else
 		{
 			this.current_barrier_size = 0;
+			ct.startGame();
 			this.setEvent(GameEvent.GAME_STARTED);
 			this.notifyAll();
 		}

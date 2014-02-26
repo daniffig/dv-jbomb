@@ -57,6 +57,8 @@ public class ClientThread implements Runnable {
 					break;
 				case START_GAME_REQUEST:
 					this.sendGamePlayersInformation();
+					//Si estoy aca e que todos nos despertamos porque comenzo el juego
+					this.sendBombOwnerNotification();
 					break;
 				default:
 				break;
@@ -66,14 +68,21 @@ public class ClientThread implements Runnable {
 		}
 	}
 	
-	public void startGame()
-	{
+	public void startGame(){
 		this.Game.start();
 	}
 	
+	public void sendBombOwnerNotification(){
+		GamePlayer BombOwner = this.Game.getBomb().getCurrentPlayer();
+		
+		response = new JBombComunicationObject(JBombRequestResponse.BOMB_OWNER_RESPONSE);
+		response.setBombOwner(this.Game.getBomb().getCurrentPlayer().getName());
+		
+		this.sendResponseToClient(response);
+		
+	}
 	
-	public void onHoldJoinHandleEvents()
-	{
+	public void onHoldJoinHandleEvents(){
 		while(!this.EventHandler.getEvent().equals(GameEvent.MAX_PLAYERS_REACHED))
 		{
 			this.sendPlayerJoinGameNotification();
@@ -82,8 +91,7 @@ public class ClientThread implements Runnable {
 		this.sendResponseToClient(new JBombComunicationObject(JBombRequestResponse.MAX_PLAYERS_REACHED));
 	}
 	
-	public void sendGamePlayersInformation()
-	{
+	public void sendGamePlayersInformation(){
 		this.Game.getLinkageStrategy().link(this.Game.getGamePlayers());
 		
 		response = new JBombComunicationObject(JBombRequestResponse.ADJACENT_PLAYERS);
@@ -94,8 +102,7 @@ public class ClientThread implements Runnable {
 		this.EventHandler.startGameBarrier(this);
 	}
 	
-	public void sendPlayerJoinGameNotification()
-	{
+	public void sendPlayerJoinGameNotification(){
 		System.out.println("recibi player_added notification");
 		response = new JBombComunicationObject(JBombRequestResponse.PLAYER_ADDED);
 		response.setGamePlayInformation(this.getGamePlayInformation());
@@ -105,8 +112,7 @@ public class ClientThread implements Runnable {
 		this.EventHandler.goToSleep();
 	}
 	
-	public boolean processJoinGameRequest()
-	{		
+	public boolean processJoinGameRequest(){		
 		JBombComunicationObject jbco = new JBombComunicationObject();
 		try
 		{			
@@ -177,8 +183,8 @@ public class ClientThread implements Runnable {
 		this.sendResponseToClient(response);
 	}
 	
-	public GamePlayInformation getGamePlayInformation()
-	{
+	public GamePlayInformation getGamePlayInformation(){
+		
 		GamePlayInformation gpi = new GamePlayInformation();
 		gpi.setId(this.Game.getUID());
 		gpi.setName(this.Game.getName());
