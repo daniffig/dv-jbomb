@@ -23,6 +23,7 @@ public class ClientThread implements Runnable {
 	private Socket ClientSocket;
 	private JBombEventHandler EventHandler;
 	private Game Game;
+	private String PlayerName;
 	private Integer PlayerId;
 	
 	private JBombComunicationObject request;
@@ -84,6 +85,7 @@ public class ClientThread implements Runnable {
 		
 		response = new JBombComunicationObject(JBombRequestResponse.BOMB_OWNER_RESPONSE);
 		response.setBombOwner(new Player(BombOwner.getId(), BombOwner.getName()));
+		response.setMyPlayer(new Player(this.PlayerId, this.PlayerName));
 		
 		this.sendResponseToClient(response);
 		
@@ -137,7 +139,7 @@ public class ClientThread implements Runnable {
 			}
 			else
 			{
-				Integer player_id = RequestedGame.addGamePlayer(new GamePlayer(request.getMyPlayerName()));
+				Integer player_id = RequestedGame.addGamePlayer(new GamePlayer(request.getMyPlayer().getName()));
 				if(player_id == -1){
 					jbco.setType(JBombRequestResponse.ERROR_FLASH);
 					jbco.setFlash("Juego Completo! no se pueden agregar m�s jugadores");
@@ -146,6 +148,7 @@ public class ClientThread implements Runnable {
 				else{
 					this.Game = RequestedGame;
 					this.EventHandler = GameServer.getInstance().getEventHandlerOfGame(RequestedGame);
+					this.PlayerName = request.getMyPlayer().getName();
 					this.PlayerId = player_id;
 						
 					GameServer.getInstance().refreshGamesTable();
@@ -153,10 +156,10 @@ public class ClientThread implements Runnable {
 					//esto es lo que voy a enviarle al chambon		
 					jbco.setType(JBombRequestResponse.GAMEPLAY_INFORMATION_RESPONSE);
 					jbco.setGamePlayInformation(this.getGamePlayInformation());
-					jbco.setMyPlayerId(this.PlayerId);
+					jbco.setMyPlayer(new Player(this.PlayerId, this.PlayerName));
 					
 					System.out.println("nombre del juego " + jbco.getGamePlayInformation().getName());
-					System.out.println("player_id " + jbco.getMyPlayerId());
+					System.out.println("player_id " + jbco.getMyPlayer().getUID());
 					this.sendResponseToClient(jbco);
 					return true;
 				}
