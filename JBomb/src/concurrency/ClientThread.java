@@ -28,6 +28,7 @@ public class ClientThread implements Runnable {
 	private JBombComunicationObject request;
 	private JBombComunicationObject response;
 	
+	private Integer targetPlayerId;
 	private Integer CurrentQuestionAnswer;
 	
 	public ClientThread(Socket s)
@@ -60,8 +61,12 @@ public class ClientThread implements Runnable {
 					//Si estoy aca e que todos nos despertamos porque comenzo el juego
 					this.sendBombOwnerNotification();
 					break;
+				case CHANGE_BOMB_OWNER_REQUEST:
+					//recibo a quien quiere mandarle la bomba, mando la pregunta
+
+					break;
 				default:
-				break;
+					break;
 				
 			}
 			request = this.receiveRequestFromClient();
@@ -76,10 +81,13 @@ public class ClientThread implements Runnable {
 		GamePlayer BombOwner = this.Game.getBomb().getCurrentPlayer();
 		
 		response = new JBombComunicationObject(JBombRequestResponse.BOMB_OWNER_RESPONSE);
-		response.setBombOwner(this.Game.getBomb().getCurrentPlayer().getName());
+		response.setBombOwner(BombOwner.getName());
 		
 		this.sendResponseToClient(response);
 		
+		//si no soy yo el que tiene la bomba el cliente no me va a mandar nada, yo me voy a dormir hasta que haya que notificar algo
+		if(!BombOwner.getId().equals(this.PlayerId))
+			this.EventHandler.goToSleep();
 	}
 	
 	public void onHoldJoinHandleEvents(){
