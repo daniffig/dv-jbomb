@@ -59,11 +59,11 @@ public class JBombEventHandler {
 	public synchronized void joinBarrier(ClientThread ct)
 	{
 		this.current_barrier_size++;
+		this.eventTriggererId = ct.getPlayerId();
 		
 		if(this.barrier_size != this.current_barrier_size)
 		{
 			this.setEvent(GameEvent.PLAYER_JOINED_GAME);
-			this.eventTriggererId = ct.getPlayerId();
 			this.notifyAll();
 			this.goToSleep();
 		}

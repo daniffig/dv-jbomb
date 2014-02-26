@@ -83,11 +83,12 @@ public class ClientThread implements Runnable {
 	}
 	
 	public void onHoldJoinHandleEvents(){
+		
 		while(!this.EventHandler.getEvent().equals(GameEvent.MAX_PLAYERS_REACHED))
 		{
 			this.sendPlayerJoinGameNotification();
 		}
-
+		this.sendPlayerJoinGameNotification();
 		this.sendResponseToClient(new JBombComunicationObject(JBombRequestResponse.MAX_PLAYERS_REACHED));
 	}
 	
