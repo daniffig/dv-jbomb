@@ -87,7 +87,7 @@ public class JBombServerGameFormView extends JFrame {
 		panel.add(GameNameTextField);
 		GameNameTextField.setColumns(10);
 		
-		GameLinkageStrategyComboBox = new JComboBox<AbstractLinkageStrategy>(new DefaultComboBoxModel<AbstractLinkageStrategy>(new AbstractLinkageStrategy[]{new RingLinkageStrategy()}));
+		GameLinkageStrategyComboBox = new JComboBox<AbstractLinkageStrategy>(new DefaultComboBoxModel<AbstractLinkageStrategy>(new AbstractLinkageStrategy[]{new RingLinkageStrategy(), new ConexantLinkageStrategy()}));
 		
 		GameLinkageStrategyComboBox.setBounds(130, 53, 162, 24);
 		panel.add(GameLinkageStrategyComboBox);
