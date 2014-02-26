@@ -61,7 +61,7 @@ public class ClientThread implements Runnable {
 					break;
 				case START_GAME_REQUEST:
 					this.sendGamePlayersInformation();
-					//Si estoy aca e que todos nos despertamos porque comenzo el juego
+					//Si estoy aca es que todos nos despertamos porque comenzo el juego
 					this.sendBombOwnerNotification();
 					break;
 				case SEND_BOMB_REQUEST:
@@ -95,6 +95,8 @@ public class ClientThread implements Runnable {
 		response.setQuizQuestion(qq.getQuestion());
 		response.setQuizAnswers(answers);
 		sendResponseToClient(response);
+		//activo bomba
+		this.Game.getBomb().activate();
 		
 		//armo notificación y despiero a todos
 		this.EventHandler.setEvent(GameEvent.PLAYER_RECEIVED_QUESTION);
@@ -107,7 +109,9 @@ public class ClientThread implements Runnable {
 		
 		response = new JBombComunicationObject(JBombRequestResponse.BOMB_OWNER_RESPONSE);
 		response.setBombOwner(new Player(BombOwner.getId(), BombOwner.getName()));
-		response.setFlash(BombOwner.getName() + " tiene la bomba");
+		
+		String flash = (BombOwner.getId().equals(this.MyPlayer.getUID())) ? "Tenes la bomba!": BombOwner.getName() + " tiene la bomba";
+		response.setFlash(flash);
 		response.setMyPlayer(this.MyPlayer);
 		
 		this.sendResponseToClient(response);
