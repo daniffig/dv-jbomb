@@ -85,23 +85,28 @@ public class ClientThread implements Runnable {
 	}
 	
 	public void processQuizAnswer(){
+		//apago la bomba
+		this.Game.getBomb().deactivate();
 		response = new JBombComunicationObject(JBombRequestResponse.QUIZ_ANSWER_RESPONSE);
 		
 		if(request.getSelectedQuizAnswer().equals(this.CurrentQuestionAnswer)){
 			//mando pregunta
+			response.setFlash("Respuesta Correcta! :)");
 			response.setCorrectAnswer(true);
-			sendResponseToClient(response);
-			//activo bomba
-			this.Game.getBomb().deactivate();
-			
-			//armo notificación y despiero a todos
-			this.EventHandler.setEvent(GameEvent.PLAYER_RECEIVED_QUESTION);
-			this.EventHandler.setEventMessage(this.MyPlayer.getName() + " recibió la pregunta");
-			this.EventHandler.wakeUpAll();
-		}else{
-			response.setCorrectAnswer(false);
-		}
 		
+			//armo notificación y despiero a todos
+			this.EventHandler.setEvent(GameEvent.BOMB_OWNER_ANSWER_RIGHT);
+			this.EventHandler.setEventMessage(this.MyPlayer.getName() + " respondió correctamente!");
+		}else{
+			response.setFlash("Respuesta incorrecta! :C");
+			response.setCorrectAnswer(false);
+			
+			this.EventHandler.setEvent(GameEvent.BOMB_OWNER_ANSWER_WRONG);
+			this.EventHandler.setEventMessage(this.MyPlayer.getName() + " respondió incorrectamente!");
+			
+		}
+		sendResponseToClient(response);
+		this.EventHandler.wakeUpAll();
 	}
 	
 	public void sendQuizQuestion(){
@@ -158,14 +163,21 @@ public class ClientThread implements Runnable {
 			switch(event){
 				case PLAYER_RECEIVED_QUESTION:
 					System.out.println("Mando flash porque el jugador de la bomba recibio la preguntaaa");
-					response = new JBombComunicationObject(JBombRequestResponse.NOTICE_FLASH);
-					response.setFlash(this.EventHandler.getEventMessage());
-					this.sendResponseToClient(response);
-					this.EventHandler.goToSleep();
+					break;
+				case BOMB_OWNER_ANSWER_RIGHT:
+					System.out.println("MAndo flash porque el jugador contesto bien");
+					break;
+				case BOMB_OWNER_ANSWER_WRONG:
+					System.out.println("Mando Flash porque el jugador contesto mal");
 					break;
 				default:
 					break;
 			}
+			response = new JBombComunicationObject(JBombRequestResponse.NOTICE_FLASH);
+			response.setFlash(this.EventHandler.getEventMessage());
+			this.sendResponseToClient(response);
+			this.EventHandler.goToSleep();
+			event = this.EventHandler.getEvent();
 		}
 		
 		this.sendBombOwnerNotification();
