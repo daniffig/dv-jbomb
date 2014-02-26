@@ -45,7 +45,7 @@ public class JBombEventHandler {
 	  }
 	}
 	
-	public void wakeUpAll()
+	public synchronized void wakeUpAll()
 	{
 		this.notifyAll();
 	}
