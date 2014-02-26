@@ -55,7 +55,7 @@ public class GamePlayer {
 	
 	public void addNeighbour(GamePlayer gamePlayer)
 	{
-		if (!this.getNeighbours().contains(gamePlayer))
+		if (!this.equals(gamePlayer) && !this.getNeighbours().contains(gamePlayer))
 		{
 			this.getNeighbours().add(gamePlayer);
 			gamePlayer.getNeighbours().add(this);
