@@ -21,6 +21,7 @@ public class JBombComunicationObject implements Serializable{
 	private String QuizQuestion;
 	private Vector<String> QuizAnswers;
 	private String SelectedQuizAnswer;
+	private Boolean CorrectAnswer;
 	
 	private Player  MyPlayer;
 	private Player  BombTargetPlayer;
@@ -91,6 +92,14 @@ public class JBombComunicationObject implements Serializable{
 	public void setSelectedQuizAnswer(String selectedQuizAnswer) {
 		SelectedQuizAnswer = selectedQuizAnswer;
 	}
+	public Boolean getCorrectAnswer() {
+		return CorrectAnswer;
+	}
+
+	public void setCorrectAnswer(Boolean correctAnswer) {
+		CorrectAnswer = correctAnswer;
+	}
+
 	public Player getMyPlayer() {
 		return MyPlayer;
 	}
@@ -140,4 +149,5 @@ public class JBombComunicationObject implements Serializable{
 	{
 		return GamePlayInformation.equals(null);
 	}
+	
 }

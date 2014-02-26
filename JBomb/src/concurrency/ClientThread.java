@@ -32,7 +32,8 @@ public class ClientThread implements Runnable {
 	private JBombComunicationObject response;
 	
 	private Player bombTargetPlayer;
-	private Integer CurrentQuestionAnswer;
+	
+	private String CurrentQuestionAnswer;
 	
 	public ClientThread(Socket s)
 	{
@@ -70,6 +71,7 @@ public class ClientThread implements Runnable {
 					break;
 				case QUIZ_ANSWER_REQUEST:
 					//paro el timer, analizo respuesta y repondo bien o mal
+					this.processQuizAnswer();
 				default:
 					break;
 				
@@ -82,6 +84,26 @@ public class ClientThread implements Runnable {
 		this.Game.start();
 	}
 	
+	public void processQuizAnswer(){
+		/*if(request.getSelectedQuizAnswer().equals(this.CurrentQuestionAnswer)){
+			//mando pregunta
+			response = new JBombComunicationObject(JBombRequestResponse.);
+			response.setQuizQuestion(qq.getQuestion());
+			response.setQuizAnswers(answers);
+			sendResponseToClient(response);
+			//activo bomba
+			this.Game.getBomb().deactivate();
+			
+			//armo notificación y despiero a todos
+			this.EventHandler.setEvent(GameEvent.PLAYER_RECEIVED_QUESTION);
+			this.EventHandler.setEventMessage(this.MyPlayer.getName() + " recibió la pregunta");
+			this.EventHandler.wakeUpAll();
+		}else{
+			
+		}
+		*/
+	}
+	
 	public void sendQuizQuestion(){
 		this.bombTargetPlayer = request.getBombTargetPlayer();
 		
@@ -89,6 +111,9 @@ public class ClientThread implements Runnable {
 		
 		Vector<String> answers = new Vector<String>();
 		for(String a: qq.getAnswers()) answers.add(a);
+		
+		//me guardo al respuesta para después
+		this.CurrentQuestionAnswer = qq.getAnswers().get(qq.getCorrectAnswer());
 		
 		//mando pregunta
 		response = new JBombComunicationObject(JBombRequestResponse.QUIZ_QUESTION_RESPONSE);
