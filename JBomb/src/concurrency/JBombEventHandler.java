@@ -3,6 +3,8 @@ package concurrency;
 import java.util.ArrayList;
 import java.util.List;
 
+import network.Player;
+
 import reference.GameEvent;
 import reference.JBombRequestResponse;
 
@@ -11,7 +13,7 @@ public class JBombEventHandler {
 	private int current_barrier_size;
 	private int barrier_size;
 	private GameEvent event;
-	private int eventTriggererId;
+	private Player eventTriggerer;
 	private List<ClientThread> suscriptors = new ArrayList<ClientThread>();
 
 	public JBombEventHandler(int cant)
@@ -59,7 +61,7 @@ public class JBombEventHandler {
 	public synchronized void joinBarrier(ClientThread ct)
 	{
 		this.current_barrier_size++;
-		this.eventTriggererId = ct.getPlayerId();
+		this.eventTriggerer = ct.getMyPlayer();
 		
 		if(this.barrier_size != this.current_barrier_size)
 		{
@@ -102,12 +104,12 @@ public class JBombEventHandler {
 		return this.event;
 	}
 
-	public int getEventTriggererId() {
-		return eventTriggererId;
+	public Player getEventTriggerer() {
+		return eventTriggerer;
 	}
 
-	public void setEventTriggererId(int eventTriggererId) {
-		this.eventTriggererId = eventTriggererId;
+	public void setEventTriggerer(Player eventTriggerer) {
+		this.eventTriggerer = eventTriggerer;
 	}
 	
 }

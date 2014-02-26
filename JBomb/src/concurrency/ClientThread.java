@@ -23,8 +23,7 @@ public class ClientThread implements Runnable {
 	private Socket ClientSocket;
 	private JBombEventHandler EventHandler;
 	private Game Game;
-	private String PlayerName;
-	private Integer PlayerId;
+	private Player MyPlayer;
 	
 	private JBombComunicationObject request;
 	private JBombComunicationObject response;
@@ -62,7 +61,7 @@ public class ClientThread implements Runnable {
 					//Si estoy aca e que todos nos despertamos porque comenzo el juego
 					this.sendBombOwnerNotification();
 					break;
-				case CHANGE_BOMB_OWNER_REQUEST:
+				case SEND_BOMB_REQUEST:
 					//recibo a quien quiere mandarle la bomba, mando la pregunta e inicio timer
 					this.sendQuizQuestion();
 					break;
@@ -81,7 +80,7 @@ public class ClientThread implements Runnable {
 	}
 	
 	public void sendQuizQuestion(){
-		
+		request.getBombTargetPlayer();
 	}
 	
 	public void sendBombOwnerNotification(){
@@ -90,12 +89,12 @@ public class ClientThread implements Runnable {
 		response = new JBombComunicationObject(JBombRequestResponse.BOMB_OWNER_RESPONSE);
 		response.setBombOwner(new Player(BombOwner.getId(), BombOwner.getName()));
 		response.setFlash(BombOwner.getName() + " tiene la bomba");
-		response.setMyPlayer(new Player(this.PlayerId, this.PlayerName));
+		response.setMyPlayer(this.MyPlayer);
 		
 		this.sendResponseToClient(response);
 		
 		//si no soy yo el que tiene la bomba el cliente no me va a mandar nada, yo me voy a dormir hasta que haya que notificar algo
-		if(!BombOwner.getId().equals(this.PlayerId))
+		if(!BombOwner.getId().equals(this.MyPlayer.getUID()))
 			this.EventHandler.goToSleep();
 	}
 	
@@ -113,7 +112,7 @@ public class ClientThread implements Runnable {
 		this.Game.getLinkageStrategy().link(this.Game.getGamePlayers());
 		
 		response = new JBombComunicationObject(JBombRequestResponse.ADJACENT_PLAYERS);
-		for(GamePlayer gp: this.Game.getGamePlayerById(this.PlayerId).getNeighbours())
+		for(GamePlayer gp: this.Game.getGamePlayerById(this.MyPlayer.getUID()).getNeighbours())
 			response.addPlayer(new Player(gp.getId(), gp.getName()));
 		
 		this.sendResponseToClient(response);
@@ -124,7 +123,7 @@ public class ClientThread implements Runnable {
 		System.out.println("recibi player_added notification");
 		response = new JBombComunicationObject(JBombRequestResponse.PLAYER_ADDED);
 		response.setGamePlayInformation(this.getGamePlayInformation());
-		response.setFlash(this.Game.getGamePlayerById(this.EventHandler.getEventTriggererId()).getName());
+		response.setFlash(this.EventHandler.getEventTriggerer().getName());
 	
 		this.sendResponseToClient(response);
 		this.EventHandler.goToSleep();
@@ -153,15 +152,14 @@ public class ClientThread implements Runnable {
 				else{
 					this.Game = RequestedGame;
 					this.EventHandler = GameServer.getInstance().getEventHandlerOfGame(RequestedGame);
-					this.PlayerName = request.getMyPlayer().getName();
-					this.PlayerId = player_id;
+					this.MyPlayer = new Player(player_id, request.getMyPlayer().getName());
 						
 					GameServer.getInstance().refreshGamesTable();
 					
 					//esto es lo que voy a enviarle al chambon		
 					jbco.setType(JBombRequestResponse.GAMEPLAY_INFORMATION_RESPONSE);
 					jbco.setGamePlayInformation(this.getGamePlayInformation());
-					jbco.setMyPlayer(new Player(this.PlayerId, this.PlayerName));
+					jbco.setMyPlayer(this.MyPlayer);
 					
 					System.out.println("nombre del juego " + jbco.getGamePlayInformation().getName());
 					System.out.println("player_id " + jbco.getMyPlayer().getUID());
@@ -245,12 +243,12 @@ public class ClientThread implements Runnable {
 		}
 	}
 
-	public Integer getPlayerId() {
-		return PlayerId;
+	public Player getMyPlayer() {
+		return MyPlayer;
 	}
 
-	public void setPlayerId(Integer playerId) {
-		PlayerId = playerId;
+	public void setPlayer(Player player) {
+		MyPlayer = player;
 	}
 	
 }
