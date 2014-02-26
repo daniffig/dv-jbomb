@@ -139,6 +139,7 @@ public class ClientThread implements Runnable {
 	public void sendBombOwnerNotification(){
 		GamePlayer BombOwner = this.Game.getBomb().getCurrentPlayer();
 		
+		System.out.println("[Player ID " + this.MyPlayer.getUID() + "]Mando info de quien tiene la bomba");
 		response = new JBombComunicationObject(JBombRequestResponse.BOMB_OWNER_RESPONSE);
 		response.setBombOwner(new Player(BombOwner.getId(), BombOwner.getName()));
 		
