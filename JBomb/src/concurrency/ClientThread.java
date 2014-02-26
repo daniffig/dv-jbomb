@@ -93,7 +93,7 @@ public class ClientThread implements Runnable {
 	public void sendPlayerJoinGameNotification()
 	{
 		JBombComunicationObject jbco = new JBombComunicationObject(JBombRequestResponse.PLAYER_ADDED);
-		
+		jbco.setGamePlayInformation(this.getGamePlayInformation());
 		jbco.setFlash(this.Game.getGamePlayerById(this.EventHandler.getEventTriggererId()).getName());
 	
 		this.sendResponseToClient(jbco);
@@ -128,19 +128,9 @@ public class ClientThread implements Runnable {
 						
 					GameServer.getInstance().refreshGamesTable();
 					
-					//esto es lo que voy a enviarle al chambon
-					
-					GamePlayInformation gpi = new GamePlayInformation();
-					gpi.setId(this.Game.getUID());
-					gpi.setName(this.Game.getName());
-					gpi.setMaxPlayers(this.Game.getMaxGamePlayersAllowed());
-					gpi.setTotalPlayers(this.Game.getTotalGamePlayers());
-					gpi.setCurrentRound(this.Game.getCurrentRound());
-					gpi.setMaxRounds(this.Game.getMaxRounds());
-					
-					
+					//esto es lo que voy a enviarle al chambon		
 					jbco.setType(JBombRequestResponse.GAMEPLAY_INFORMATION_RESPONSE);
-					jbco.setGamePlayInformation(gpi);
+					jbco.setGamePlayInformation(this.getGamePlayInformation());
 					jbco.setMyPlayerId(this.PlayerId);
 					
 					System.out.println("nombre del juego " + jbco.getGamePlayInformation().getName());
@@ -182,6 +172,18 @@ public class ClientThread implements Runnable {
 		this.sendResponseToClient(response);
 	}
 	
+	public GamePlayInformation getGamePlayInformation()
+	{
+		GamePlayInformation gpi = new GamePlayInformation();
+		gpi.setId(this.Game.getUID());
+		gpi.setName(this.Game.getName());
+		gpi.setMaxPlayers(this.Game.getMaxGamePlayersAllowed());
+		gpi.setTotalPlayers(this.Game.getTotalGamePlayers());
+		gpi.setCurrentRound(this.Game.getCurrentRound());
+		gpi.setMaxRounds(this.Game.getMaxRounds());
+		
+		return gpi;
+	}
 	
 	public void sendResponseToClient(JBombComunicationObject jbco){
 		try
