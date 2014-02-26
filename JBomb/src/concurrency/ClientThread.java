@@ -88,6 +88,7 @@ public class ClientThread implements Runnable {
 		this.Game.getBomb().deactivate();
 		
 		if(request.getSelectedQuizAnswer().equals(this.CurrentQuestionAnswer)){
+			System.out.println("[Player ID " + this.MyPlayer.getUID() + "]Mando respuesta correcta targetPlayer " + this.bombTargetPlayer.getName() + " id " + this.bombTargetPlayer.getUID() );
 			//mando la bomba al siguiente
 			this.Game.sendBomb(this.Game.getGamePlayerById(this.MyPlayer.getUID()), this.Game.getGamePlayerById(this.bombTargetPlayer.getUID()));
 			
@@ -101,6 +102,7 @@ public class ClientThread implements Runnable {
 			this.EventHandler.setEvent(GameEvent.BOMB_OWNER_ANSWER_RIGHT);
 			this.EventHandler.setEventMessage(this.MyPlayer.getName() + " respondió correctamente!");
 		}else{
+			System.out.println("[Player ID " + this.MyPlayer.getUID() + "]Mando respuesta mal mi respuesta= " + this.CurrentQuestionAnswer + " y el tiene " + request.getSelectedQuizAnswer());
 			response = new JBombComunicationObject(JBombRequestResponse.QUIZ_ANSWER_RESPONSE);
 			response.setFlash("Respuesta incorrecta! :C");
 			response.setCorrectAnswer(false);

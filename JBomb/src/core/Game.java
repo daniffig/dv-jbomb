@@ -158,7 +158,7 @@ public class Game {
 		return true;
 	}
 
-	public void sendBomb(GamePlayer sourceGamePlayer,
+	public synchronized void sendBomb(GamePlayer sourceGamePlayer,
 			GamePlayer destinationGamePlayer) {
 		if (this.canSendBomb(sourceGamePlayer, destinationGamePlayer)) {
 			Bomb.setLastPlayer(sourceGamePlayer);
