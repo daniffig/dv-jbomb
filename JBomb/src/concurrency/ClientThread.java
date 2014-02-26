@@ -79,19 +79,23 @@ public class ClientThread implements Runnable {
 				//Envio información del juego al cliente y me voy a dormir
 			break;
 			case BOMB_OWNER_CHANGED:
-				//Envio información de quien tiene la bomba a todos, si yo tengo la bomba, mando pregunta
+				//Envio información de quien tiene la bomba y me voy a dormir, si yo tengo la bomba, mando pregunta y no me voy a dormir
 			break;
 			case BOMB_OWNER_ANSWER_RIGHT:
+				//Envio aviso y luego disparo BOMB_OWNER_CHANGE
 			break;
 			case BOMB_OWNER_ANSWER_WRONG:
+				//Envio aviso y me voy a dormir, si era yo el que respondi mal mando nueva pregunta
 			break;
 			case BOMB_EXPLODED:
+				//Mando aviso con estado final del juego y jugador perdedor
 			break;
 		}
 	}
 	
 	public void sendPlayerJoinGameNotification()
 	{
+		System.out.println("recibi player_added notification");
 		JBombComunicationObject jbco = new JBombComunicationObject(JBombRequestResponse.PLAYER_ADDED);
 		jbco.setGamePlayInformation(this.getGamePlayInformation());
 		jbco.setFlash(this.Game.getGamePlayerById(this.EventHandler.getEventTriggererId()).getName());

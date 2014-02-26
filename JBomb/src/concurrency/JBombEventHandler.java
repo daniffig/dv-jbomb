@@ -47,7 +47,7 @@ public class JBombEventHandler {
 		this.notifyAll();
 	}
 	
-	public void goToSleep()
+	public synchronized void goToSleep()
 	{
 		try{
 			this.wait();
@@ -62,6 +62,7 @@ public class JBombEventHandler {
 		
 		if(this.barrier_size != this.current_barrier_size)
 		{
+			System.out.println("entre al joinBarrier y me voy a dormir");
 			this.setEvent(GameEvent.PLAYER_JOINED_GAME);
 			this.eventTriggererId = ct.getPlayerId();
 			this.notifyAll();
@@ -69,6 +70,7 @@ public class JBombEventHandler {
 		}
 		else
 		{
+			System.out.println("Entre al joinbarrier y empiezo el juego");
 			this.current_barrier_size = 0;
 			this.setEvent(GameEvent.GAME_STARTED);
 			this.notifyAll();
