@@ -90,6 +90,9 @@ public class ClientThread implements Runnable {
 		response = new JBombComunicationObject(JBombRequestResponse.QUIZ_ANSWER_RESPONSE);
 		
 		if(request.getSelectedQuizAnswer().equals(this.CurrentQuestionAnswer)){
+			//mando la bomba al siguiente
+			this.Game.sendBomb(this.Game.getGamePlayerById(this.MyPlayer.getUID()), this.Game.getGamePlayerById(this.bombTargetPlayer.getUID()));
+			
 			//mando pregunta
 			response.setFlash("Respuesta Correcta! :)");
 			response.setCorrectAnswer(true);
@@ -148,6 +151,7 @@ public class ClientThread implements Runnable {
 		
 		//si no soy yo el que tiene la bomba el cliente no me va a mandar nada, yo me voy a dormir hasta que haya que notificar algo
 		if(!BombOwner.getId().equals(this.MyPlayer.getUID())){
+			System.out.println("Me voy a dormir porque no tengo la bomba");
 			this.EventHandler.goToSleep();
 		    //si me despierto aca es que me van a notificar de algo
 			this.handleGameEvent();
