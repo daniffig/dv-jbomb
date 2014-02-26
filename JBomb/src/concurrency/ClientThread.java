@@ -13,6 +13,7 @@ import network.GameInformation;
 import network.GamePlayInformation;
 import network.GameServer;
 import network.JBombComunicationObject;
+import network.Player;
 
 import core.Game;
 import core.GamePlayer;
@@ -52,7 +53,7 @@ public class ClientThread implements Runnable {
 					{
 						this.EventHandler.joinBarrier(this);
 						this.handleEvent();
-						//El juego empezó, envio la información del juego y me voy a dormir
+						//El juego empezó, envio la información del juego y luego la información de quien tiene la bomba y me voy a dormir
 					}
 				default:
 				break;
@@ -77,6 +78,7 @@ public class ClientThread implements Runnable {
 			break;
 			case GAME_STARTED:
 				//Envio información del juego al cliente y me voy a dormir
+				this.EventHandler.goToSleep();
 			break;
 			case BOMB_OWNER_CHANGED:
 				//Envio información de quien tiene la bomba y me voy a dormir, si yo tengo la bomba, mando pregunta y no me voy a dormir
@@ -93,14 +95,25 @@ public class ClientThread implements Runnable {
 		}
 	}
 	
+	public void sendGamePlayersInformation()
+	{
+		this.Game.getLinkageStrategy().link(this.Game.getGamePlayers());
+		
+		response = new JBombComunicationObject(JBombRequestResponse.ADJACENT_PLAYERS);
+		for(GamePlayer gp: this.Game.getGamePlayerById(this.PlayerId).getNeighbours())
+			response.addPlayer(new Player(gp.getId(), gp.getName()));
+		
+		this.sendResponseToClient(response);
+	}
+	
 	public void sendPlayerJoinGameNotification()
 	{
 		System.out.println("recibi player_added notification");
-		JBombComunicationObject jbco = new JBombComunicationObject(JBombRequestResponse.PLAYER_ADDED);
-		jbco.setGamePlayInformation(this.getGamePlayInformation());
-		jbco.setFlash(this.Game.getGamePlayerById(this.EventHandler.getEventTriggererId()).getName());
+		response = new JBombComunicationObject(JBombRequestResponse.PLAYER_ADDED);
+		response.setGamePlayInformation(this.getGamePlayInformation());
+		response.setFlash(this.Game.getGamePlayerById(this.EventHandler.getEventTriggererId()).getName());
 	
-		this.sendResponseToClient(jbco);
+		this.sendResponseToClient(response);
 		this.EventHandler.goToSleep();
 	}
 	

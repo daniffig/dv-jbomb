@@ -15,7 +15,7 @@ public class JBombComunicationObject implements Serializable{
 	private String Flash;
 	
 	private Vector<GameInformation> AvailableGames = new Vector<GameInformation>();
-	private Vector<String> Players = new Vector<String>();
+	private Vector<Player> Players = new Vector<Player>();
 	private String BombOwner;
 	private String Loser;
 	private String QuizQuestion;
@@ -51,12 +51,16 @@ public class JBombComunicationObject implements Serializable{
 		Flash = flash;
 	}
 
-	public Vector<String> getPlayers() {
+	public Vector<Player> getPlayers() {
 		return Players;
 	}
-	public void setPlayers(Vector<String> players) {
+	public void setPlayers(Vector<Player> players) {
 		Players = players;
 	}
+	public void addPlayer(Player p){
+		Players.add(p);
+	}
+	
 	public String getBombOwner() {
 		return BombOwner;
 	}
