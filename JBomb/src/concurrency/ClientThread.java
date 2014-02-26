@@ -86,28 +86,31 @@ public class ClientThread implements Runnable {
 	public void processQuizAnswer(){
 		//apago la bomba
 		this.Game.getBomb().deactivate();
-		response = new JBombComunicationObject(JBombRequestResponse.QUIZ_ANSWER_RESPONSE);
 		
 		if(request.getSelectedQuizAnswer().equals(this.CurrentQuestionAnswer)){
 			//mando la bomba al siguiente
 			this.Game.sendBomb(this.Game.getGamePlayerById(this.MyPlayer.getUID()), this.Game.getGamePlayerById(this.bombTargetPlayer.getUID()));
 			
 			//mando pregunta
+			response = new JBombComunicationObject(JBombRequestResponse.QUIZ_ANSWER_RESPONSE);
 			response.setFlash("Respuesta Correcta! :)");
 			response.setCorrectAnswer(true);
-		
+			this.sendResponseToClient(response);
+			
 			//armo notificación y despiero a todos
 			this.EventHandler.setEvent(GameEvent.BOMB_OWNER_ANSWER_RIGHT);
 			this.EventHandler.setEventMessage(this.MyPlayer.getName() + " respondió correctamente!");
 		}else{
+			response = new JBombComunicationObject(JBombRequestResponse.QUIZ_ANSWER_RESPONSE);
 			response.setFlash("Respuesta incorrecta! :C");
 			response.setCorrectAnswer(false);
+			this.sendResponseToClient(response);
 			
 			this.EventHandler.setEvent(GameEvent.BOMB_OWNER_ANSWER_WRONG);
 			this.EventHandler.setEventMessage(this.MyPlayer.getName() + " respondió incorrectamente!");
 			
 		}
-		sendResponseToClient(response);
+		
 		this.EventHandler.wakeUpAll();
 	}
 	
