@@ -85,11 +85,11 @@ public class ClientThread implements Runnable {
 	}
 	
 	public void processQuizAnswer(){
-		/*if(request.getSelectedQuizAnswer().equals(this.CurrentQuestionAnswer)){
+		response = new JBombComunicationObject(JBombRequestResponse.QUIZ_ANSWER_RESPONSE);
+		
+		if(request.getSelectedQuizAnswer().equals(this.CurrentQuestionAnswer)){
 			//mando pregunta
-			response = new JBombComunicationObject(JBombRequestResponse.);
-			response.setQuizQuestion(qq.getQuestion());
-			response.setQuizAnswers(answers);
+			response.setCorrectAnswer(true);
 			sendResponseToClient(response);
 			//activo bomba
 			this.Game.getBomb().deactivate();
@@ -99,9 +99,9 @@ public class ClientThread implements Runnable {
 			this.EventHandler.setEventMessage(this.MyPlayer.getName() + " recibió la pregunta");
 			this.EventHandler.wakeUpAll();
 		}else{
-			
+			response.setCorrectAnswer(false);
 		}
-		*/
+		
 	}
 	
 	public void sendQuizQuestion(){
@@ -151,11 +151,13 @@ public class ClientThread implements Runnable {
 	}
 	
 	public void handleGameEvent(){
+		System.out.println("desperte a todos porque hubo un evento");
 		GameEvent event = this.EventHandler.getEvent();
 		while(!event.equals(GameEvent.BOMB_OWNER_CHANGED))
 		{
 			switch(event){
 				case PLAYER_RECEIVED_QUESTION:
+					System.out.println("Mando flash porque el jugador de la bomba recibio la preguntaaa");
 					response = new JBombComunicationObject(JBombRequestResponse.NOTICE_FLASH);
 					response.setFlash(this.EventHandler.getEventMessage());
 					this.sendResponseToClient(response);
