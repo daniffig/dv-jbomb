@@ -62,9 +62,11 @@ public class ClientThread implements Runnable {
 					this.sendBombOwnerNotification();
 					break;
 				case CHANGE_BOMB_OWNER_REQUEST:
-					//recibo a quien quiere mandarle la bomba, mando la pregunta
+					//recibo a quien quiere mandarle la bomba, mando la pregunta e inicio timer
 
 					break;
+				case QUIZ_ANSWER_REQUEST:
+					//paro el timer, analizo respuesta y repondo bien o mal
 				default:
 					break;
 				
