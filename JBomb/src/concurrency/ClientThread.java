@@ -52,6 +52,7 @@ public class ClientThread implements Runnable {
 					{
 						this.EventHandler.joinBarrier(this);
 						this.handleEvent();
+						//El juego empezó, envio la información del juego y me voy a dormir
 					}
 				default:
 				break;
@@ -75,8 +76,10 @@ public class ClientThread implements Runnable {
 				this.sendPlayerJoinGameNotification();
 			break;
 			case GAME_STARTED:
+				//Envio información del juego al cliente y me voy a dormir
 			break;
 			case BOMB_OWNER_CHANGED:
+				//Envio información de quien tiene la bomba a todos, si yo tengo la bomba, mando pregunta
 			break;
 			case BOMB_OWNER_ANSWER_RIGHT:
 			break;

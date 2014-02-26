@@ -70,6 +70,7 @@ public class JBombEventHandler {
 		else
 		{
 			this.current_barrier_size = 0;
+			this.setEvent(GameEvent.GAME_STARTED);
 			this.notifyAll();
 			ct.startGame();
 		}
