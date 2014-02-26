@@ -83,7 +83,7 @@ public class ClientThread implements Runnable {
 		GamePlayer BombOwner = this.Game.getBomb().getCurrentPlayer();
 		
 		response = new JBombComunicationObject(JBombRequestResponse.BOMB_OWNER_RESPONSE);
-		response.setBombOwner(BombOwner.getName());
+		response.setBombOwner(new Player(BombOwner.getId(), BombOwner.getName()));
 		
 		this.sendResponseToClient(response);
 		
