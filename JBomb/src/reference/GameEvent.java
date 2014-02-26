@@ -2,6 +2,7 @@ package reference;
 
 public enum GameEvent {
 	PLAYER_JOINED_GAME,
+	MAX_PLAYERS_REACHED,
 	GAME_STARTED,
 	BOMB_OWNER_CHANGED,
 	BOMB_OWNER_ANSWER_RIGHT,

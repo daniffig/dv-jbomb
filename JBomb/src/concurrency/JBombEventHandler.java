@@ -62,7 +62,6 @@ public class JBombEventHandler {
 		
 		if(this.barrier_size != this.current_barrier_size)
 		{
-			System.out.println("entre al joinBarrier y me voy a dormir");
 			this.setEvent(GameEvent.PLAYER_JOINED_GAME);
 			this.eventTriggererId = ct.getPlayerId();
 			this.notifyAll();
@@ -70,14 +69,31 @@ public class JBombEventHandler {
 		}
 		else
 		{
-			System.out.println("Entre al joinbarrier y empiezo el juego");
+			this.current_barrier_size = 0;
+			this.setEvent(GameEvent.MAX_PLAYERS_REACHED);
+			this.notifyAll();
+		}
+	}
+	
+	public synchronized void startGameBarrier(ClientThread ct)
+	{
+		this.current_barrier_size++;
+		
+		if(this.barrier_size != this.current_barrier_size)
+		{
+			this.setEvent(GameEvent.PLAYER_JOINED_GAME);
+			this.eventTriggererId = ct.getPlayerId();
+			this.notifyAll();
+			this.goToSleep();
+		}
+		else
+		{
 			this.current_barrier_size = 0;
 			this.setEvent(GameEvent.GAME_STARTED);
 			this.notifyAll();
-			ct.startGame();
 		}
 	}
-		
+	
 	public void setEvent(GameEvent e)
 	{
 		this.event = e;

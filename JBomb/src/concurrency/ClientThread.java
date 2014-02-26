@@ -4,8 +4,8 @@ package concurrency;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Vector;
 
+import reference.GameEvent;
 import reference.JBombRequestResponse;
 
 
@@ -46,15 +46,18 @@ public class ClientThread implements Runnable {
 				case GAME_LIST_REQUEST:
 					System.out.println("I received a game list request from the client");
 					this.sendGameListInformation();
-				break;
+					break;
 				case JOIN_GAME_REQUEST:
 					System.out.println("I received a game join request from the client");
 					if(this.processJoinGameRequest())
 					{
 						this.EventHandler.joinBarrier(this);
-						this.handleEvent();
-						//El juego empezó, envio la información del juego y luego la información de quien tiene la bomba y me voy a dormir
+						this.onHoldJoinHandleEvents();
 					}
+					break;
+				case START_GAME_REQUEST:
+					this.sendGamePlayersInformation();
+					break;
 				default:
 				break;
 				
@@ -69,30 +72,14 @@ public class ClientThread implements Runnable {
 	}
 	
 	
-	public void handleEvent()
+	public void onHoldJoinHandleEvents()
 	{
-		switch(this.EventHandler.getEvent())
+		while(!this.EventHandler.getEvent().equals(GameEvent.MAX_PLAYERS_REACHED))
 		{
-			case PLAYER_JOINED_GAME:
-				this.sendPlayerJoinGameNotification();
-			break;
-			case GAME_STARTED:
-				this.sendGamePlayersInformation();
-				this.EventHandler.goToSleep();
-			break;
-			case BOMB_OWNER_CHANGED:
-				//Envio información de quien tiene la bomba y me voy a dormir, si yo tengo la bomba, mando pregunta y no me voy a dormir
-			break;
-			case BOMB_OWNER_ANSWER_RIGHT:
-				//Envio aviso y luego disparo BOMB_OWNER_CHANGE
-			break;
-			case BOMB_OWNER_ANSWER_WRONG:
-				//Envio aviso y me voy a dormir, si era yo el que respondi mal mando nueva pregunta
-			break;
-			case BOMB_EXPLODED:
-				//Mando aviso con estado final del juego y jugador perdedor
-			break;
+			this.sendPlayerJoinGameNotification();
 		}
+
+		this.sendResponseToClient(new JBombComunicationObject(JBombRequestResponse.MAX_PLAYERS_REACHED));
 	}
 	
 	public void sendGamePlayersInformation()
@@ -104,6 +91,7 @@ public class ClientThread implements Runnable {
 			response.addPlayer(new Player(gp.getId(), gp.getName()));
 		
 		this.sendResponseToClient(response);
+		this.EventHandler.startGameBarrier(this);
 	}
 	
 	public void sendPlayerJoinGameNotification()
