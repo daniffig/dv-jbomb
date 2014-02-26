@@ -4,7 +4,6 @@ package concurrency;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Collections;
 import java.util.Vector;
 
 import reference.GameEvent;
@@ -162,25 +161,29 @@ public class ClientThread implements Runnable {
 	public void handleGameEvent(){
 		System.out.println("desperte a todos porque hubo un evento");
 		GameEvent event = this.EventHandler.getEvent();
+		
+		mainLoop:
 		while(!event.equals(GameEvent.BOMB_OWNER_CHANGED))
 		{
 			switch(event){
 				case PLAYER_RECEIVED_QUESTION:
 					System.out.println("Mando flash porque el jugador de la bomba recibio la preguntaaa");
+					this.sendNoticeFlash();
+					this.EventHandler.goToSleep();
 					break;
 				case BOMB_OWNER_ANSWER_RIGHT:
 					System.out.println("MAndo flash porque el jugador contesto bien");
-					break;
+					this.sendNoticeFlash();
+					break mainLoop;
 				case BOMB_OWNER_ANSWER_WRONG:
 					System.out.println("Mando Flash porque el jugador contesto mal");
+					this.sendNoticeFlash();
+					this.EventHandler.goToSleep();
 					break;
 				default:
 					break;
 			}
-			response = new JBombComunicationObject(JBombRequestResponse.NOTICE_FLASH);
-			response.setFlash(this.EventHandler.getEventMessage());
-			this.sendResponseToClient(response);
-			this.EventHandler.goToSleep();
+			
 			event = this.EventHandler.getEvent();
 		}
 		
@@ -286,6 +289,13 @@ public class ClientThread implements Runnable {
 		{
 			System.out.println("Juego disponible id " + gi.getUID());
 		}
+		this.sendResponseToClient(response);
+	}
+	
+	public void sendNoticeFlash()
+	{
+		response = new JBombComunicationObject(JBombRequestResponse.NOTICE_FLASH);
+		response.setFlash(this.EventHandler.getEventMessage());
 		this.sendResponseToClient(response);
 	}
 	
