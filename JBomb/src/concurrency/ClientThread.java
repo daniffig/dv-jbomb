@@ -64,7 +64,7 @@ public class ClientThread implements Runnable {
 					break;
 				case CHANGE_BOMB_OWNER_REQUEST:
 					//recibo a quien quiere mandarle la bomba, mando la pregunta e inicio timer
-
+					this.sendQuizQuestion();
 					break;
 				case QUIZ_ANSWER_REQUEST:
 					//paro el timer, analizo respuesta y repondo bien o mal
@@ -80,11 +80,16 @@ public class ClientThread implements Runnable {
 		this.Game.start();
 	}
 	
+	public void sendQuizQuestion(){
+		
+	}
+	
 	public void sendBombOwnerNotification(){
 		GamePlayer BombOwner = this.Game.getBomb().getCurrentPlayer();
 		
 		response = new JBombComunicationObject(JBombRequestResponse.BOMB_OWNER_RESPONSE);
 		response.setBombOwner(new Player(BombOwner.getId(), BombOwner.getName()));
+		response.setFlash(BombOwner.getName() + " tiene la bomba");
 		response.setMyPlayer(new Player(this.PlayerId, this.PlayerName));
 		
 		this.sendResponseToClient(response);
