@@ -124,6 +124,7 @@ public class ClientThread implements Runnable {
 		
 		//mando pregunta
 		response = new JBombComunicationObject(JBombRequestResponse.QUIZ_QUESTION_RESPONSE);
+		response.setFlash("Recibiste una pregunta!");
 		response.setQuizQuestion(qq.getQuestion());
 		response.setQuizAnswers(answers);
 		sendResponseToClient(response);
@@ -202,8 +203,9 @@ public class ClientThread implements Runnable {
 	}
 	
 	public void sendGamePlayersInformation(){
-		this.Game.getLinkageStrategy().link(this.Game.getGamePlayers());
+		System.out.println("[Player Id " + this.MyPlayer.getUID() +"] voy a enviar información y adyacentes y toca al barrera de juego"  );
 		
+		this.Game.getLinkageStrategy().link(this.Game.getGamePlayers());		
 		response = new JBombComunicationObject(JBombRequestResponse.ADJACENT_PLAYERS);
 		for(GamePlayer gp: this.Game.getGamePlayerById(this.MyPlayer.getUID()).getNeighbours())
 			response.addPlayer(new Player(gp.getId(), gp.getName()));
