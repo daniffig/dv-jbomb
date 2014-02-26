@@ -4,6 +4,8 @@ package concurrency;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Collections;
+import java.util.Vector;
 
 import reference.GameEvent;
 import reference.JBombRequestResponse;
@@ -17,6 +19,7 @@ import network.Player;
 
 import core.Game;
 import core.GamePlayer;
+import core.QuizQuestion;
 
 public class ClientThread implements Runnable {
 
@@ -28,7 +31,7 @@ public class ClientThread implements Runnable {
 	private JBombComunicationObject request;
 	private JBombComunicationObject response;
 	
-	private Integer targetPlayerId;
+	private Player bombTargetPlayer;
 	private Integer CurrentQuestionAnswer;
 	
 	public ClientThread(Socket s)
@@ -80,7 +83,23 @@ public class ClientThread implements Runnable {
 	}
 	
 	public void sendQuizQuestion(){
-		request.getBombTargetPlayer();
+		this.bombTargetPlayer = request.getBombTargetPlayer();
+		
+		QuizQuestion qq = this.Game.getQuiz().getRandomQuizQuestion();
+		
+		Vector<String> answers = new Vector<String>();
+		for(String a: qq.getAnswers()) answers.add(a);
+		
+		//mando pregunta
+		response = new JBombComunicationObject(JBombRequestResponse.QUIZ_QUESTION_RESPONSE);
+		response.setQuizQuestion(qq.getQuestion());
+		response.setQuizAnswers(answers);
+		sendResponseToClient(response);
+		
+		//armo notificación y despiero a todos
+		this.EventHandler.setEvent(GameEvent.PLAYER_RECEIVED_QUESTION);
+		this.EventHandler.setEventMessage(this.MyPlayer.getName() + " recibió la pregunta");
+		this.EventHandler.wakeUpAll();
 	}
 	
 	public void sendBombOwnerNotification(){
@@ -94,8 +113,31 @@ public class ClientThread implements Runnable {
 		this.sendResponseToClient(response);
 		
 		//si no soy yo el que tiene la bomba el cliente no me va a mandar nada, yo me voy a dormir hasta que haya que notificar algo
-		if(!BombOwner.getId().equals(this.MyPlayer.getUID()))
+		if(!BombOwner.getId().equals(this.MyPlayer.getUID())){
 			this.EventHandler.goToSleep();
+		    //si me despierto aca es que me van a notificar de algo
+			this.handleGameEvent();
+		}	
+		//si sigo es que tengo la bomba asi que tengo que esperar una respuesta del usuario
+	}
+	
+	public void handleGameEvent(){
+		GameEvent event = this.EventHandler.getEvent();
+		while(!event.equals(GameEvent.BOMB_OWNER_CHANGED))
+		{
+			switch(event){
+				case PLAYER_RECEIVED_QUESTION:
+					response = new JBombComunicationObject(JBombRequestResponse.NOTICE_FLASH);
+					response.setFlash(this.EventHandler.getEventMessage());
+					this.sendResponseToClient(response);
+					this.EventHandler.goToSleep();
+					break;
+				default:
+					break;
+			}
+		}
+		
+		this.sendBombOwnerNotification();
 	}
 	
 	public void onHoldJoinHandleEvents(){

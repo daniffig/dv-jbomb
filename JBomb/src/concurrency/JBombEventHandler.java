@@ -14,6 +14,7 @@ public class JBombEventHandler {
 	private int barrier_size;
 	private GameEvent event;
 	private Player eventTriggerer;
+	private String eventMessage;
 	private List<ClientThread> suscriptors = new ArrayList<ClientThread>();
 
 	public JBombEventHandler(int cant)
@@ -112,4 +113,11 @@ public class JBombEventHandler {
 		this.eventTriggerer = eventTriggerer;
 	}
 	
+	public String getEventMessage(){
+		return this.eventMessage;
+	}
+	
+	public void setEventMessage(String m){
+		this.eventMessage = m;
+	}
 }
