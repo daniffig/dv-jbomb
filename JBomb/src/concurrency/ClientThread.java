@@ -88,7 +88,7 @@ public class ClientThread implements Runnable {
 		{
 			this.sendPlayerJoinGameNotification();
 		}
-		this.sendPlayerJoinGameNotification();
+
 		this.sendResponseToClient(new JBombComunicationObject(JBombRequestResponse.MAX_PLAYERS_REACHED));
 	}
 	
