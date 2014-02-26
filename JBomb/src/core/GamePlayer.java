@@ -55,8 +55,11 @@ public class GamePlayer {
 	
 	public void addNeighbour(GamePlayer gamePlayer)
 	{
-		this.getNeighbours().add(gamePlayer);
-		gamePlayer.getNeighbours().add(this);
+		if (!this.getNeighbours().contains(gamePlayer))
+		{
+			this.getNeighbours().add(gamePlayer);
+			gamePlayer.getNeighbours().add(this);
+		}
 	}
 	
 	public GamePlayer getNeighbour(Integer index)
