@@ -151,7 +151,7 @@ public class ClientThread implements Runnable {
 		
 		//si no soy yo el que tiene la bomba el cliente no me va a mandar nada, yo me voy a dormir hasta que haya que notificar algo
 		if(!BombOwner.getId().equals(this.MyPlayer.getUID())){
-			System.out.println("Me voy a dormir porque no tengo la bomba");
+			System.out.println("[Player ID " + this.MyPlayer.getUID() + "]Me voy a dormir porque no tengo la bomba");
 			this.EventHandler.goToSleep();
 		    //si me despierto aca es que me van a notificar de algo
 			this.handleGameEvent();
