@@ -77,7 +77,7 @@ public class ClientThread implements Runnable {
 				this.sendPlayerJoinGameNotification();
 			break;
 			case GAME_STARTED:
-				//Envio información del juego al cliente y me voy a dormir
+				this.sendGamePlayersInformation();
 				this.EventHandler.goToSleep();
 			break;
 			case BOMB_OWNER_CHANGED:
