@@ -1,5 +1,6 @@
 package core;
 
+@Deprecated
 public class Player {
 
 	private String PlayerName;
