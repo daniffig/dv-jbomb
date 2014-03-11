@@ -10,14 +10,16 @@ import reference.GameEvent;
 import reference.JBombRequestResponse;
 
 
+import view.JBombServerMainView;
 import network.GameInformation;
 import network.GamePlayInformation;
 import network.GameServer;
 import network.JBombComunicationObject;
 import network.Player;
-
+import network.QuizInformation;
 import core.Game;
 import core.GamePlayer;
+import core.Quiz;
 import core.QuizQuestion;
 
 public class ClientThread implements Runnable {
@@ -47,6 +49,10 @@ public class ClientThread implements Runnable {
 		while(!request.getType().equals(JBombRequestResponse.FINISH_CONNECTION_REQUEST))
 		{
 			switch(request.getType()){
+				case QUIZ_LIST_REQUEST:
+					System.out.println("I received a quiz list request from the client.");
+					this.sendQuizListInformation();
+					break;
 				case GAME_LIST_REQUEST:
 					System.out.println("I received a game list request from the client");
 					this.sendGameListInformation();
@@ -98,9 +104,9 @@ public class ClientThread implements Runnable {
 			response.setCorrectAnswer(true);
 			this.sendResponseToClient(response);
 			
-			//armo notificación y despiero a todos
+			//armo notificaciï¿½n y despiero a todos
 			this.EventHandler.setEvent(GameEvent.BOMB_OWNER_ANSWER_RIGHT);
-			this.EventHandler.setEventMessage(this.MyPlayer.getName() + " respondió correctamente!");
+			this.EventHandler.setEventMessage(this.MyPlayer.getName() + " respondiï¿½ correctamente!");
 		}else{
 			System.out.println("[Player ID " + this.MyPlayer.getUID() + "]Mando respuesta mal mi respuesta= " + this.CurrentQuestionAnswer + " y el tiene " + request.getSelectedQuizAnswer());
 			response = new JBombComunicationObject(JBombRequestResponse.QUIZ_ANSWER_RESPONSE);
@@ -109,7 +115,7 @@ public class ClientThread implements Runnable {
 			this.sendResponseToClient(response);
 			
 			this.EventHandler.setEvent(GameEvent.BOMB_OWNER_ANSWER_WRONG);
-			this.EventHandler.setEventMessage(this.MyPlayer.getName() + " respondió incorrectamente!");
+			this.EventHandler.setEventMessage(this.MyPlayer.getName() + " respondiï¿½ incorrectamente!");
 			
 		}
 		
@@ -124,7 +130,7 @@ public class ClientThread implements Runnable {
 		Vector<String> answers = new Vector<String>();
 		for(String a: qq.getAnswers()) answers.add(a);
 		
-		//me guardo al respuesta para después
+		//me guardo al respuesta para despuï¿½s
 		this.CurrentQuestionAnswer = qq.getAnswers().get(qq.getCorrectAnswer());
 		
 		//mando pregunta
@@ -136,9 +142,9 @@ public class ClientThread implements Runnable {
 		//activo bomba
 		this.Game.getBomb().activate();
 		
-		//armo notificación y despiero a todos
+		//armo notificaciï¿½n y despiero a todos
 		this.EventHandler.setEvent(GameEvent.PLAYER_RECEIVED_QUESTION);
-		this.EventHandler.setEventMessage(this.MyPlayer.getName() + " recibió la pregunta");
+		this.EventHandler.setEventMessage(this.MyPlayer.getName() + " recibiï¿½ la pregunta");
 		this.EventHandler.wakeUpAll();
 	}
 	
@@ -208,7 +214,7 @@ public class ClientThread implements Runnable {
 	}
 	
 	public void sendGamePlayersInformation(){
-		System.out.println("[Player Id " + this.MyPlayer.getUID() +"] voy a enviar información y adyacentes y toca al barrera de juego"  );
+		System.out.println("[Player Id " + this.MyPlayer.getUID() +"] voy a enviar informaciï¿½n y adyacentes y toca al barrera de juego"  );
 		
 		this.Game.getLinkageStrategy().link(this.Game.getGamePlayers());		
 		response = new JBombComunicationObject(JBombRequestResponse.ADJACENT_PLAYERS);
@@ -298,6 +304,24 @@ public class ClientThread implements Runnable {
 			System.out.println("Juego disponible id " + gi.getUID());
 		}
 		this.sendResponseToClient(response);
+	}
+	
+	public void sendQuizListInformation()
+	{
+		JBombComunicationObject response = new JBombComunicationObject();
+		
+		response.setType(JBombRequestResponse.QUIZ_LIST_RESPONSE);
+		
+		for (Quiz q : GameServer.getInstance().getAvailableQuizzes())
+		{
+			QuizInformation qi = new QuizInformation();
+			
+			qi.setQuizTitle(q.getTitle());
+			
+			response.getAvailableQuizzes().add(qi);
+		}
+		
+		this.sendResponseToClient(response);		
 	}
 	
 	public void sendNoticeFlash()

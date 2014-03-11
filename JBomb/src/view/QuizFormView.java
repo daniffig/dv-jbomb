@@ -40,24 +40,6 @@ public class QuizFormView extends JFrame {
 	private JTextField QuizTitleTextField;
 
 	/**
-	 * Launch the application.
-	 */
-	/*
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					QuizFormView frame = new QuizFormView();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-	*/
-
-	/**
 	 * Create the frame.
 	 */
 	public QuizFormView(QuizConfigurationFormView QuizConfigurationFormView, Quiz Quiz) {

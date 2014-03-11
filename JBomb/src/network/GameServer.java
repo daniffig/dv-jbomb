@@ -4,6 +4,7 @@ import view.*;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.List;
 import java.util.Vector;
 
 import javax.swing.event.ChangeEvent;
@@ -12,6 +13,7 @@ import javax.swing.event.ChangeListener;
 import concurrency.ClientThread;
 import concurrency.JBombEventHandler;
 import core.Game;
+import core.Quiz;
 
 public class GameServer implements Runnable{
 
@@ -23,6 +25,7 @@ public class GameServer implements Runnable{
 	private String InetIPAddress = "127.0.0.1";
 	private Integer InetPort = 4321;
 	private Integer IncrementalGameId = 1;
+	private Vector<Quiz> availableQuizzes = new Vector<Quiz>();
 		
 	public static GameServer getInstance()
 	{
@@ -174,5 +177,13 @@ public class GameServer implements Runnable{
 	public void refreshGamesTable()
 	{
 		
+	}
+
+	public Vector<Quiz> getAvailableQuizzes() {
+		return availableQuizzes;
+	}
+
+	public void setAvailableQuizzes(Vector<Quiz> availableQuizzes) {
+		this.availableQuizzes = availableQuizzes;
 	}
 }

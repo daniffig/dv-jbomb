@@ -232,6 +232,8 @@ public class JBombServerMainView {
 	public void addQuiz(Quiz Quiz)
 	{
 		this.QuizVector.add(Quiz);
+		
+		GameServer.getInstance().getAvailableQuizzes().add(Quiz);
 	}
 	
 	public Vector<Quiz> getQuizVector()
