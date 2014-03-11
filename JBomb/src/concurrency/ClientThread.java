@@ -84,18 +84,14 @@ public class ClientThread implements Runnable {
 			request = this.receiveRequestFromClient();
 		}
 	}
-	
-	public void startGame(){
-		this.Game.start();
-	}
-	
+		
 	public void processQuizAnswer(){
-		//apago la bomba
+
 		this.Game.getBomb().deactivate();
 		
 		if(request.getSelectedQuizAnswer().equals(this.CurrentQuestionAnswer)){
-			System.out.println("[Player ID " + this.MyPlayer.getUID() + "]Mando respuesta correcta targetPlayer " + this.bombTargetPlayer.getName() + " id " + this.bombTargetPlayer.getUID() );
-			//mando la bomba al siguiente
+			System.out.println("[Player ID " + this.MyPlayer.getUID() + "]Mando respuesta correcta targetPlayer " + this.bombTargetPlayer.getName() + "[" + this.bombTargetPlayer.getUID() +"]");
+			
 			this.Game.sendBomb(this.Game.getGamePlayerById(this.MyPlayer.getUID()), this.Game.getGamePlayerById(this.bombTargetPlayer.getUID()));
 			
 			//mando pregunta
@@ -104,10 +100,11 @@ public class ClientThread implements Runnable {
 			response.setCorrectAnswer(true);
 			this.sendResponseToClient(response);
 			
-			//armo notificaci�n y despiero a todos
+			//armo notificacion y despiero a todos
 			this.EventHandler.setEvent(GameEvent.BOMB_OWNER_ANSWER_RIGHT);
 			this.EventHandler.setEventMessage(this.MyPlayer.getName() + " respondi� correctamente!");
-		}else{
+		}
+		else{
 			System.out.println("[Player ID " + this.MyPlayer.getUID() + "]Mando respuesta mal mi respuesta= " + this.CurrentQuestionAnswer + " y el tiene " + request.getSelectedQuizAnswer());
 			response = new JBombComunicationObject(JBombRequestResponse.QUIZ_ANSWER_RESPONSE);
 			response.setFlash("Respuesta incorrecta! :C");
@@ -115,8 +112,7 @@ public class ClientThread implements Runnable {
 			this.sendResponseToClient(response);
 			
 			this.EventHandler.setEvent(GameEvent.BOMB_OWNER_ANSWER_WRONG);
-			this.EventHandler.setEventMessage(this.MyPlayer.getName() + " respondi� incorrectamente!");
-			
+			this.EventHandler.setEventMessage(this.MyPlayer.getName() + " respondi� incorrectamente!");	
 		}
 		
 		this.EventHandler.wakeUpAll();
@@ -130,7 +126,7 @@ public class ClientThread implements Runnable {
 		Vector<String> answers = new Vector<String>();
 		for(String a: qq.getAnswers()) answers.add(a);
 		
-		//me guardo al respuesta para despu�s
+		//me guardo al respuesta para despues
 		this.CurrentQuestionAnswer = qq.getAnswers().get(qq.getCorrectAnswer());
 		
 		//mando pregunta
@@ -149,9 +145,10 @@ public class ClientThread implements Runnable {
 	}
 	
 	public void sendBombOwnerNotification(){
+		System.out.println("[Player ID " + this.MyPlayer.getUID() + "]Mando info de quien tiene la bomba");
+		
 		GamePlayer BombOwner = this.Game.getBomb().getCurrentPlayer();
 		
-		System.out.println("[Player ID " + this.MyPlayer.getUID() + "]Mando info de quien tiene la bomba");
 		response = new JBombComunicationObject(JBombRequestResponse.BOMB_OWNER_RESPONSE);
 		response.setBombOwner(new Player(BombOwner.getId(), BombOwner.getName()));
 		
@@ -165,8 +162,8 @@ public class ClientThread implements Runnable {
 		if(!BombOwner.getId().equals(this.MyPlayer.getUID())){
 			System.out.println("[Player ID " + this.MyPlayer.getUID() + "]Me voy a dormir porque no tengo la bomba");
 			this.EventHandler.goToSleep();
-		    //si me despierto aca es que me van a notificar de algo
-			this.handleGameEvent();
+		    
+			this.handleGameEvent();//si me despierto aca es que me van a notificar de algo
 		}	
 		//si sigo es que tengo la bomba asi que tengo que esperar una respuesta del usuario
 	}
@@ -216,8 +213,9 @@ public class ClientThread implements Runnable {
 	public void sendGamePlayersInformation(){
 		System.out.println("[Player Id " + this.MyPlayer.getUID() +"] voy a enviar informaci�n y adyacentes y toca al barrera de juego"  );
 		
-		this.Game.getLinkageStrategy().link(this.Game.getGamePlayers());		
 		response = new JBombComunicationObject(JBombRequestResponse.ADJACENT_PLAYERS);
+		
+		this.Game.getLinkageStrategy().link(this.Game.getGamePlayers());		
 		for(GamePlayer gp: this.Game.getGamePlayerById(this.MyPlayer.getUID()).getNeighbours())
 			response.addPlayer(new Player(gp.getId(), gp.getName()));
 		
@@ -226,7 +224,8 @@ public class ClientThread implements Runnable {
 	}
 	
 	public void sendPlayerJoinGameNotification(){
-		System.out.println("recibi player_added notification");
+		System.out.println("[Player Id " + this.MyPlayer.getUID() +"]recibi player_added notification");
+		
 		response = new JBombComunicationObject(JBombRequestResponse.PLAYER_ADDED);
 		response.setGamePlayInformation(this.getGamePlayInformation());
 		response.setFlash(this.EventHandler.getEventTriggerer().getName());
@@ -237,19 +236,19 @@ public class ClientThread implements Runnable {
 	
 	public boolean processJoinGameRequest(){		
 		JBombComunicationObject jbco = new JBombComunicationObject();
-		try
-		{			
+		
+		try{			
 			Game RequestedGame = GameServer.getInstance().getGameById(request.getRequestedGameId());
 
-			if(RequestedGame.equals(null))
-			{	
+			if(RequestedGame.equals(null)){	
+				
 				jbco.setType(JBombRequestResponse.ERROR_FLASH);
 				jbco.setFlash("El juego requerido no existe");
 				System.out.println("mando error porque el juego requerido no existe");
 			}
-			else
-			{
+			else{
 				Integer player_id = RequestedGame.addGamePlayer(new GamePlayer(request.getMyPlayer().getName()));
+				
 				if(player_id == -1){
 					jbco.setType(JBombRequestResponse.ERROR_FLASH);
 					jbco.setFlash("Juego Completo! no se pueden agregar m�s jugadores");
@@ -267,13 +266,12 @@ public class ClientThread implements Runnable {
 					jbco.setGamePlayInformation(this.getGamePlayInformation());
 					jbco.setMyPlayer(this.MyPlayer);
 					
-					System.out.println("nombre del juego " + jbco.getGamePlayInformation().getName());
-					System.out.println("player_id " + jbco.getMyPlayer().getUID());
 					this.sendResponseToClient(jbco);
 					return true;
 				}
-				this.sendResponseToClient(jbco);
 			}
+			
+			this.sendResponseToClient(jbco);
 		}
 		catch (Exception e)
 		{
@@ -283,9 +281,7 @@ public class ClientThread implements Runnable {
 	}
 	
 	public void sendGameListInformation(){
-		JBombComunicationObject response = new JBombComunicationObject();
-		
-		response.setType(JBombRequestResponse.GAME_LIST_RESPONSE);
+		JBombComunicationObject response = new JBombComunicationObject(JBombRequestResponse.GAME_LIST_RESPONSE);
 		
 		for(Game g :GameServer.getInstance().getGames())
 		{
@@ -295,25 +291,19 @@ public class ClientThread implements Runnable {
 			gi.setMode(g.getMode().toString());
 			gi.setMaxPlayers(g.getMaxGamePlayersAllowed());
 			gi.setTotalPlayers(g.getTotalGamePlayers());
-			System.out.println("Mande el game con id " + gi.getUID());
+
 			response.addGameInformation(gi);
 		}
 
-		for(GameInformation gi: response.getAvailableGames())
-		{
-			System.out.println("Juego disponible id " + gi.getUID());
-		}
 		this.sendResponseToClient(response);
 	}
 	
-	public void sendQuizListInformation()
-	{
-		JBombComunicationObject response = new JBombComunicationObject();
+	public void sendQuizListInformation(){
 		
-		response.setType(JBombRequestResponse.QUIZ_LIST_RESPONSE);
+		JBombComunicationObject response = new JBombComunicationObject(JBombRequestResponse.QUIZ_LIST_RESPONSE);
 		
-		for (Quiz q : GameServer.getInstance().getAvailableQuizzes())
-		{
+		for (Quiz q : GameServer.getInstance().getAvailableQuizzes()){
+			
 			QuizInformation qi = new QuizInformation();
 			
 			qi.setQuizTitle(q.getTitle());
@@ -324,8 +314,8 @@ public class ClientThread implements Runnable {
 		this.sendResponseToClient(response);		
 	}
 	
-	public void sendNoticeFlash()
-	{
+	public void sendNoticeFlash(){
+		
 		response = new JBombComunicationObject(JBombRequestResponse.NOTICE_FLASH);
 		response.setFlash(this.EventHandler.getEventMessage());
 		this.sendResponseToClient(response);
@@ -345,35 +335,33 @@ public class ClientThread implements Runnable {
 	}
 	
 	public void sendResponseToClient(JBombComunicationObject jbco){
-		try
-		{
+		try{
 			ObjectOutputStream outToClient = new ObjectOutputStream(this.ClientSocket.getOutputStream());
 			
 			outToClient.writeObject(jbco);
 			
-			System.out.println("Envie el response al cliente");
-		}
-		catch(Exception e)
-		{
-			System.out.println("Fallo el envio del response");
+			System.out.println("[Player Id " + this.MyPlayer.getUID() +"] Envie el response al cliente.");
+		}catch(Exception e){
+			System.out.println("[Player Id " + this.MyPlayer.getUID() +"]Fallo el envio del response");
 		}
 	}
 	
 	public JBombComunicationObject receiveRequestFromClient(){
-		try
-		{
+		try{
 			ObjectInputStream inFromClient = new ObjectInputStream(this.ClientSocket.getInputStream());
 		
 			return (JBombComunicationObject) inFromClient.readObject();
-		}
-		catch(Exception e)
-		{
+		}catch(Exception e){
 			System.out.println("Fallo la recepcion del request del cliente");
 			
 			return null;
 		}
 	}
 
+	public void startGame(){
+		this.Game.start();
+	}
+	
 	public Player getMyPlayer() {
 		return MyPlayer;
 	}

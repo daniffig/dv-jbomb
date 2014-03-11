@@ -78,7 +78,7 @@ public class JBombEventHandler {
 		}
 	}
 	
-	public synchronized void startGameBarrier(ClientThread ct)
+	public synchronized void startGameBarrier(ClientThread clientThread)
 	{
 		this.current_barrier_size++;
 		
@@ -88,9 +88,9 @@ public class JBombEventHandler {
 		}
 		else
 		{
+			//Soy el último en llegar a la barrera, inicio el juego y despierto a todos
 			this.current_barrier_size = 0;
-			ct.startGame();
-			this.setEvent(GameEvent.GAME_STARTED);
+			clientThread.startGame();
 			this.notifyAll();
 		}
 	}
