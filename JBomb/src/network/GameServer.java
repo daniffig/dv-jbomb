@@ -4,11 +4,7 @@ import view.*;
 
 import java.io.IOException;
 import java.net.ServerSocket;
-import java.util.List;
 import java.util.Vector;
-
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import concurrency.ClientThread;
 import concurrency.JBombEventHandler;

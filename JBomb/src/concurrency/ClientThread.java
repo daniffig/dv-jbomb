@@ -1,22 +1,25 @@
 package concurrency;
 
 
+import gameModes.BouncingGameMode;
+import gameModes.NormalGameMode;
+
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Vector;
 
+import linkageStrategies.ConexantLinkageStrategy;
+import linkageStrategies.RingLinkageStrategy;
 import reference.GameEvent;
 import reference.JBombRequestResponse;
 
-
-import view.JBombServerMainView;
 import network.GameInformation;
 import network.GamePlayInformation;
 import network.GameServer;
+import network.GameSettingsInformation;
 import network.JBombComunicationObject;
 import network.Player;
-import network.QuizInformation;
 import core.Game;
 import core.GamePlayer;
 import core.Quiz;
@@ -49,9 +52,9 @@ public class ClientThread implements Runnable {
 		while(!request.getType().equals(JBombRequestResponse.FINISH_CONNECTION_REQUEST))
 		{
 			switch(request.getType()){
-				case QUIZ_LIST_REQUEST:
-					System.out.println("I received a quiz list request from the client.");
-					this.sendQuizListInformation();
+				case GAME_SETTINGS_INFORMATION_REQUEST:
+					System.out.println("I received a game settings information request from the client.");
+					this.sendGameSettingsInformation();
 					break;
 				case GAME_LIST_REQUEST:
 					System.out.println("I received a game list request from the client");
@@ -298,20 +301,49 @@ public class ClientThread implements Runnable {
 		this.sendResponseToClient(response);
 	}
 	
-	public void sendQuizListInformation(){
+	public void sendGameSettingsInformation()
+	{
+		JBombComunicationObject response = new JBombComunicationObject(JBombRequestResponse.GAME_SETTINGS_INFORMATION_RESPONSE);
 		
-		JBombComunicationObject response = new JBombComunicationObject(JBombRequestResponse.QUIZ_LIST_RESPONSE);
+		GameSettingsInformation gsi = new GameSettingsInformation();
 		
-		for (Quiz q : GameServer.getInstance().getAvailableQuizzes()){
-			
-			QuizInformation qi = new QuizInformation();
-			
-			qi.setQuizTitle(q.getTitle());
-			
-			response.getAvailableQuizzes().add(qi);
+		Vector<String> topologies = new Vector<String>();
+		
+		topologies.add((new RingLinkageStrategy()).toString());
+		topologies.add((new ConexantLinkageStrategy()).toString());
+		
+		gsi.setTopologies(topologies);
+		
+		Vector<String> quizzes = new Vector<String>();
+
+		for (Quiz q : GameServer.getInstance().getAvailableQuizzes())
+		{
+			quizzes.add(q.getTitle());
 		}
 		
-		this.sendResponseToClient(response);		
+		gsi.setQuizzes(quizzes);
+		
+		Vector<String> modes = new Vector<String>();
+		
+		modes.add((new NormalGameMode()).toString());
+		modes.add((new BouncingGameMode()).toString());
+		
+		gsi.setModes(modes);
+		
+		gsi.setMaxPlayersAllowed(16);
+		gsi.setMaxRoundsAllowed(7);
+		
+		Vector<String> roundDurations = new Vector<String>();
+		
+		roundDurations.add("1-2 minutos");
+		roundDurations.add("2-4 minutos");
+		roundDurations.add("4-6 minutos");
+		
+		gsi.setRoundDurations(roundDurations);	
+		
+		response.setGameSettingsInformation(gsi);
+		
+		this.sendResponseToClient(response);
 	}
 	
 	public void sendNoticeFlash(){
