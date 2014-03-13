@@ -114,9 +114,9 @@ public class Bomb extends Observable{
 	public TimerTask getDetonationTask() {
 		return new TimerTask(){
 			public void run(){
-				System.out.println("Estoy aca porque exploto la bomba! le voy a avisar a mis " + countObservers() + "observers.");
-			
-				notifyObservers(CurrentPlayer);
+				System.out.println("Estoy aca porque exploto la bomba! le voy a avisar a mis " + countObservers() + " observers.");
+				setChanged();
+				notifyObservers();
 			}
 		};
 	}

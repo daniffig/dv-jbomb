@@ -190,7 +190,8 @@ public class Game {
 	public synchronized void suscribeToBombDetonation(ClientThread ct)
 	{
 		//Suscribo el clientThread para que observer la bomba para cuando explote
-		//this.getBomb().addObserver(ct);
+		System.out.println("Agregue el observer " + ct.toString() + " para que chequee la bomba");
+		this.getBomb().addObserver(ct);
 	}
 	
 	public Boolean isValid()

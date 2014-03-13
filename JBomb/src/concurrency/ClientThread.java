@@ -436,7 +436,7 @@ public class ClientThread implements Runnable, Observer {
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		System.out.println("[Player Id " + this.MyPlayer.getUID() +"] Acabo de recibir notificaci�n de explosi�n de bomba!! perdi� el jugador" + ((GamePlayer)arg1).getName() );
+		System.out.println("[Player Id " + this.MyPlayer.getUID() +"] Acabo de recibir notificacion de explosion de bomba!");
 	}
 	
 }
