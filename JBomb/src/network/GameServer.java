@@ -1,11 +1,16 @@
 package network;
 
 import view.*;
+import gameModes.*;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
+import roundDurations.*;
+import linkageStrategies.*;
 import concurrency.ClientThread;
 import concurrency.JBombEventHandler;
 import core.Game;
@@ -21,11 +26,41 @@ public class GameServer implements Runnable{
 	private String InetIPAddress = "127.0.0.1";
 	private Integer InetPort = 4321;
 	private Integer IncrementalGameId = 1;
-	private Vector<Quiz> availableQuizzes = new Vector<Quiz>();
+	
+	private Map<Integer, AbstractLinkageStrategy> availableLinkageStrategies = new HashMap<Integer, AbstractLinkageStrategy>();
+	private Map<Integer, Quiz> availableQuizzes = new HashMap<Integer, Quiz>();
+	private Map<Integer, AbstractGameMode> availableGameModes  = new HashMap<Integer, AbstractGameMode>();
+	private Map<Integer, AbstractRoundDuration> availableRoundDurations = new HashMap<Integer, AbstractRoundDuration>();
 		
 	public static GameServer getInstance()
 	{
-		if(instance == null) instance = new GameServer();
+		if (instance == null)
+		{
+			instance = new GameServer();				
+
+			Map<Integer, AbstractLinkageStrategy> topologies = new HashMap<Integer, AbstractLinkageStrategy>();
+
+			topologies.put(topologies.size(), new RingLinkageStrategy());
+			topologies.put(topologies.size(), new ConexantLinkageStrategy());
+
+			instance.setAvailableLinkageStrategies(topologies);
+
+			Map<Integer, AbstractGameMode> gameModes = new HashMap<Integer, AbstractGameMode>();
+
+			gameModes.put(gameModes.size(), new NormalGameMode());
+			gameModes.put(gameModes.size(), new BouncingGameMode());
+
+			instance.setAvailableGameModes(gameModes);
+
+			Map<Integer, AbstractRoundDuration> roundDurations = new HashMap<Integer, AbstractRoundDuration>();
+
+			roundDurations.put(roundDurations.size(), new ShortRoundDuration());
+			roundDurations.put(roundDurations.size(), new NormalRoundDuration());
+			roundDurations.put(roundDurations.size(), new LongRoundDuration());
+
+			instance.setAvailableRoundDurations(roundDurations);
+		}
+		
 		return instance;
 	}
 	
@@ -175,11 +210,39 @@ public class GameServer implements Runnable{
 		
 	}
 
-	public Vector<Quiz> getAvailableQuizzes() {
+	public Map<Integer, AbstractLinkageStrategy> getAvailableLinkageStrategies() {
+		return availableLinkageStrategies;
+	}
+
+	public void setAvailableLinkageStrategies(
+			Map<Integer, AbstractLinkageStrategy> availableLinkageStrategies) {
+		this.availableLinkageStrategies = availableLinkageStrategies;
+	}
+
+	public Map<Integer, Quiz> getAvailableQuizzes() {
 		return availableQuizzes;
 	}
 
-	public void setAvailableQuizzes(Vector<Quiz> availableQuizzes) {
+	public void setAvailableQuizzes(Map<Integer, Quiz> availableQuizzes) {
 		this.availableQuizzes = availableQuizzes;
 	}
+
+	public Map<Integer, AbstractGameMode> getAvailableGameModes() {
+		return availableGameModes;
+	}
+
+	public void setAvailableGameModes(
+			Map<Integer, AbstractGameMode> availableGameModes) {
+		this.availableGameModes = availableGameModes;
+	}
+
+	public Map<Integer, AbstractRoundDuration> getAvailableRoundDurations() {
+		return availableRoundDurations;
+	}
+
+	public void setAvailableRoundDurations(
+			Map<Integer, AbstractRoundDuration> availableRoundDurations) {
+		this.availableRoundDurations = availableRoundDurations;
+	}
+
 }

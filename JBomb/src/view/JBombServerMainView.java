@@ -4,15 +4,12 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JTable;
-import javax.swing.JLabel;
-import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
 
 import core.*;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.net.InetAddress;
 import java.util.Vector;
 
 import javax.swing.JScrollPane;
@@ -21,32 +18,10 @@ import network.GameServer;
 
 import java.awt.Toolkit;
 
-import javax.swing.JToolBar;
-
-import java.awt.Choice;
-
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
-import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-
-import javax.swing.JPopupMenu;
-
-import java.awt.Dimension;
-
-import javax.swing.JPanel;
 import javax.swing.ButtonGroup;
-
-import java.awt.Component;
-
-import javax.swing.Box;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
 
 public class JBombServerMainView {
 
@@ -55,7 +30,7 @@ public class JBombServerMainView {
 	
 	private Vector<Game> GameVector = new Vector<Game>();
 	private Vector<Quiz> QuizVector = new Vector<Quiz>();
-	private Vector<GameServer> GameServerVector = new Vector<GameServer>();
+//	private Vector<GameServer> GameServerVector = new Vector<GameServer>();
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private final ButtonGroup buttonGroup_1 = new ButtonGroup();
 	
@@ -233,7 +208,7 @@ public class JBombServerMainView {
 	{
 		this.QuizVector.add(Quiz);
 		
-		GameServer.getInstance().getAvailableQuizzes().add(Quiz);
+		GameServer.getInstance().getAvailableQuizzes().put(GameServer.getInstance().getAvailableGameModes().size(), Quiz);
 	}
 	
 	public Vector<Quiz> getQuizVector()
@@ -245,7 +220,10 @@ public class JBombServerMainView {
 	{
 		((DefaultTableModel)this.GamesTable.getModel()).fireTableDataChanged();
 	}
+	
+	/*
 	private class SwingAction extends AbstractAction {
+		private static final long serialVersionUID = 1L;
 		public SwingAction() {
 			putValue(NAME, "SwingAction");
 			putValue(SHORT_DESCRIPTION, "Some short description");
@@ -253,6 +231,7 @@ public class JBombServerMainView {
 		public void actionPerformed(ActionEvent e) {
 		}
 	}
+	*/
 	public String getInetIPAddress() {
 		return InetIPAddress;
 	}

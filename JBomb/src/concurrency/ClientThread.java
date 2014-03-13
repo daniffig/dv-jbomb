@@ -1,28 +1,23 @@
 package concurrency;
 
 
-import gameModes.BouncingGameMode;
-import gameModes.NormalGameMode;
-
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.Vector;
 
-import linkageStrategies.ConexantLinkageStrategy;
-import linkageStrategies.RingLinkageStrategy;
 import reference.GameEvent;
 import reference.JBombRequestResponse;
-
 import network.GameInformation;
 import network.GamePlayInformation;
 import network.GameServer;
+import network.GameSettings;
 import network.GameSettingsInformation;
 import network.JBombComunicationObject;
 import network.Player;
 import core.Game;
 import core.GamePlayer;
-import core.Quiz;
 import core.QuizQuestion;
 
 public class ClientThread implements Runnable {
@@ -56,6 +51,10 @@ public class ClientThread implements Runnable {
 					System.out.println("I received a game settings information request from the client.");
 					this.sendGameSettingsInformation();
 					break;
+				case CREATE_GAME_REQUEST:
+					System.out.println("I received a create game request from the client.");
+					this.createGame();
+					break;					
 				case GAME_LIST_REQUEST:
 					System.out.println("I received a game list request from the client");
 					this.sendGameListInformation();
@@ -307,41 +306,72 @@ public class ClientThread implements Runnable {
 		
 		GameSettingsInformation gsi = new GameSettingsInformation();
 		
-		Vector<String> topologies = new Vector<String>();
+		gsi.setTopologies(new HashMap<Integer, String>());
 		
-		topologies.add((new RingLinkageStrategy()).toString());
-		topologies.add((new ConexantLinkageStrategy()).toString());
-		
-		gsi.setTopologies(topologies);
-		
-		Vector<String> quizzes = new Vector<String>();
-
-		for (Quiz q : GameServer.getInstance().getAvailableQuizzes())
+		for (Integer i : GameServer.getInstance().getAvailableLinkageStrategies().keySet())
 		{
-			quizzes.add(q.getTitle());
+			gsi.getTopologies().put(i, GameServer.getInstance().getAvailableLinkageStrategies().get(i).toString());
 		}
 		
-		gsi.setQuizzes(quizzes);
+		gsi.setQuizzes(new HashMap<Integer, String>());
 		
-		Vector<String> modes = new Vector<String>();
+		for (Integer i : GameServer.getInstance().getAvailableQuizzes().keySet())
+		{
+			gsi.getQuizzes().put(i, GameServer.getInstance().getAvailableQuizzes().get(i).toString());
+		}
 		
-		modes.add((new NormalGameMode()).toString());
-		modes.add((new BouncingGameMode()).toString());
+		gsi.setModes(new HashMap<Integer, String>());
 		
-		gsi.setModes(modes);
+		for (Integer i : GameServer.getInstance().getAvailableGameModes().keySet())
+		{
+			gsi.getModes().put(i, GameServer.getInstance().getAvailableGameModes().get(i).toString());
+		}
 		
 		gsi.setMaxPlayersAllowed(16);
 		gsi.setMaxRoundsAllowed(7);
 		
-		Vector<String> roundDurations = new Vector<String>();
+		gsi.setRoundDurations(new HashMap<Integer, String>());
 		
-		roundDurations.add("1-2 minutos");
-		roundDurations.add("2-4 minutos");
-		roundDurations.add("4-6 minutos");
-		
-		gsi.setRoundDurations(roundDurations);	
+		for (Integer i : GameServer.getInstance().getAvailableRoundDurations().keySet())
+		{
+			gsi.getRoundDurations().put(i, GameServer.getInstance().getAvailableRoundDurations().get(i).toString());
+		}
 		
 		response.setGameSettingsInformation(gsi);
+		
+		this.sendResponseToClient(response);
+	}
+	
+	public void createGame()
+	{
+		GameSettings gs = this.request.getGameSettings();
+		
+		Game g = new Game();
+		
+		g.setName(gs.getName());
+		g.setLinkageStrategy(GameServer.getInstance().getAvailableLinkageStrategies().get(gs.getTopologyId()));
+		g.setQuiz(GameServer.getInstance().getAvailableQuizzes().get(gs.getQuizId()));
+		g.setMode(GameServer.getInstance().getAvailableGameModes().get(gs.getModeId()));
+		g.setMaxGamePlayersAllowed(gs.getMaxPlayers());
+		g.setMaxRounds(gs.getMaxRounds());
+		
+		/* 
+		 * FIXME
+		 */
+		g.setRoundDuration(30);		
+		
+		GameServer.getInstance().addGame(g);
+		
+		JBombComunicationObject response = new JBombComunicationObject(JBombRequestResponse.CREATE_GAME_RESPONSE);
+		
+		GameInformation gi = new GameInformation();
+		
+		gi.setUID(g.getUID());
+		gi.setName(g.getName());
+		gi.setMaxPlayers(g.getMaxGamePlayersAllowed());
+		gi.setTotalPlayers(g.getTotalGamePlayers());
+		
+		response.addGameInformation(gi);
 		
 		this.sendResponseToClient(response);
 	}

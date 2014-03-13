@@ -19,11 +19,14 @@ import javax.swing.JTextField;
 import javax.swing.JComboBox;
 import javax.swing.JButton;
 
+import network.GameServer;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import linkageStrategies.*;
 import gameModes.*;
+import roundDurations.*;
 
 import java.awt.Toolkit;
 import java.awt.FlowLayout;
@@ -47,7 +50,7 @@ public class JBombServerGameFormView extends JFrame {
 	private JComboBox<AbstractGameMode> GameModeComboBox;
 	private JComboBox<Integer> GameMaxPlayersComboBox;
 	private JComboBox<Integer> GameRoundsComboBox;
-	private JComboBox<Integer> GameRoundDurationComboBox;
+	private JComboBox<AbstractRoundDuration> GameRoundDurationComboBox;
 	
 	private Game Game;
 
@@ -84,7 +87,10 @@ public class JBombServerGameFormView extends JFrame {
 		panel.add(GameNameTextField);
 		GameNameTextField.setColumns(10);
 		
-		GameLinkageStrategyComboBox = new JComboBox<AbstractLinkageStrategy>(new DefaultComboBoxModel<AbstractLinkageStrategy>(new AbstractLinkageStrategy[]{new RingLinkageStrategy(), new ConexantLinkageStrategy()}));
+		AbstractLinkageStrategy[] linkageStrategies = new AbstractLinkageStrategy[GameServer.getInstance().getAvailableLinkageStrategies().size()];
+		GameServer.getInstance().getAvailableLinkageStrategies().values().toArray(linkageStrategies);
+		
+		GameLinkageStrategyComboBox = new JComboBox<AbstractLinkageStrategy>(new DefaultComboBoxModel<AbstractLinkageStrategy>(linkageStrategies));
 		
 		GameLinkageStrategyComboBox.setBounds(130, 53, 162, 24);
 		panel.add(GameLinkageStrategyComboBox);
@@ -109,8 +115,11 @@ public class JBombServerGameFormView extends JFrame {
 		lblGameDuration.setBounds(12, 236, 63, 15);
 		panel.add(lblGameDuration);
 		
-		GameRoundDurationComboBox = new JComboBox<Integer>(new DefaultComboBoxModel<Integer>(new Integer[]{30, 60, 90}));
-		GameRoundDurationComboBox.setBounds(169, 233, 123, 24);
+		AbstractRoundDuration[] roundDurations = new AbstractRoundDuration[GameServer.getInstance().getAvailableRoundDurations().size()];
+		GameServer.getInstance().getAvailableRoundDurations().values().toArray(roundDurations);
+		
+		GameRoundDurationComboBox = new JComboBox<AbstractRoundDuration>(new DefaultComboBoxModel<AbstractRoundDuration>(roundDurations));
+		GameRoundDurationComboBox.setBounds(130, 233, 162, 24);
 		panel.add(GameRoundDurationComboBox);
 		
 		Vector<InetAddress> InetAddressVector = new Vector<InetAddress>();
@@ -144,7 +153,10 @@ public class JBombServerGameFormView extends JFrame {
 		GameQuizComboBox.setBounds(130, 89, 162, 24);
 		panel.add(GameQuizComboBox);
 		
-		GameModeComboBox = new JComboBox<AbstractGameMode>(new DefaultComboBoxModel<AbstractGameMode>(new AbstractGameMode[]{new NormalGameMode(), new BouncingGameMode()}));
+		AbstractGameMode[] gameModes = new AbstractGameMode[GameServer.getInstance().getAvailableGameModes().size()];
+		GameServer.getInstance().getAvailableGameModes().values().toArray(gameModes);
+		
+		GameModeComboBox = new JComboBox<AbstractGameMode>(new DefaultComboBoxModel<AbstractGameMode>(gameModes));
 		GameModeComboBox.setBounds(130, 125, 162, 24);
 		panel.add(GameModeComboBox);
 		
