@@ -5,6 +5,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.HashMap;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Vector;
 
 import reference.GameEvent;
@@ -20,7 +22,7 @@ import core.Game;
 import core.GamePlayer;
 import core.QuizQuestion;
 
-public class ClientThread implements Runnable {
+public class ClientThread implements Runnable, Observer {
 
 	private Socket ClientSocket;
 	private JBombEventHandler EventHandler;
@@ -260,7 +262,8 @@ public class ClientThread implements Runnable {
 					this.Game = RequestedGame;
 					this.EventHandler = GameServer.getInstance().getEventHandlerOfGame(RequestedGame);
 					this.MyPlayer = new Player(player_id, request.getMyPlayer().getName());
-						
+					this.Game.suscribeToBombDetonation(this);	
+					
 					GameServer.getInstance().refreshGamesTable();
 					
 					//esto es lo que voy a enviarle al chambon		
@@ -430,6 +433,11 @@ public class ClientThread implements Runnable {
 
 	public void setPlayer(Player player) {
 		MyPlayer = player;
+	}
+
+	@Override
+	public void update(Observable arg0, Object arg1) {
+		System.out.println("[Player Id " + this.MyPlayer.getUID() +"] Acabo de recibir notificación de explosión de bomba!! perdió el jugador" + ((GamePlayer)arg1).getName() );
 	}
 	
 }

@@ -1,52 +1,47 @@
 package core;
 
+import java.util.Observable;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Bomb {
+public class Bomb extends Observable{
 
 	private Long DetonationMilliseconds;
-	private Long LastActivationMilliseconds;
-	private Long CurrentMilliseconds;
+	private Long RemainingMilliseconds;
+	
+	private Long TimeOnActivation;
+	
 	private GamePlayer LastPlayer;
 	private GamePlayer CurrentPlayer;
 	private Boolean IsActive;
 	private Timer Timer;
-	private TimerTask DetonationTask;
 	
 	public Bomb(Long DetonationMilliseconds, TimerTask DetonationTask)
 	{
 		this.setDetonationMilliseconds(DetonationMilliseconds);
-		this.setCurrentMilliseconds(0L);
-		this.setDetonationTask(DetonationTask);
+		this.setRemainingMilliseconds(DetonationMilliseconds);
 	}
 	
 	public void activate()
-	{		
+	{	
+		this.setIsActive(true);
+		
 		this.setTimer(new Timer());
 		
 		this.getTimer().schedule(this.getDetonationTask(), this.getRemainingMilliseconds());
 		
-		this.setLastActivationMilliseconds(System.currentTimeMillis());
+		this.TimeOnActivation = System.currentTimeMillis();
 	}
 	
 	public void deactivate()
 	{
+		this.setIsActive(false);
+		
 		this.getTimer().cancel();
 		
-		this.setCurrentMilliseconds(System.currentTimeMillis() - this.getLastActivationMilliseconds());
+		this.RemainingMilliseconds = this.getRemainingMilliseconds() - (System.currentTimeMillis() - this.TimeOnActivation);
 	}
 	
-	public void detonate()
-	{
-		// TODO: ¿Qué hacemos cuando detonamos?
-	}
-	
-	public Long getRemainingMilliseconds()
-	{
-		return this.getDetonationMilliseconds() - this.getCurrentMilliseconds();
-	}
-
 	public Long getDetonationMilliseconds() {
 		return DetonationMilliseconds;
 	}
@@ -55,13 +50,6 @@ public class Bomb {
 		DetonationMilliseconds = detonationMilliseconds;
 	}
 
-	public Long getCurrentMilliseconds() {
-		return CurrentMilliseconds;
-	}
-
-	public void setCurrentMilliseconds(Long currentMilliseconds) {
-		CurrentMilliseconds = currentMilliseconds;
-	}
 
 	public GamePlayer getLastPlayer() {
 		return LastPlayer;
@@ -81,17 +69,15 @@ public class Bomb {
 	
 	public Boolean isDetonated()
 	{
-		//return ((new Date()).getTime() >= this.getDetonationMilliseconds());
-		// TODO
-		return false;
+		return (this.getRemainingMilliseconds() <= 0);
 	}
 
-	public Long getLastActivationMilliseconds() {
-		return LastActivationMilliseconds;
+	public Long getRemainingMilliseconds() {
+		return RemainingMilliseconds;
 	}
 
-	public void setLastActivationMilliseconds(Long lastActivationMilliseconds) {
-		LastActivationMilliseconds = lastActivationMilliseconds;
+	public void setRemainingMilliseconds(Long RemainingMilliseconds) {
+		this.RemainingMilliseconds = RemainingMilliseconds;
 	}
 
 	public Boolean getIsActive() {
@@ -111,10 +97,11 @@ public class Bomb {
 	}
 
 	public TimerTask getDetonationTask() {
-		return DetonationTask;
+		return new TimerTask(){
+			public void run(){
+				notifyObservers(CurrentPlayer);
+			}
+		};
 	}
 
-	public void setDetonationTask(TimerTask detonationTask) {
-		DetonationTask = detonationTask;
-	}
 }

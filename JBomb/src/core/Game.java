@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.TimerTask;
 import java.util.Vector;
 
+import concurrency.ClientThread;
+
 import roundDurations.AbstractRoundDuration;
 
 import edu.uci.ics.jung.graph.Graph;
@@ -183,6 +185,12 @@ public class Game {
 		this.getLinkageStrategy().link(this.getGamePlayers());
 	}
 
+	public synchronized void suscribeToBombDetonation(ClientThread ct)
+	{
+		//Suscribo el clientThread para que observer la bomba para cuando explote
+		//this.getBomb().addObserver(ct);
+	}
+	
 	public Boolean isValid()
 	{
 		return true;
