@@ -401,9 +401,9 @@ public class ClientThread implements Runnable, Observer {
 			
 			outToClient.writeObject(jbco);
 			
-			System.out.println("[Player Id " + this.MyPlayer.getUID() +"] Envie el response al cliente.");
+			System.out.println("Envie response al cliente");
 		}catch(Exception e){
-			System.out.println("[Player Id " + this.MyPlayer.getUID() +"]Fallo el envio del response");
+			System.out.println("Fallo el envio del response");
 		}
 	}
 	

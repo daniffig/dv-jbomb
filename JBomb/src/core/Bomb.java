@@ -6,8 +6,8 @@ import java.util.TimerTask;
 
 public class Bomb extends Observable{
 
-	private Long DetonationMilliseconds;
-	private Long RemainingMilliseconds;
+	private Long DetonationMilliseconds = 0L;
+	private Long RemainingMilliseconds = 0L;
 	
 	private Long TimeOnActivation;
 	
@@ -16,10 +16,19 @@ public class Bomb extends Observable{
 	private Boolean IsActive;
 	private Timer Timer;
 	
+	public Bomb()
+	{
+		super();
+	}
+	
 	public Bomb(Long DetonationMilliseconds, TimerTask DetonationTask)
 	{
 		this.setDetonationMilliseconds(DetonationMilliseconds);
-		this.setRemainingMilliseconds(DetonationMilliseconds);
+	}
+	
+	public Bomb(Long DetonationMilliseconds)
+	{
+		this.setDetonationMilliseconds(DetonationMilliseconds);
 	}
 	
 	public void activate()
@@ -31,6 +40,8 @@ public class Bomb extends Observable{
 		this.getTimer().schedule(this.getDetonationTask(), this.getRemainingMilliseconds());
 		
 		this.TimeOnActivation = System.currentTimeMillis();
+		
+		System.out.println("Active la bomba con tiempo restante " + this.getRemainingMilliseconds() + "ml");
 	}
 	
 	public void deactivate()
@@ -48,6 +59,10 @@ public class Bomb extends Observable{
 
 	public void setDetonationMilliseconds(Long detonationMilliseconds) {
 		DetonationMilliseconds = detonationMilliseconds;
+		
+		this.setRemainingMilliseconds(DetonationMilliseconds);
+		
+		System.out.println("Setee la bomba con un tiempo de detonación de " + this.getDetonationMilliseconds() + "ms");
 	}
 
 

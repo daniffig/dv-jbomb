@@ -28,7 +28,7 @@ public class Game {
 	private Integer MaxRounds = 0;
 	
 	private AbstractRoundDuration RoundDuration;
-	private Bomb Bomb = new Bomb(60000L, new TimerTask(){ public void run(){}});
+	private Bomb Bomb = new Bomb();
 	
 	private Quiz Quiz;
 	
@@ -115,6 +115,8 @@ public class Game {
 
 	public void setRoundDuration(AbstractRoundDuration roundDuration) {
 		RoundDuration = roundDuration;
+		
+		this.getBomb().setDetonationMilliseconds((long)(this.RoundDuration.getDuration()*1000));
 	}
 
 	public synchronized Bomb getBomb() {
