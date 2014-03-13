@@ -2,9 +2,10 @@ package core;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.TimerTask;
 import java.util.Vector;
+
+import roundDurations.AbstractRoundDuration;
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
@@ -15,15 +16,21 @@ import linkageStrategies.AbstractLinkageStrategy;
 public class Game {
 
 	private Integer UID;
+	
 	private String Name;
-	private List<GamePlayer> GamePlayers = new ArrayList<GamePlayer>();
-	private Integer MaxRounds = 0;
-	private Integer CurrentRound;
+	
 	private Integer MaxGamePlayersAllowed = 0;
-	private Integer RoundDuration;
+	private List<GamePlayer> GamePlayers = new ArrayList<GamePlayer>();
+	
+	private Integer CurrentRound;
+	private Integer MaxRounds = 0;
+	
+	private AbstractRoundDuration RoundDuration;
 	private Bomb Bomb = new Bomb(60000L, new TimerTask(){ public void run(){}});
-	private AbstractLinkageStrategy LinkageStrategy;
+	
 	private Quiz Quiz;
+	
+	private AbstractLinkageStrategy LinkageStrategy;
 	private AbstractGameMode Mode;
 	private AbstractGameState State;
 	
@@ -72,6 +79,7 @@ public class Game {
 	public synchronized GamePlayer getGamePlayerById(Integer Id){
 		for(GamePlayer gp: this.GamePlayers)
 			if(gp.getId().equals(Id)) return gp;
+		
 		return null;
 	}
 	
@@ -99,11 +107,11 @@ public class Game {
 		MaxGamePlayersAllowed = maxGamePlayersAllowed;
 	}
 
-	public Integer getRoundDuration() {
+	public AbstractRoundDuration getRoundDuration() {
 		return RoundDuration;
 	}
 
-	public void setRoundDuration(Integer roundDuration) {
+	public void setRoundDuration(AbstractRoundDuration roundDuration) {
 		RoundDuration = roundDuration;
 	}
 
@@ -124,7 +132,7 @@ public class Game {
 	}
 
 	public synchronized Integer addGamePlayer(GamePlayer p) {
-		if (this.canAddPlayer()) {
+		if (this.canAddPlayer()){
 			Integer new_player_id = this.getGamePlayers().size()+1;
 			p.setId(new_player_id);
 			this.getGamePlayers().add(p);
@@ -151,16 +159,15 @@ public class Game {
 		return this.getGamePlayers().size();
 	}
 	
-	public Boolean canSendBomb(GamePlayer sourceGamePlayer,
-			GamePlayer destinationGamePlayer) {
-		// TODO
-
+	public Boolean canSendBomb(GamePlayer sourceGamePlayer,	GamePlayer destinationGamePlayer)
+	{
 		return true;
 	}
 
-	public synchronized void sendBomb(GamePlayer sourceGamePlayer,
-			GamePlayer destinationGamePlayer) {
-		if (this.canSendBomb(sourceGamePlayer, destinationGamePlayer)) {
+	public synchronized void sendBomb(GamePlayer sourceGamePlayer,GamePlayer destinationGamePlayer)
+	{
+		if (this.canSendBomb(sourceGamePlayer, destinationGamePlayer))
+		{
 			Bomb.setLastPlayer(sourceGamePlayer);
 			Bomb.setCurrentPlayer(destinationGamePlayer);
 		}
@@ -176,45 +183,6 @@ public class Game {
 		this.getLinkageStrategy().link(this.getGamePlayers());
 	}
 
-	public boolean play() {
-		//Simulo Pregunta-Respuesta correcto/incorrecta de forma aleatoria
-		Random	rnd = new Random();
-		Boolean respuesta_correcta = rnd.nextBoolean();
-		
-		if(respuesta_correcta)
-		{
-			if (!this.getBomb().isDetonated())
-			{
-				//Si respondiï¿½ bien le paso la bomba a un vecino random
-				this.sendBomb(this.Bomb.getCurrentPlayer(), this.Bomb.getCurrentPlayer().getRandomNeighbour());				
-			}
-		}
-		
-		return respuesta_correcta;
-	}
-	
-	public Graph<String, String> getGraph()
-	{
-		Graph<String, String> g = new SparseMultigraph<String, String>();
-		
-		for(GamePlayer gp: this.GamePlayers)
-		{
-			g.addVertex(gp.getName());
-		}
-		
-		for(GamePlayer gp: this.GamePlayers)
-		{
-			for(GamePlayer nb: gp.getNeighbours())
-			{
-				if(!g.containsEdge(nb.getName()+gp.getName()))
-				{
-					g.addEdge(gp.getName()+nb.getName() , gp.getName(), nb.getName());
-				}
-			}
-		}
-		return g;
-	}
-	
 	public Boolean isValid()
 	{
 		return true;
@@ -264,5 +232,29 @@ public class Game {
 
 	public void setState(AbstractGameState state) {
 		State = state;
+	}
+	
+	
+	//Utilizado por la librería grafica Jung
+	public Graph<String, String> getGraph()
+	{
+		Graph<String, String> g = new SparseMultigraph<String, String>();
+		
+		for(GamePlayer gp: this.GamePlayers)
+		{
+			g.addVertex(gp.getName());
+		}
+		
+		for(GamePlayer gp: this.GamePlayers)
+		{
+			for(GamePlayer nb: gp.getNeighbours())
+			{
+				if(!g.containsEdge(nb.getName()+gp.getName()))
+				{
+					g.addEdge(gp.getName()+nb.getName() , gp.getName(), nb.getName());
+				}
+			}
+		}
+		return g;
 	}
 }

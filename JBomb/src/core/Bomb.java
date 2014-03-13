@@ -14,19 +14,6 @@ public class Bomb {
 	private Timer Timer;
 	private TimerTask DetonationTask;
 	
-	public static void main(String[] args)
-	{
-		Bomb B = new Bomb(2000L, new TimerTask(){
-			
-			public void run()
-			{
-				System.out.println("KABOOOOOOOOOOOOOOOOOOOM!!!");
-			}
-		});
-		
-		B.activate();
-	}
-	
 	public Bomb(Long DetonationMilliseconds, TimerTask DetonationTask)
 	{
 		this.setDetonationMilliseconds(DetonationMilliseconds);
