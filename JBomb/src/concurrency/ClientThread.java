@@ -357,11 +357,7 @@ public class ClientThread implements Runnable, Observer {
 		g.setMode(GameServer.getInstance().getAvailableGameModes().get(gs.getModeId()));
 		g.setMaxGamePlayersAllowed(gs.getMaxPlayers());
 		g.setMaxRounds(gs.getMaxRounds());
-		
-		/* 
-		 * FIXME
-		 */
-		g.setRoundDuration(30);		
+		g.setRoundDuration(GameServer.getInstance().getAvailableRoundDurations().get(gs.getRoundDurationId()));		
 		
 		GameServer.getInstance().addGame(g);
 		
@@ -437,7 +433,7 @@ public class ClientThread implements Runnable, Observer {
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		System.out.println("[Player Id " + this.MyPlayer.getUID() +"] Acabo de recibir notificación de explosión de bomba!! perdió el jugador" + ((GamePlayer)arg1).getName() );
+		System.out.println("[Player Id " + this.MyPlayer.getUID() +"] Acabo de recibir notificaciï¿½n de explosiï¿½n de bomba!! perdiï¿½ el jugador" + ((GamePlayer)arg1).getName() );
 	}
 	
 }

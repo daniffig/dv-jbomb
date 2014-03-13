@@ -66,7 +66,7 @@ public class GamePlayView {
 			public void actionPerformed(ActionEvent arg0) {
 				//TODO
 				String msj = "El Jugador " + Game.getBomb().getCurrentPlayer().getName() + " respondi� ";
-				boolean resultado = Game.play();
+				boolean resultado = true; //Game.play();
 				if(resultado)
 				{
 					msj += " mal.";
