@@ -158,7 +158,17 @@ public class GameServer implements Runnable{
 			if(g.getUID().equals(Id))
 				return g;
 		return null;
-	}	
+	}
+	
+	public synchronized Vector<Game> getAvailableGames()
+	{
+		Vector<Game> games = new Vector<Game>();
+		
+		for(Game g : this.Games)
+			if(g.canAddPlayer()) games.add(g);
+		
+		return games;
+	}
 	
 	public synchronized Vector<JBombEventHandler> getEventHandlers()
 	{

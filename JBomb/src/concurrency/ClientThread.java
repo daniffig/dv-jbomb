@@ -287,7 +287,7 @@ public class ClientThread implements Runnable, Observer {
 	public void sendGameListInformation(){
 		JBombComunicationObject response = new JBombComunicationObject(JBombRequestResponse.GAME_LIST_RESPONSE);
 		
-		for(Game g :GameServer.getInstance().getGames())
+		for(Game g :GameServer.getInstance().getAvailableGames())
 		{
 			GameInformation gi = new GameInformation();
 			gi.setUID(g.getUID());
