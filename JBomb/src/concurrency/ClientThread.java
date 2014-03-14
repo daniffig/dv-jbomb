@@ -104,9 +104,11 @@ public class ClientThread implements Runnable, Observer {
 			response.setCorrectAnswer(true);
 			this.sendResponseToClient(response);
 			
-			//armo notificacion y despiero a todos
+			//armo notificacion y despierto a todos
 			this.EventHandler.setEvent(GameEvent.BOMB_OWNER_ANSWER_RIGHT);
 			this.EventHandler.setEventMessage(this.MyPlayer.getName() + " respondi� correctamente!");
+			
+			this.sendBombOwnerNotification();
 		}
 		else{
 			System.out.println("[Player ID " + this.MyPlayer.getUID() + "]Mando respuesta mal mi respuesta= " + this.CurrentQuestionAnswer + " y el tiene " + request.getSelectedQuizAnswer());
