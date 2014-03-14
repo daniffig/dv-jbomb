@@ -107,7 +107,7 @@ public class ClientThread implements Runnable, Observer {
 			//armo notificacion y despierto a todos
 			this.EventHandler.setEvent(GameEvent.BOMB_OWNER_ANSWER_RIGHT);
 			this.EventHandler.setEventMessage(this.MyPlayer.getName() + " respondi� correctamente!");
-			
+			this.EventHandler.wakeUpAll();
 			this.sendBombOwnerNotification();
 		}
 		else{
@@ -118,10 +118,9 @@ public class ClientThread implements Runnable, Observer {
 			this.sendResponseToClient(response);
 			
 			this.EventHandler.setEvent(GameEvent.BOMB_OWNER_ANSWER_WRONG);
-			this.EventHandler.setEventMessage(this.MyPlayer.getName() + " respondi� incorrectamente!");	
+			this.EventHandler.setEventMessage(this.MyPlayer.getName() + " respondi� incorrectamente!");
+			this.EventHandler.wakeUpAll();
 		}
-		
-		this.EventHandler.wakeUpAll();
 	}
 	
 	public void sendQuizQuestion(){
