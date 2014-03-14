@@ -146,10 +146,21 @@ public class JBombServerMainView {
 		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Iniciar");
 		buttonGroup_1.add(mntmNewMenuItem_3);
 		mnArchivo.add(mntmNewMenuItem_3);
-
-		mnArchivo.addSeparator();
 		
-		JMenuItem mntmNewMenuItem_4 = new JMenuItem("Cerrar");
+		JMenuItem mntmNewMenuItem_4 = new JMenuItem("Ver estado");
+		mntmNewMenuItem_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JBombServerMainView JBSMV = JBombServerMainView.this;
+				
+				if (GamesTable.getSelectedRow() >= 0)
+				{					
+				//	GamePlayView GameplayWindow = new GamePlayView(JBSMV, JBSMV.GameVector.get(JBSMV.GamesTable.getSelectedRow()));
+					
+				//	GameplayWindow.setVisible(true);					
+				}
+			}
+		});
+		buttonGroup_1.add(mntmNewMenuItem_4);
 		mnArchivo.add(mntmNewMenuItem_4);
 		
 		JMenu mnNewMenu = new JMenu("Cuestionario");

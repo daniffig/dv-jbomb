@@ -179,11 +179,12 @@ public class Game {
 	
 	public void start()
 	{
-		//TODO
-		//this.getBomb().setCurrentMilliseconds((new Date()).getTime());
-		//this.getBomb().setDetonationMilliseconds((new Date()).getTime() + this.getRoundDuration() * 1000);
 		this.getBomb().setLastPlayer(null);
 		this.getBomb().setCurrentPlayer(this.getGamePlayers().get((int)(Math.random() * this.getGamePlayers().size())));
+	}
+	
+	public void configureAdjacentPlayersGraph()
+	{
 		this.getLinkageStrategy().link(this.getGamePlayers());
 	}
 

@@ -73,6 +73,7 @@ public class JBombEventHandler {
 		else
 		{
 			this.current_barrier_size = 0;
+			ct.configureAdjacentPlayersGraph();
 			this.setEvent(GameEvent.MAX_PLAYERS_REACHED);
 			this.notifyAll();
 		}

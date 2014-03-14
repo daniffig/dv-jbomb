@@ -218,8 +218,7 @@ public class ClientThread implements Runnable, Observer {
 		System.out.println("[Player Id " + this.MyPlayer.getUID() +"] voy a enviar informaci�n y adyacentes y toca al barrera de juego"  );
 		
 		response = new JBombComunicationObject(JBombRequestResponse.ADJACENT_PLAYERS);
-		
-		this.Game.getLinkageStrategy().link(this.Game.getGamePlayers());		
+			
 		for(GamePlayer gp: this.Game.getGamePlayerById(this.MyPlayer.getUID()).getNeighbours())
 			response.addPlayer(new Player(gp.getId(), gp.getName()));
 		
@@ -424,6 +423,11 @@ public class ClientThread implements Runnable, Observer {
 
 	public void startGame(){
 		this.Game.start();
+	}
+	
+	public void configureAdjacentPlayersGraph()
+	{
+		this.Game.configureAdjacentPlayersGraph();
 	}
 	
 	public Player getMyPlayer() {
