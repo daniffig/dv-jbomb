@@ -46,15 +46,17 @@ public class GamePlayView {
 		
 		Layout<String, String> layout = new CircleLayout(this.Grafo);
 		layout.setSize(new Dimension(300, 300));
+		
 		vv = new BasicVisualizationServer<String, String>(layout);
 		vv.setPreferredSize(new Dimension(350, 350)); 
 		vv.getRenderContext().setVertexLabelTransformer(new ToStringLabeller());
 		vv.getRenderer().setVertexRenderer(new MyRenderer(this.Game));
 
 		this.dialog.setBounds(100, 100, 500, 500);
+		
 		Container contentPane = this.dialog.getContentPane();
-
 		contentPane.setLayout(new BorderLayout());
+		
 		contentPanel.setLayout(new FlowLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -119,9 +121,9 @@ public class GamePlayView {
 			Point2D center = layout.transform(vertex);
 			Color color = null;
 			if (vertex.equals(this.Game.getBomb().getCurrentPlayer().getName())) {
-				color = new Color(0, 255, 0);
-			} else {
 				color = new Color(255, 0, 0);
+			} else {
+				color = new Color(0, 255, 0);
 			}
 
 			graphicsContext.setPaint(color);

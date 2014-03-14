@@ -154,9 +154,9 @@ public class JBombServerMainView {
 				
 				if (GamesTable.getSelectedRow() >= 0)
 				{					
-				//	GamePlayView GameplayWindow = new GamePlayView(JBSMV, JBSMV.GameVector.get(JBSMV.GamesTable.getSelectedRow()));
+					JBombGamePlayView GameplayWindow = new JBombGamePlayView(JBSMV, JBSMV.GameVector.get(JBSMV.GamesTable.getSelectedRow()));
 					
-				//	GameplayWindow.setVisible(true);					
+					GameplayWindow.setVisible(true);					
 				}
 			}
 		});

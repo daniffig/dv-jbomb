@@ -11,6 +11,7 @@ import roundDurations.AbstractRoundDuration;
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
+import edu.uci.ics.jung.graph.util.EdgeType;
 import gameModes.AbstractGameMode;
 import gameStates.*;
 import linkageStrategies.AbstractLinkageStrategy;
@@ -261,10 +262,7 @@ public class Game {
 		{
 			for(GamePlayer nb: gp.getNeighbours())
 			{
-				if(!g.containsEdge(nb.getName()+gp.getName()))
-				{
-					g.addEdge(gp.getName()+nb.getName() , gp.getName(), nb.getName());
-				}
+				g.addEdge(gp.getName()+nb.getName() , gp.getName(), nb.getName(), EdgeType.DIRECTED);
 			}
 		}
 		return g;

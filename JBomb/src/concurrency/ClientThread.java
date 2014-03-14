@@ -439,16 +439,20 @@ public class ClientThread implements Runnable, Observer {
 	}
 
 	@Override
-	public void update(Observable arg0, Object arg1) {
-		System.out.println("[Player Id " + this.MyPlayer.getUID() +"] Acabo de recibir notificacion de explosion de bomba!");
+	public void update(Observable arg0, Object event) 
+	{
+		GameEvent e = (GameEvent) event;
+		if(e.equals(GameEvent.BOMB_EXPLODED)){
+			System.out.println("[Player Id " + this.MyPlayer.getUID() +"] Acabo de recibir notificacion de explosion de bomba!");
 		
-		GamePlayer BombOwner = this.Game.getBomb().getCurrentPlayer();
+			GamePlayer BombOwner = this.Game.getBomb().getCurrentPlayer();
 		
-		this.response = new JBombComunicationObject(JBombRequestResponse.BOMB_DETONATED_RESPONSE);
-		this.response.setGamePlayInformation(this.getGamePlayInformation());
-		this.response.setLoser(new Player(BombOwner.getId(), BombOwner.getName()));
+			this.response = new JBombComunicationObject(JBombRequestResponse.BOMB_DETONATED_RESPONSE);
+			this.response.setGamePlayInformation(this.getGamePlayInformation());
+			this.response.setLoser(new Player(BombOwner.getId(), BombOwner.getName()));
 		
-		this.sendResponseToClient(this.response);
+			this.sendResponseToClient(this.response);
+		}
 	}
 	
 }

@@ -4,6 +4,8 @@ import java.util.Observable;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import reference.GameEvent;
+
 public class Bomb extends Observable{
 
 	private Long DetonationMilliseconds = 0L;
@@ -80,6 +82,9 @@ public class Bomb extends Observable{
 
 	public void setCurrentPlayer(GamePlayer currentPlayer) {
 		CurrentPlayer = currentPlayer;
+		
+		setChanged();
+		notifyObservers(GameEvent.BOMB_OWNER_CHANGED);
 	}
 	
 	public Boolean isDetonated()
@@ -116,7 +121,7 @@ public class Bomb extends Observable{
 			public void run(){
 				System.out.println("Estoy aca porque exploto la bomba! le voy a avisar a mis " + countObservers() + " observers.");
 				setChanged();
-				notifyObservers();
+				notifyObservers(GameEvent.BOMB_EXPLODED);
 			}
 		};
 	}
