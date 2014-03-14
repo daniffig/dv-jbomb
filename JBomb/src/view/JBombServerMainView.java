@@ -219,7 +219,7 @@ public class JBombServerMainView {
 	{
 		this.QuizVector.add(Quiz);
 		
-		GameServer.getInstance().getAvailableQuizzes().put(GameServer.getInstance().getAvailableGameModes().size(), Quiz);
+		GameServer.getInstance().getAvailableQuizzes().put(GameServer.getInstance().getAvailableQuizzes().size(), Quiz);
 	}
 	
 	public Vector<Quiz> getQuizVector()
