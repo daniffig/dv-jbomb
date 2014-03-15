@@ -144,6 +144,11 @@ public class QuizConfigurationFormView extends JFrame {
 			ObjectVector.add(Quiz.toVector());
 		}
 		
+		for (Quiz Quiz : this.parentWindow.getQuizVector())
+		{
+			ObjectVector.add(Quiz.toVector());
+		}
+		
 		JPanel panel = new JPanel();
 		contentPane.add(panel, BorderLayout.CENTER);
 		panel.setLayout(null);
