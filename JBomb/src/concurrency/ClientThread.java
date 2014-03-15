@@ -355,8 +355,6 @@ public class ClientThread implements Runnable, Observer {
 		response.setGameSettingsInformation(gsi);
 		
 		this.sendResponseToClient(response);
-		
-		System.out.println("Envié los parámetros de juego a un cliente.");
 	}
 	
 	public void createGame()
