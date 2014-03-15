@@ -347,6 +347,8 @@ public class ClientThread implements Runnable, Observer {
 		
 		gsi.setRoundDurations(new HashMap<Integer, String>());
 		
+		// Comentario!!!
+		
 		for (Integer i : GameServer.getInstance().getAvailableRoundDurations().keySet())
 		{
 			gsi.getRoundDurations().put(i, GameServer.getInstance().getAvailableRoundDurations().get(i).toString());
