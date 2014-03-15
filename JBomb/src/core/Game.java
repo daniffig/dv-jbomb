@@ -27,7 +27,7 @@ public class Game {
 	
 	private GamePoints GamePoints = new GamePoints();
 	
-	private Integer CurrentRound;
+	private Integer CurrentRound = 0;
 	private Integer MaxRounds = 0;
 	
 	private AbstractRoundDuration RoundDuration;
@@ -182,6 +182,10 @@ public class Game {
 	
 	public void start()
 	{
+		if(this.CurrentRound == 0) this.getGamePoints().initializeGeneralPoints(this.GamePlayers);
+		
+		this.CurrentRound++;
+		
 		this.getGamePoints().initializeNewRoundPoints(this.GamePlayers);
 		this.getBomb().setLastPlayer(null);
 		this.getBomb().setCurrentPlayer(this.getGamePlayers().get((int)(Math.random() * this.getGamePlayers().size())));
