@@ -31,6 +31,17 @@ public class GameServer implements Runnable{
 	private Map<Integer, Quiz> availableQuizzes = new HashMap<Integer, Quiz>();
 	private Map<Integer, AbstractGameMode> availableGameModes  = new HashMap<Integer, AbstractGameMode>();
 	private Map<Integer, AbstractRoundDuration> availableRoundDurations = new HashMap<Integer, AbstractRoundDuration>();
+	
+	public static GameServer buildInstance(JBombServerMainView JBombServerMainView)
+	{
+		GameServer gs = getInstance();
+		
+		gs.JBombServerMainView = JBombServerMainView;
+		
+		instance = gs;
+		
+		return instance;
+	}
 		
 	public static GameServer getInstance()
 	{
@@ -134,8 +145,12 @@ public class GameServer implements Runnable{
 		g.setUID(this.IncrementalGameId);
 		this.IncrementalGameId++;
 		
-		this.addEventHandler(new JBombEventHandler(g.getMaxGamePlayersAllowed()));
 		this.Games.add(g);
+		
+		this.addEventHandler(new JBombEventHandler(g.getMaxGamePlayersAllowed()));
+		
+		this.JBombServerMainView.refreshGameTable();
+		//this.JBombServerMainView.addGame(g);
 	}
 	
 	public synchronized void removeGame(Game g)
@@ -217,7 +232,7 @@ public class GameServer implements Runnable{
 	
 	public void refreshGamesTable()
 	{
-		
+		this.JBombServerMainView.refreshGameTable();
 	}
 
 	public Map<Integer, AbstractLinkageStrategy> getAvailableLinkageStrategies() {

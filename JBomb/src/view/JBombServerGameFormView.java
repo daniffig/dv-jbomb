@@ -191,8 +191,10 @@ public class JBombServerGameFormView extends JFrame {
 					JBSGFV.Game.setMaxGamePlayersAllowed((Integer)JBSGFV.GameMaxPlayersComboBox.getSelectedItem());
 					JBSGFV.Game.setMaxRounds((Integer)JBSGFV.GameRoundsComboBox.getSelectedItem());					
 					JBSGFV.Game.setRoundDuration((AbstractRoundDuration)JBSGFV.GameRoundDurationComboBox.getSelectedItem());
+					
+					GameServer.getInstance().addGame(JBSGFV.Game);
 										
-					JBSGFV.parentWindow.addGame(JBombServerGameFormView.this.Game);		
+					//JBSGFV.parentWindow.addGame(JBombServerGameFormView.this.Game);		
 					
 					JBSGFV.dispose();			
 				}

@@ -225,6 +225,8 @@ public class ClientThread implements Runnable, Observer {
 			
 		for(GamePlayer gp: this.Game.getGamePlayerById(this.MyPlayer.getUID()).getNeighbours())
 			response.addPlayer(new Player(gp.getId(), gp.getName()));
+				
+		GameServer.getInstance().refreshGamesTable();
 		
 		this.sendResponseToClient(response);
 		this.EventHandler.startGameBarrier(this);
@@ -246,6 +248,8 @@ public class ClientThread implements Runnable, Observer {
 		
 		try{			
 			Game RequestedGame = GameServer.getInstance().getGameById(request.getRequestedGameId());
+			
+			System.out.println("Me pidio el juego con ID: " + request.getRequestedGameId());
 
 			if(RequestedGame.equals(null)){	
 				
@@ -267,12 +271,14 @@ public class ClientThread implements Runnable, Observer {
 					this.MyPlayer = new Player(player_id, request.getMyPlayer().getName());
 					this.Game.suscribeToBombDetonation(this);	
 					
-					GameServer.getInstance().refreshGamesTable();
-					
 					//esto es lo que voy a enviarle al chambon		
 					jbco.setType(JBombRequestResponse.GAMEPLAY_INFORMATION_RESPONSE);
 					jbco.setGamePlayInformation(this.getGamePlayInformation());
 					jbco.setMyPlayer(this.MyPlayer);
+					
+					System.out.println("Hasta acá está todo bien.");
+					
+					GameServer.getInstance().refreshGamesTable();
 					
 					this.sendResponseToClient(jbco);
 					return true;
@@ -290,6 +296,8 @@ public class ClientThread implements Runnable, Observer {
 	
 	public void sendGameListInformation(){
 		JBombComunicationObject response = new JBombComunicationObject(JBombRequestResponse.GAME_LIST_RESPONSE);
+		
+		System.out.println("Tengo " + GameServer.getInstance().getAvailableGames().size() + " juegos disponibles" );
 		
 		for(Game g :GameServer.getInstance().getAvailableGames())
 		{

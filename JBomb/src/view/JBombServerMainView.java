@@ -81,7 +81,7 @@ public class JBombServerMainView {
 		
 		Vector<Vector<Object>> ObjectVector = new Vector<Vector<Object>>();
 		
-		for (Game g : GameVector)
+		for (Game g : GameServer.getInstance().getGames())
 		{			
 			ObjectVector.add(g.toVector());
 		}
@@ -192,27 +192,83 @@ public class JBombServerMainView {
 		JMenu mnNewMenu_2 = new JMenu("Ayuda");
 		menuBar.add(mnNewMenu_2);
 
-		Thread t = new Thread(GameServer.getInstance());
+		Thread t = new Thread(GameServer.buildInstance(this));
 		
 		t.start();
 	}
 	
-	public void addGame(Game Game)
-	{
-		GameServer.getInstance().addGame(Game);
+	/*
+	
+	public void addGame(Game g)
+	{		
+		this.GameVector = GameServer.getInstance().getGames();
 		
-		if (!this.GameVector.contains(Game))
+		/*
+		if (!this.GameVector.contains(g))
 		{
-			this.GameVector.add(Game);
-			((DefaultTableModel)this.GamesTable.getModel()).addRow(Game.toVector());			
+			this.GameVector.add(g);
+			((DefaultTableModel)this.GamesTable.getModel()).addRow(g.toVector());			
 		}
 		else
 		{
+			System.out.println("Ya lo tengo!!!!");
 			// TODO: Agregar lógica para poder modificar un juego;
 		}
 		
-		this.refresh();
-		//((DefaultTableModel)this.GamesTable.getModel()).fireTableDataChanged();
+		
+		this.refreshGameTable();
+	}
+	
+	*/
+	
+	public void refreshGameTable()
+	{
+		
+		Vector<String> GameFields = new Vector<String>();
+		
+		GameFields.add("Nombre");
+		GameFields.add("Modo");
+		GameFields.add("Estado");
+		GameFields.add("Jugadores");
+		
+		Vector<Vector<Object>> ObjectVector = new Vector<Vector<Object>>();
+		
+		for (Game g : GameServer.getInstance().getGames())
+		{			
+			ObjectVector.add(g.toVector());
+		}
+		
+		System.out.printf("Mi vector tiene %s juegos.\n", ObjectVector.size());
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBounds(12, 12, 570, 320);
+		frmJbombV.getContentPane().add(scrollPane);
+		
+		GamesTable.setModel(new DefaultTableModel(ObjectVector, GameFields){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		        //all cells false
+		        return false;
+		    }
+		});
+		
+		/*
+		
+		GamesTable = new JTable(new DefaultTableModel(ObjectVector, GameFields){
+			private static final long serialVersionUID = 1L;
+
+			@Override
+		    public boolean isCellEditable(int row, int column) {
+		        //all cells false
+		        return false;
+		    }
+		});
+		
+		*/
+		
+		((DefaultTableModel)this.GamesTable.getModel()).fireTableDataChanged();		
 	}
 	
 	public void addQuiz(Quiz Quiz)
@@ -227,22 +283,6 @@ public class JBombServerMainView {
 		return this.QuizVector;
 	}
 	
-	public void refresh()
-	{
-		((DefaultTableModel)this.GamesTable.getModel()).fireTableDataChanged();
-	}
-	
-	/*
-	private class SwingAction extends AbstractAction {
-		private static final long serialVersionUID = 1L;
-		public SwingAction() {
-			putValue(NAME, "SwingAction");
-			putValue(SHORT_DESCRIPTION, "Some short description");
-		}
-		public void actionPerformed(ActionEvent e) {
-		}
-	}
-	*/
 	public String getInetIPAddress() {
 		return InetIPAddress;
 	}
