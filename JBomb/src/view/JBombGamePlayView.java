@@ -82,8 +82,11 @@ public class JBombGamePlayView extends JFrame implements Observer {
 				
 		Vector<String> ScoreTableFields = new Vector<String>();
 		ScoreTableFields.add("Jugador");
-		ScoreTableFields.add("Puntaje en la ronda actual");
+		ScoreTableFields.add("Puntaje Ronda actual");
 		ScoreTableFields.add("Puntaje General");
+		
+		JScrollPane scrollPane = new JScrollPane();
+		this.getContentPane().add(scrollPane);
 		
 		ScoreTable = new JTable(new DefaultTableModel(this.Game.getGamePoints().getVectorScoreBoard(), ScoreTableFields){
 			private static final long serialVersionUID = 1L;
@@ -94,9 +97,11 @@ public class JBombGamePlayView extends JFrame implements Observer {
 		    }
 		});
 		
+		scrollPane.setViewportView(ScoreTable);
+		
 		this.getContentPane().add(new JLabel("<html><i>El vertice de color <font color='red'>rojo</font> indica el poseedor de la bomba.</i></html>"));
 		this.getContentPane().add(contentPanel);
-		this.getContentPane().add(ScoreTable);
+		this.getContentPane().add(scrollPane);
 		
 		this.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
