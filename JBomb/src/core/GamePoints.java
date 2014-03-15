@@ -6,10 +6,28 @@ import java.util.Vector;
 
 public class GamePoints {
 
-	Vector<HashMap<Integer, Integer>> RoundPoints = new Vector<HashMap<Integer, Integer>>();
+	private Vector<HashMap<Integer, Integer>> RoundPoints = new Vector<HashMap<Integer, Integer>>();
 	
-	HashMap<Integer, Integer> GeneralPoints = new HashMap<Integer, Integer>();
+	private HashMap<Integer, Integer> GeneralPoints = new HashMap<Integer, Integer>();
 	
+	
+	
+	public Vector<HashMap<Integer, Integer>> getRoundPoints() {
+		return RoundPoints;
+	}
+
+	public void setRoundPoints(Vector<HashMap<Integer, Integer>> roundPoints) {
+		RoundPoints = roundPoints;
+	}
+
+	public HashMap<Integer, Integer> getGeneralPoints() {
+		return GeneralPoints;
+	}
+
+	public void setGeneralPoints(HashMap<Integer, Integer> generalPoints) {
+		GeneralPoints = generalPoints;
+	}
+
 	public void initializeNewRoundPoints(List<GamePlayer> GamePlayers)
 	{
 		HashMap<Integer, Integer> statPoints = new HashMap<Integer, Integer>();
@@ -50,5 +68,10 @@ public class GamePoints {
 	public Integer getGeneralPointsOfPlayer(Integer PlayerId)
 	{
 		return this.GeneralPoints.get(PlayerId);
+	}
+	
+	public HashMap<Integer, Integer> getCurrenRoundPoints()
+	{
+		return this.RoundPoints.lastElement();
 	}
 }
