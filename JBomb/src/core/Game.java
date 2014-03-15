@@ -25,6 +25,8 @@ public class Game {
 	private Integer MaxGamePlayersAllowed = 0;
 	private List<GamePlayer> GamePlayers = new ArrayList<GamePlayer>();
 	
+	private GamePoints GamePoints = new GamePoints();
+	
 	private Integer CurrentRound;
 	private Integer MaxRounds = 0;
 	
@@ -180,6 +182,7 @@ public class Game {
 	
 	public void start()
 	{
+		this.getGamePoints().initializeNewRoundPoints(this.GamePlayers);
 		this.getBomb().setLastPlayer(null);
 		this.getBomb().setCurrentPlayer(this.getGamePlayers().get((int)(Math.random() * this.getGamePlayers().size())));
 	}
@@ -247,7 +250,14 @@ public class Game {
 		State = state;
 	}
 	
-	
+	public GamePoints getGamePoints() {
+		return GamePoints;
+	}
+
+	public void setGamePoints(GamePoints gamePoints) {
+		GamePoints = gamePoints;
+	}
+
 	//Utilizado por la librería grafica Jung
 	public Graph<String, String> getGraph()
 	{

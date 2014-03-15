@@ -96,6 +96,7 @@ public class ClientThread implements Runnable, Observer {
 		if(request.getSelectedQuizAnswer().equals(this.CurrentQuestionAnswer)){
 			System.out.println("[Player ID " + this.MyPlayer.getUID() + "]Mando respuesta correcta targetPlayer " + this.bombTargetPlayer.getName() + "[" + this.bombTargetPlayer.getUID() +"]");
 			
+			this.Game.getGamePoints().scoreCorrectAnswer(this.MyPlayer.getUID());
 			this.Game.sendBomb(this.Game.getGamePlayerById(this.MyPlayer.getUID()), this.Game.getGamePlayerById(this.bombTargetPlayer.getUID()));
 			
 			//mando pregunta
@@ -112,6 +113,8 @@ public class ClientThread implements Runnable, Observer {
 		}
 		else{
 			System.out.println("[Player ID " + this.MyPlayer.getUID() + "]Mando respuesta mal mi respuesta= " + this.CurrentQuestionAnswer + " y el tiene " + request.getSelectedQuizAnswer());
+			this.Game.getGamePoints().scoreWrongAnswer(this.MyPlayer.getUID());
+			
 			response = new JBombComunicationObject(JBombRequestResponse.QUIZ_ANSWER_RESPONSE);
 			response.setFlash("Respuesta incorrecta! :C");
 			response.setCorrectAnswer(false);
@@ -445,8 +448,10 @@ public class ClientThread implements Runnable, Observer {
 		GameEvent e = (GameEvent) event;
 		if(e.equals(GameEvent.BOMB_EXPLODED)){
 			System.out.println("[Player Id " + this.MyPlayer.getUID() +"] Acabo de recibir notificacion de explosion de bomba!");
-		
+			
 			GamePlayer BombOwner = this.Game.getBomb().getCurrentPlayer();
+			
+			if(BombOwner.getId().equals(MyPlayer.getUID())) this.Game.getGamePoints().scoreBombDetonated(this.MyPlayer.getUID());
 		
 			this.response = new JBombComunicationObject(JBombRequestResponse.BOMB_DETONATED_RESPONSE);
 			this.response.setGamePlayInformation(this.getGamePlayInformation());

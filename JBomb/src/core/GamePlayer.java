@@ -16,6 +16,7 @@ public class GamePlayer {
 	 */
 	private Integer Id;
 	private String Name;
+	private Integer Points;
 	private List<GamePlayer> Neighbours = new ArrayList<GamePlayer>();
 
 	public GamePlayer() {
@@ -43,6 +44,14 @@ public class GamePlayer {
 
 	public void setName(String name) {
 		Name = name;
+	}
+
+	public Integer getPoints() {
+		return Points;
+	}
+
+	public void setPoints(Integer points) {
+		Points = points;
 	}
 
 	public List<GamePlayer> getNeighbours() {
