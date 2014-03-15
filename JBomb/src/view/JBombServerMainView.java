@@ -154,7 +154,7 @@ public class JBombServerMainView {
 				
 				if (GamesTable.getSelectedRow() >= 0)
 				{					
-					JBombGamePlayView GameplayWindow = new JBombGamePlayView(JBSMV, JBSMV.GameVector.get(JBSMV.GamesTable.getSelectedRow()));
+					JBombGamePlayView GameplayWindow = new JBombGamePlayView(JBSMV, GameServer.getInstance().getGames().get(JBSMV.GamesTable.getSelectedRow()));
 					
 					GameplayWindow.setVisible(true);					
 				}
