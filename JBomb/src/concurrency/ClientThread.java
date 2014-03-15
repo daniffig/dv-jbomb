@@ -76,8 +76,19 @@ public class ClientThread implements Runnable, Observer {
 					this.sendBombOwnerNotification();
 					break;
 				case SEND_BOMB_REQUEST:
-					//recibo a quien quiere mandarle la bomba, mando la pregunta e inicio timer
-					this.sendQuizQuestion();
+					//recibo a quien quiere mandarle la bomba
+					this.bombTargetPlayer = request.getBombTargetPlayer();
+					if(this.Game.getMode().toString().equals("Rebote"))
+					{
+						//si el modo es con rebote, cambio el bomb_owner,despierto a todos, aviso del cambio y le mando la pregunta al jugador
+						this.sendBombAndNotify();
+					}
+					else
+					{
+						//si no es modo con rebote mando la pregunta 
+						this.sendQuizQuestion();
+					}
+					
 					break;
 				case QUIZ_ANSWER_REQUEST:
 					//paro el timer, analizo respuesta y repondo bien o mal
@@ -90,6 +101,18 @@ public class ClientThread implements Runnable, Observer {
 		}
 	}
 		
+	public void sendBombAndNotify()
+	{
+		this.Game.sendBomb(this.Game.getGamePlayerById(this.MyPlayer.getUID()), this.Game.getGamePlayerById(this.bombTargetPlayer.getUID()));
+		
+		//armo notificacion y despierto a todos
+		this.EventHandler.setEvent(GameEvent.BOMB_OWNER_CHANGED);
+		this.EventHandler.wakeUpAll();
+		
+		//Aviso quien tiene la bomba
+		this.sendBombOwnerNotification();
+	}
+	
 	public void processQuizAnswer(){
 
 		this.Game.getBomb().deactivate();
@@ -98,7 +121,16 @@ public class ClientThread implements Runnable, Observer {
 			System.out.println("[Player ID " + this.MyPlayer.getUID() + "]Mando respuesta correcta targetPlayer " + this.bombTargetPlayer.getName() + "[" + this.bombTargetPlayer.getUID() +"]");
 			
 			this.Game.getGamePoints().scoreCorrectAnswer(this.MyPlayer.getUID());
-			this.Game.sendBomb(this.Game.getGamePlayerById(this.MyPlayer.getUID()), this.Game.getGamePlayerById(this.bombTargetPlayer.getUID()));
+			
+			//Si no es modo con rebote le mando la bomba al que me habían dicho, sino la bomba vuelve al que me la había tirado
+			if(this.Game.getMode().toString().equals("Rebote"))
+			{
+				this.Game.sendBomb(this.Game.getGamePlayerById(this.MyPlayer.getUID()), this.Game.getBomb().getLastPlayer());
+			}
+			else
+			{
+				this.Game.sendBomb(this.Game.getGamePlayerById(this.MyPlayer.getUID()), this.Game.getGamePlayerById(this.bombTargetPlayer.getUID()));
+			}
 			
 			//mando pregunta
 			response = new JBombComunicationObject(JBombRequestResponse.QUIZ_ANSWER_RESPONSE);
@@ -128,8 +160,6 @@ public class ClientThread implements Runnable, Observer {
 	}
 	
 	public void sendQuizQuestion(){
-		this.bombTargetPlayer = request.getBombTargetPlayer();
-		
 		QuizQuestion qq = this.Game.getQuiz().getRandomQuizQuestion();
 		
 		Vector<String> answers = new Vector<String>();
@@ -158,23 +188,38 @@ public class ClientThread implements Runnable, Observer {
 		
 		GamePlayer BombOwner = this.Game.getBomb().getCurrentPlayer();
 		
-		response = new JBombComunicationObject(JBombRequestResponse.BOMB_OWNER_RESPONSE);
-		response.setBombOwner(new Player(BombOwner.getId(), BombOwner.getName()));
+		if(this.EventHandler.getEvent().equals(GameEvent.BOMB_OWNER_ANSWER_RIGHT) && BombOwner.getId().equals(this.MyPlayer.getUID()))
+		{
+			//esto sirve para el modo de rebote, si cambio el dueño de la bomba porque el flaco respondió bien y yo soy el dueño de la bomba, tengo que mandar BOMB_REJECTED_RESPONSE
+			response = new JBombComunicationObject(JBombRequestResponse.BOMB_REJECTED_RESPONSE);
+			response.setBombOwner(new Player(BombOwner.getId(), BombOwner.getName()));
 		
-		String flash = (BombOwner.getId().equals(this.MyPlayer.getUID())) ? "Tenes la bomba!": BombOwner.getName() + " tiene la bomba";
-		response.setFlash(flash);
-		response.setMyPlayer(this.MyPlayer);
+			String flash = "Te devolvieron la bomba!";
+			response.setFlash(flash);
+			response.setMyPlayer(this.MyPlayer);
 		
-		this.sendResponseToClient(response);
+			this.sendResponseToClient(response);
+		}
+		else
+		{
+			response = new JBombComunicationObject(JBombRequestResponse.BOMB_OWNER_RESPONSE);
+			response.setBombOwner(new Player(BombOwner.getId(), BombOwner.getName()));
 		
-		//si no soy yo el que tiene la bomba el cliente no me va a mandar nada, yo me voy a dormir hasta que haya que notificar algo
-		if(!BombOwner.getId().equals(this.MyPlayer.getUID())){
-			System.out.println("[Player ID " + this.MyPlayer.getUID() + "]Me voy a dormir porque no tengo la bomba");
-			this.EventHandler.goToSleep();
+			String flash = (BombOwner.getId().equals(this.MyPlayer.getUID())) ? "Tenes la bomba!": BombOwner.getName() + " tiene la bomba";
+			response.setFlash(flash);
+			response.setMyPlayer(this.MyPlayer);
+		
+			this.sendResponseToClient(response);
+		
+			//si no soy yo el que tiene la bomba el cliente no me va a mandar nada, yo me voy a dormir hasta que haya que notificar algo
+			if(!BombOwner.getId().equals(this.MyPlayer.getUID())){
+				System.out.println("[Player ID " + this.MyPlayer.getUID() + "]Me voy a dormir porque no tengo la bomba");
+				this.EventHandler.goToSleep();
 		    
-			this.handleGameEvent();//si me despierto aca es que me van a notificar de algo
-		}	
-		//si sigo es que tengo la bomba asi que tengo que esperar una respuesta del usuario
+				this.handleGameEvent();//si me despierto aca es que me van a notificar de algo
+			}	
+			//si sigo es que tengo la bomba asi que tengo que esperar una respuesta del usuario
+		}
 	}
 	
 	public void handleGameEvent(){
@@ -206,7 +251,10 @@ public class ClientThread implements Runnable, Observer {
 			event = this.EventHandler.getEvent();
 		}
 		
+		//Si sali de aca es ó porque el flaco respondió bien así que tengo que notificar a todos quien tiene la bomba
+		//o alguien le tiro la bomba a otro porque es modo rebote y en ese caso tambien tengo que notificar y mandar la pregunta
 		this.sendBombOwnerNotification();
+		if(event.equals(GameEvent.BOMB_OWNER_CHANGED)) this.sendQuizQuestion();
 	}
 	
 	public void onHoldJoinHandleEvents(){
