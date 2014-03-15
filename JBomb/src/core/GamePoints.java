@@ -2,6 +2,7 @@ package core;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 public class GamePoints {
@@ -10,7 +11,7 @@ public class GamePoints {
 	
 	private HashMap<Integer, Integer> GeneralPoints = new HashMap<Integer, Integer>();
 	
-	
+	private Game Game;
 	
 	public Vector<HashMap<Integer, Integer>> getRoundPoints() {
 		return RoundPoints;
@@ -38,9 +39,11 @@ public class GamePoints {
 		RoundPoints.add(statPoints);
 	}
 	
-	public void initializeGeneralPoints(List<GamePlayer> GamePlayers)
+	public void initializeGeneralPoints(Game Game)
 	{
-		for(GamePlayer gp : GamePlayers)
+		this.Game = Game;
+		
+		for(GamePlayer gp : Game.getGamePlayers())
 			GeneralPoints.put(gp.getId(), 0);
 	}
 	
@@ -73,5 +76,44 @@ public class GamePoints {
 	public HashMap<Integer, Integer> getCurrenRoundPoints()
 	{
 		return this.RoundPoints.lastElement();
+	}
+	
+	
+	//Metodos para el ClientThread y el JBombGamePlayView
+	public HashMap<String, Integer> getFormattedCurrentRoundPoints()
+	{
+		HashMap<String, Integer> crp = new HashMap<String, Integer>();
+		
+		for (Map.Entry<Integer, Integer> entry : this.getCurrenRoundPoints().entrySet())
+			crp.put(this.Game.getGamePlayerById(entry.getKey()).getName(), entry.getValue());
+		
+		return crp;
+	}
+	
+	public HashMap<String, Integer> getFormattedGeneralPoints()
+	{
+		HashMap<String, Integer> gp = new HashMap<String, Integer>();
+		
+		for (Map.Entry<Integer, Integer> entry : this.getGeneralPoints().entrySet())
+			gp.put(this.Game.getGamePlayerById(entry.getKey()).getName(), entry.getValue());
+		
+		return gp;
+	}
+	
+	public Vector<Vector<Object>> getVectorScoreBoard()
+	{
+		Vector<Vector<Object>> vectorScoreBoard = new Vector<Vector<Object>>();
+		
+		for(GamePlayer gp : this.Game.getGamePlayers())
+		{
+			Vector<Object> PlayerScores = new Vector<Object>();
+			PlayerScores.add(gp.getName());
+			PlayerScores.add(this.getCurrentRoundPointsOfPlayer(gp.getId()));
+			PlayerScores.add(this.getGeneralPointsOfPlayer(gp.getId()));
+			
+			vectorScoreBoard.add(PlayerScores);
+		}
+		
+		return vectorScoreBoard;
 	}
 }

@@ -463,33 +463,12 @@ public class ClientThread implements Runnable, Observer {
 			if(BombOwner.getId().equals(MyPlayer.getUID())) this.Game.getGamePoints().scoreBombDetonated(this.MyPlayer.getUID());
 		
 			this.response = new JBombComunicationObject(JBombRequestResponse.BOMB_DETONATED_RESPONSE);
-			this.response.setGeneralScores(this.getGeneralPoints());
-			this.response.setLastRoundScores(this.getCurrentRoundPoints());
+			this.response.setGeneralScores(this.Game.getGamePoints().getFormattedGeneralPoints());
+			this.response.setLastRoundScores(this.Game.getGamePoints().getFormattedCurrentRoundPoints());
 			this.response.setGamePlayInformation(this.getGamePlayInformation());
 			this.response.setLoser(new Player(BombOwner.getId(), BombOwner.getName()));
 		
 			this.sendResponseToClient(this.response);
 		}
-	}
-	
-	
-	public HashMap<String, Integer> getCurrentRoundPoints()
-	{
-		HashMap<String, Integer> crp = new HashMap<String, Integer>();
-		
-		for (Map.Entry<Integer, Integer> entry : this.Game.getGamePoints().getCurrenRoundPoints().entrySet())
-			crp.put(this.Game.getGamePlayerById(entry.getKey()).getName(), entry.getValue());
-		
-		return crp;
-	}
-	
-	public HashMap<String, Integer> getGeneralPoints()
-	{
-		HashMap<String, Integer> gp = new HashMap<String, Integer>();
-		
-		for (Map.Entry<Integer, Integer> entry : this.Game.getGamePoints().getGeneralPoints().entrySet())
-			gp.put(this.Game.getGamePlayerById(entry.getKey()).getName(), entry.getValue());
-		
-		return gp;
 	}
 }
