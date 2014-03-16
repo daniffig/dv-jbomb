@@ -49,7 +49,7 @@ public class ClientThread implements Runnable, Observer {
 		System.out.println("Conexion establecida! Thread # " + Thread.currentThread().getName() + " creado");
 		
 		request = this.receiveRequestFromClient();
-		while(!request.getType().equals(JBombRequestResponse.CLOSED_CONNECTION))
+		while(!request.getType().equals(JBombRequestResponse.CLOSE_CONNECTION_REQUEST))
 		{
 			switch(request.getType()){
 				case GAME_SETTINGS_INFORMATION_REQUEST:
