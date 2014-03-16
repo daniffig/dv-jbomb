@@ -182,7 +182,7 @@ public class Game {
 
 	public void start()
 	{
-		if(this.CurrentRound == 0) this.getGamePoints().initializeGeneralPoints(this.GamePlayers);
+		if(this.CurrentRound == 0) this.getGamePoints().initializeGeneralPoints(this);
 
 		this.CurrentRound++;
 
