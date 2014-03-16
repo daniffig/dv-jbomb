@@ -301,7 +301,7 @@ public class ClientThread implements Runnable, Observer {
 
 			if(RequestedGame.equals(null)){	
 				
-				jbco.setType(JBombRequestResponse.ERROR_FLASH);
+				jbco.setType(JBombRequestResponse.GAME_NOT_FOUND_ERROR);
 				jbco.setFlash("El juego requerido no existe");
 				System.out.println("mando error porque el juego requerido no existe");
 			}
@@ -309,7 +309,7 @@ public class ClientThread implements Runnable, Observer {
 				Integer player_id = RequestedGame.addGamePlayer(new GamePlayer(request.getMyPlayer().getName()));
 				
 				if(player_id == -1){
-					jbco.setType(JBombRequestResponse.ERROR_FLASH);
+					jbco.setType(JBombRequestResponse.GAME_FULL_ERROR);
 					jbco.setFlash("Juego Completo! no se pueden agregar m�s jugadores");
 					System.out.println("mando error porque el juego esta completo");
 				}
