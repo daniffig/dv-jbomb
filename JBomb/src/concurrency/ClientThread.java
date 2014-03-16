@@ -188,14 +188,11 @@ public class ClientThread implements Runnable, Observer {
 		
 		GamePlayer BombOwner = this.Game.getBomb().getCurrentPlayer();
 		
-		if(this.EventHandler.getEvent().equals(GameEvent.BOMB_OWNER_ANSWER_RIGHT) && BombOwner.getId().equals(this.MyPlayer.getUID()))
+		if(this.bombHasBounced())
 		{
 			//esto sirve para el modo de rebote, si cambio el dueño de la bomba porque el flaco respondió bien y yo soy el dueño de la bomba, tengo que mandar BOMB_REJECTED_RESPONSE
 			response = new JBombComunicationObject(JBombRequestResponse.BOMB_REJECTED_RESPONSE);
 			response.setBombOwner(new Player(BombOwner.getId(), BombOwner.getName()));
-		
-			String flash = "Te devolvieron la bomba!";
-			response.setFlash(flash);
 			response.setMyPlayer(this.MyPlayer);
 		
 			this.sendResponseToClient(response);
@@ -499,6 +496,13 @@ public class ClientThread implements Runnable, Observer {
 		MyPlayer = player;
 	}
 
+	public boolean bombHasBounced()
+	{
+		return 	  (this.Game.getMode().equals("rebote") 
+				&&(this.EventHandler.getEvent().equals(GameEvent.BOMB_OWNER_ANSWER_RIGHT) || this.EventHandler.getEvent().equals(GameEvent.GAME_STARTED))
+				&& this.Game.getBomb().getCurrentPlayer().getId().equals(this.MyPlayer.getUID()));
+	}
+	
 	@Override
 	public void update(Observable arg0, Object event) 
 	{
