@@ -185,7 +185,8 @@ public class Game {
 		if(this.CurrentRound == 0) this.getGamePoints().initializeGeneralPoints(this);
 
 		this.CurrentRound++;
-
+		
+		this.setState(new RunningGameState());
 		this.getGamePoints().initializeNewRoundPoints(this.GamePlayers);
 		this.getBomb().setLastPlayer(null);
 		this.getBomb().setCurrentPlayer(this.getGamePlayers().get((int)(Math.random() * this.getGamePlayers().size())));

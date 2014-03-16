@@ -1,6 +1,9 @@
 package concurrency;
 
 
+import gameStates.RoundFinishedGameState;
+import gameStates.WaitingGameState;
+
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -46,7 +49,7 @@ public class ClientThread implements Runnable, Observer {
 		System.out.println("Conexion establecida! Thread # " + Thread.currentThread().getName() + " creado");
 		
 		request = this.receiveRequestFromClient();
-		while(!request.getType().equals(JBombRequestResponse.FINISH_CONNECTION_REQUEST))
+		while(!request.getType().equals(JBombRequestResponse.CLOSED_CONNECTION))
 		{
 			switch(request.getType()){
 				case GAME_SETTINGS_INFORMATION_REQUEST:
@@ -487,6 +490,10 @@ public class ClientThread implements Runnable, Observer {
 		this.Game.configureAdjacentPlayersGraph();
 	}
 	
+	public void changeGameToWaitingState(){
+		this.Game.setState(new WaitingGameState());
+	}
+	
 	public Player getMyPlayer() {
 		return MyPlayer;
 	}
@@ -511,7 +518,11 @@ public class ClientThread implements Runnable, Observer {
 			
 			GamePlayer BombOwner = this.Game.getBomb().getCurrentPlayer();
 			
-			if(BombOwner.getId().equals(MyPlayer.getUID())) this.Game.getGamePoints().scoreBombDetonated(this.MyPlayer.getUID());
+			if(BombOwner.getId().equals(MyPlayer.getUID()))
+			{	
+				this.Game.setState(new RoundFinishedGameState());
+				this.Game.getGamePoints().scoreBombDetonated(this.MyPlayer.getUID());
+			}
 		
 			this.response = new JBombComunicationObject(JBombRequestResponse.BOMB_DETONATED_RESPONSE);
 			this.response.setGeneralScores(this.Game.getGamePoints().getFormattedGeneralPoints());

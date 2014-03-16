@@ -66,6 +66,8 @@ public class JBombEventHandler {
 		
 		if(this.barrier_size != this.current_barrier_size)
 		{
+			if(this.current_barrier_size==1) ct.changeGameToWaitingState();
+			
 			this.setEvent(GameEvent.PLAYER_JOINED_GAME);
 			this.notifyAll();
 			this.goToSleep();
