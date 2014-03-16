@@ -515,8 +515,8 @@ public class ClientThread implements Runnable, Observer {
 			if(BombOwner.getId().equals(MyPlayer.getUID())) this.Game.getGamePoints().scoreBombDetonated(this.MyPlayer.getUID());
 		
 			this.response = new JBombComunicationObject(JBombRequestResponse.BOMB_DETONATED_RESPONSE);
-			this.response.setGeneralScores(this.Game.getGamePoints().getFormattedGeneralPoints());
-			this.response.setLastRoundScores(this.Game.getGamePoints().getFormattedCurrentRoundPoints());
+			//this.response.setGeneralScores(this.Game.getGamePoints().getFormattedGeneralPoints());
+			//this.response.setLastRoundScores(this.Game.getGamePoints().getFormattedCurrentRoundPoints());
 			this.response.setGamePlayInformation(this.getGamePlayInformation());
 			this.response.setLoser(new Player(BombOwner.getId(), BombOwner.getName()));
 		

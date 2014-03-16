@@ -19,44 +19,44 @@ import linkageStrategies.AbstractLinkageStrategy;
 public class Game {
 
 	private Integer UID;
-	
+
 	private String Name;
-	
+
 	private Integer MaxGamePlayersAllowed = 0;
 	private List<GamePlayer> GamePlayers = new ArrayList<GamePlayer>();
-	
+
 	private GamePoints GamePoints = new GamePoints();
-	
+
 	private Integer CurrentRound = 0;
 	private Integer MaxRounds = 0;
-	
+
 	private AbstractRoundDuration RoundDuration;
 	private Bomb Bomb = new Bomb();
-	
+
 	private Quiz Quiz;
-	
+
 	private AbstractLinkageStrategy LinkageStrategy;
 	private AbstractGameMode Mode;
 	private AbstractGameState State;
-	
-	
+
+
 	public Game()
 	{
 		this.setState(new NewGameState());		
 	}
-	
+
 	public Game (String name)
 	{
 		this();
-		
+
 		this.setName(name);
 	}
-	
+
 	public Game (Game Game)
 	{
 		this.setName(Game.getName());
 	}
-	
+
 	public Integer getUID() {
 		return UID;
 	}
@@ -84,10 +84,10 @@ public class Game {
 	public synchronized GamePlayer getGamePlayerById(Integer Id){
 		for(GamePlayer gp: this.GamePlayers)
 			if(gp.getId().equals(Id)) return gp;
-		
+
 		return null;
 	}
-	
+
 	public Integer getMaxRounds() {
 		return MaxRounds;
 	}
@@ -118,7 +118,7 @@ public class Game {
 
 	public void setRoundDuration(AbstractRoundDuration roundDuration) {
 		RoundDuration = roundDuration;
-		
+
 		this.getBomb().setDetonationMilliseconds((long)(this.RoundDuration.getDuration()*1000));
 	}
 
@@ -158,14 +158,14 @@ public class Game {
 	{
 		for(GamePlayer gp : this.GamePlayers)
 			if(gp.getName().equals(username)) return true;
-		
+
 		return false;
 	}
-	
+
 	public Integer getTotalGamePlayers(){
 		return this.getGamePlayers().size();
 	}
-	
+
 	public Boolean canSendBomb(GamePlayer sourceGamePlayer,	GamePlayer destinationGamePlayer)
 	{
 		return true;
@@ -179,18 +179,18 @@ public class Game {
 			Bomb.setCurrentPlayer(destinationGamePlayer);
 		}
 	}
-	
+
 	public void start()
 	{
-		if(this.CurrentRound == 0) this.getGamePoints().initializeGeneralPoints(this);
-		
+		if(this.CurrentRound == 0) this.getGamePoints().initializeGeneralPoints(this.GamePlayers);
+
 		this.CurrentRound++;
-		
+
 		this.getGamePoints().initializeNewRoundPoints(this.GamePlayers);
 		this.getBomb().setLastPlayer(null);
 		this.getBomb().setCurrentPlayer(this.getGamePlayers().get((int)(Math.random() * this.getGamePlayers().size())));
 	}
-	
+
 	public void configureAdjacentPlayersGraph()
 	{
 		this.getLinkageStrategy().link(this.getGamePlayers());
@@ -202,26 +202,26 @@ public class Game {
 		System.out.println("Agregue el observer " + ct.toString() + " para que chequee la bomba");
 		this.getBomb().addObserver(ct);
 	}
-	
+
 	public Boolean isValid()
 	{
 		return true;
 	}
-	
+
 	public void deepCopy(Game newGame)
 	{
 		this.setName(newGame.getName());
 	}
-	
+
 	public Vector<Object> toVector()
 	{
 		Vector<Object> v = new Vector<Object>();
-		
+
 		v.add(this.getName());
 		v.add(this.getMode());
 		v.add(this.getState());
 		v.add(this.getGamePlayersOverMaxGamePlayers());
-		
+
 		return v;
 	}
 
@@ -240,7 +240,7 @@ public class Game {
 	public void setMode(AbstractGameMode mode) {
 		Mode = mode;
 	}
-	
+
 	public String getGamePlayersOverMaxGamePlayers()
 	{
 		return this.getGamePlayers().size() + "/" + this.getMaxGamePlayersAllowed();
@@ -253,7 +253,7 @@ public class Game {
 	public void setState(AbstractGameState state) {
 		State = state;
 	}
-	
+
 	public GamePoints getGamePoints() {
 		return GamePoints;
 	}
@@ -262,16 +262,16 @@ public class Game {
 		GamePoints = gamePoints;
 	}
 
-	//Utilizado por la librería grafica Jung
+	//Utilizado por la librerÃ­a grafica Jung
 	public Graph<String, String> getGraph()
 	{
 		Graph<String, String> g = new SparseMultigraph<String, String>();
-		
+
 		for(GamePlayer gp: this.GamePlayers)
 		{
 			g.addVertex(gp.getName());
 		}
-		
+
 		for(GamePlayer gp: this.GamePlayers)
 		{
 			for(GamePlayer nb: gp.getNeighbours())

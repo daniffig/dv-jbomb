@@ -91,6 +91,7 @@ public class JBombEventHandler {
 		{
 			//Soy el último en llegar a la barrera, inicio el juego y despierto a todos
 			this.current_barrier_size = 0;
+			this.setEvent(GameEvent.GAME_STARTED);
 			clientThread.startGame();
 			this.notifyAll();
 		}
