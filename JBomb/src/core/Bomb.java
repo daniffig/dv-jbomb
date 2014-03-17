@@ -18,14 +18,22 @@ public class Bomb extends Observable{
 	private Boolean IsActive;
 	private Timer Timer;
 	
+	private Game Game;
+	
 	public Bomb()
 	{
 		super();
 	}
 	
-	public Bomb(Long DetonationMilliseconds, TimerTask DetonationTask)
+	public Bomb(Game Game)
+	{
+		this.Game = Game;
+	}
+	
+	public Bomb(Long DetonationMilliseconds, Game Game)
 	{
 		this.setDetonationMilliseconds(DetonationMilliseconds);
+		this.Game = Game;
 	}
 	
 	public Bomb(Long DetonationMilliseconds)
