@@ -73,7 +73,7 @@ public class ClientThread implements Runnable, Observer {
 					}
 					break;
 				case START_GAME_REQUEST:
-					this.sendGamePlayersInformation();
+					this.EventHandler.startGameBarrier(this);
 					//Si estoy aca es que todos nos despertamos porque comenzo el juego
 					this.sendBombOwnerNotification();
 					break;
@@ -258,26 +258,20 @@ public class ClientThread implements Runnable, Observer {
 	
 	public void onHoldJoinHandleEvents(){
 		
-		while(!this.EventHandler.getEvent().equals(GameEvent.MAX_PLAYERS_REACHED))
+		while(!this.EventHandler.getEvent().equals(GameEvent.GAME_RUNNABLE))
 		{
 			this.sendPlayerJoinGameNotification();
 		}
 
-		this.sendResponseToClient(new JBombComunicationObject(JBombRequestResponse.MAX_PLAYERS_REACHED));
-	}
-	
-	public void sendGamePlayersInformation(){
 		System.out.println("[Player Id " + this.MyPlayer.getUID() +"] voy a enviar informaci�n y adyacentes y toca al barrera de juego"  );
+		response = new JBombComunicationObject(JBombRequestResponse.GAME_RUNNABLE);
 		
-		response = new JBombComunicationObject(JBombRequestResponse.ADJACENT_PLAYERS);
-			
 		for(GamePlayer gp: this.Game.getGamePlayerById(this.MyPlayer.getUID()).getNeighbours())
 			response.addPlayer(new Player(gp.getId(), gp.getName()));
 				
 		GameServer.getInstance().refreshGamesTable();
 		
 		this.sendResponseToClient(response);
-		this.EventHandler.startGameBarrier(this);
 	}
 	
 	public void sendPlayerJoinGameNotification(){
@@ -517,13 +511,7 @@ public class ClientThread implements Runnable, Observer {
 			System.out.println("[Player Id " + this.MyPlayer.getUID() +"] Acabo de recibir notificacion de explosion de bomba!");
 			
 			GamePlayer BombOwner = this.Game.getBomb().getCurrentPlayer();
-			
-			if(BombOwner.getId().equals(MyPlayer.getUID()))
-			{	
-				this.Game.setState(new RoundFinishedGameState());
-				this.Game.getGamePoints().scoreBombDetonated(this.MyPlayer.getUID());
-			}
-		
+					
 			this.response = new JBombComunicationObject(JBombRequestResponse.BOMB_DETONATED_RESPONSE);
 			this.response.setGeneralScores(this.Game.getGamePoints().getFormattedGeneralPoints());
 			this.response.setLastRoundScores(this.Game.getGamePoints().getFormattedCurrentRoundPoints());

@@ -30,7 +30,7 @@ public class Game {
 	private Integer MaxRounds = 0;
 
 	private AbstractRoundDuration RoundDuration;
-	private Bomb Bomb = new Bomb();
+	private Bomb Bomb;
 
 	private Quiz Quiz;
 
@@ -42,18 +42,6 @@ public class Game {
 	public Game()
 	{
 		this.setState(new NewGameState());		
-	}
-
-	public Game (String name)
-	{
-		this();
-
-		this.setName(name);
-	}
-
-	public Game (Game Game)
-	{
-		this.setName(Game.getName());
 	}
 
 	public Integer getUID() {
@@ -117,8 +105,6 @@ public class Game {
 
 	public void setRoundDuration(AbstractRoundDuration roundDuration) {
 		RoundDuration = roundDuration;
-
-		this.getBomb().setDetonationMilliseconds((long)(this.RoundDuration.getDuration()*1000));
 	}
 
 	public synchronized Bomb getBomb() {
@@ -138,12 +124,12 @@ public class Game {
 	}
 
 	public synchronized Integer addGamePlayer(GamePlayer p) {
-		if (this.canAddPlayer()){
-			Integer new_player_id = this.getGamePlayers().size()+1;
-			p.setId(new_player_id);
+		if (this.canAddPlayer())
+		{
+			p.setId((this.getGamePlayers().size()+1));
 			this.getGamePlayers().add(p);
 
-			return new_player_id;
+			return p.getId();
 		}
 
 		return -1;
@@ -186,6 +172,7 @@ public class Game {
 		this.CurrentRound++;
 		
 		this.setState(new RunningGameState());
+		this.setBomb(new Bomb(this.RoundDuration.getDuration(), this));
 		this.getGamePoints().initializeNewRoundPoints(this.GamePlayers);
 		this.getBomb().setLastPlayer(null);
 		this.getBomb().setCurrentPlayer(this.getGamePlayers().get((int)(Math.random() * this.getGamePlayers().size())));
@@ -198,7 +185,6 @@ public class Game {
 
 	public synchronized void suscribeToBombDetonation(ClientThread ct)
 	{
-		//Suscribo el clientThread para que observer la bomba para cuando explote
 		System.out.println("Agregue el observer " + ct.toString() + " para que chequee la bomba");
 		this.getBomb().addObserver(ct);
 	}
@@ -262,7 +248,7 @@ public class Game {
 		GamePoints = gamePoints;
 	}
 
-	//Utilizado por la librería grafica Jung
+	//Genera el grafo para ser mostrado en el JBombGamePlayView
 	public Graph<String, String> getGraph()
 	{
 		Graph<String, String> g = new SparseMultigraph<String, String>();

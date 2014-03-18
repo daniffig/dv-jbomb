@@ -2,27 +2,21 @@ package core;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class GamePlayer {
 
-	/*
-	 * private Player Player;
-	 * 
-	 * public String toString() { return this.getPlayer().toString(); }
-	 * 
-	 * public Player getPlayer() { return Player; }
-	 * 
-	 * public void setPlayer(Player player) { Player = player; }
-	 */
 	private Integer Id;
 	private String Name;
-	private Integer Points;
+	private Vector<Integer> RoundPoints = new Vector<Integer>();
+	private Integer GeneralPoints = 0;
 	private List<GamePlayer> Neighbours = new ArrayList<GamePlayer>();
 
 	public GamePlayer() {
 	}
 
 	public GamePlayer(String name) {
+		this.RoundPoints.add(-1);//Agregamos un valor dummy para la posición 0 del Vector
 		this.setName(name);
 	}
 
@@ -46,14 +40,44 @@ public class GamePlayer {
 		Name = name;
 	}
 
-	public Integer getPoints() {
-		return Points;
+	//Puntajes
+	public Integer getGeneralPoints() {
+		return GeneralPoints;
 	}
 
-	public void setPoints(Integer points) {
-		Points = points;
+	public void setGeneralPoints(Integer generalPoints) {
+		GeneralPoints = generalPoints;
 	}
 
+	public Vector<Integer> getRoundPoints() {
+		return RoundPoints;
+	}
+
+	public void setRoundPoints(Vector<Integer> roundPoints) {
+		RoundPoints = roundPoints;
+	}
+	
+	public void InitializeNewRoundPoints(){
+		RoundPoints.add(0);
+	}
+	
+	public Integer getCurrentRoundPoints(){
+		return RoundPoints.lastElement();
+	}
+
+	public void scoreWrongAnswer(){
+		this.RoundPoints.set(this.RoundPoints.size()-1, this.getCurrentRoundPoints()-5);
+	}
+	
+	public void scoreRightAnswer(){
+		this.RoundPoints.set(this.RoundPoints.size()-1, this.getCurrentRoundPoints()+10);
+	}
+	
+	public void scoreBombExploded(){
+		this.RoundPoints.set(this.RoundPoints.size()-1, this.getCurrentRoundPoints()-50);
+	}
+	
+	//Jugadores adyacentes
 	public List<GamePlayer> getNeighbours() {
 		return Neighbours;
 	}
