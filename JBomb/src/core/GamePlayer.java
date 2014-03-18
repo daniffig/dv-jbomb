@@ -65,6 +65,10 @@ public class GamePlayer {
 		return RoundPoints.lastElement();
 	}
 
+	public Integer getPointsFromRound(Integer Round){
+		return RoundPoints.get(Round);
+	}
+	
 	public void scoreWrongAnswer(){
 		this.RoundPoints.set(this.RoundPoints.size()-1, this.getCurrentRoundPoints()-5);
 	}
