@@ -121,7 +121,7 @@ public class ClientThread implements Runnable, Observer {
 		if(request.getSelectedQuizAnswer().equals(this.CurrentQuestionAnswer)){
 			System.out.println("[Player ID " + this.MyPlayer.getUID() + "]Mando respuesta correcta targetPlayer " + this.bombTargetPlayer.getName() + "[" + this.bombTargetPlayer.getUID() +"]");
 			
-			this.Game.getGamePoints().scoreCorrectAnswer(this.MyPlayer.getUID());
+			this.Game.getGamePlayerById(this.MyPlayer.getUID()).scoreRightAnswer();
 			
 			//Si no es modo con rebote le mando la bomba al que me habían dicho, sino la bomba vuelve al que me la había tirado
 			if(this.Game.getMode().toString().equals("Rebote"))
@@ -147,7 +147,7 @@ public class ClientThread implements Runnable, Observer {
 		}
 		else{
 			System.out.println("[Player ID " + this.MyPlayer.getUID() + "]Mando respuesta mal mi respuesta= " + this.CurrentQuestionAnswer + " y el tiene " + request.getSelectedQuizAnswer());
-			this.Game.getGamePoints().scoreWrongAnswer(this.MyPlayer.getUID());
+			this.Game.getGamePlayerById(this.MyPlayer.getUID()).scoreWrongAnswer();
 			
 			response = new JBombComunicationObject(JBombRequestResponse.QUIZ_ANSWER_RESPONSE);
 			response.setFlash("Respuesta incorrecta! :C");
