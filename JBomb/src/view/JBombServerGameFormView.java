@@ -59,7 +59,7 @@ public class JBombServerGameFormView extends JFrame {
 	 */
 	public JBombServerGameFormView(JBombServerMainView JBombServerMainView, Game Game) {
 		setModalExclusionType(ModalExclusionType.APPLICATION_EXCLUDE);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(JBombServerGameFormView.class.getResource("/images/icon.png")));
+		//setIconImage(Toolkit.getDefaultToolkit().getImage(JBombServerGameFormView.class.getResource("/images/icon.png")));
 		
 		this.parentWindow = JBombServerMainView;
 		
