@@ -2,6 +2,7 @@ package core;
 
 import gameStates.RoundFinishedGameState;
 
+import java.util.List;
 import java.util.Observable;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -25,21 +26,24 @@ public class Bomb extends Observable{
 	private Game Game;
 	
 
-	
 	public Bomb(Game Game)
 	{
 		this.Game = Game;
 	}
-	
-	public Bomb(Integer DetonationSeconds)
+		
+	public void initializeBomb(Integer DetonationSeconds, List<GamePlayer> GamePlayers)
 	{
-		this.setDetonationMilliseconds((long)(DetonationSeconds*1000));
-	}
-	
-	public Bomb(Integer DetonationSeconds, Game Game)
-	{
-		this.setDetonationMilliseconds((long)(DetonationSeconds*1000));
-		this.Game = Game;
+		this.setDetonationMilliseconds((long)DetonationSeconds*1000);
+		
+		this.setRemainingMilliseconds(this.getDetonationMilliseconds());
+		
+		this.setLastPlayer(null);
+		
+		this.setCurrentPlayer(GamePlayers.get((int)(Math.random() * GamePlayers.size())));
+		
+		this.setTargetPlayer(null);
+		
+		System.out.println("Setee la bomba con un tiempo de detonación de " + this.getDetonationMilliseconds() + "ms");
 	}
 	
 	public void activate()
@@ -57,9 +61,9 @@ public class Bomb extends Observable{
 	
 	public void deactivate()
 	{
-		this.setIsActive(false);
-		
 		this.getTimer().cancel();
+		
+		this.setIsActive(false);
 		
 		this.RemainingMilliseconds = this.getRemainingMilliseconds() - (System.currentTimeMillis() - this.TimeOnActivation);
 	}
@@ -70,14 +74,6 @@ public class Bomb extends Observable{
 
 	public void setDetonationMilliseconds(Long detonationMilliseconds) {
 		DetonationMilliseconds = detonationMilliseconds;
-		
-		this.setRemainingMilliseconds(DetonationMilliseconds);
-		
-		System.out.println("Setee la bomba con un tiempo de detonación de " + this.getDetonationMilliseconds() + "ms");
-	}
-
-	public void setDetonationSeconds(Integer detonationsSeconds){
-		this.setDetonationMilliseconds((long)detonationsSeconds*1000);
 	}
 
 	public GamePlayer getLastPlayer() {
@@ -96,6 +92,7 @@ public class Bomb extends Observable{
 		CurrentPlayer = currentPlayer;
 		
 		setChanged();
+		
 		notifyObservers(GameEvent.BOMB_OWNER_CHANGED);
 	}
 	
@@ -139,10 +136,14 @@ public class Bomb extends Observable{
 	private TimerTask getDetonationTask() {
 		return new TimerTask(){
 			public void run(){
-				CurrentPlayer.scoreBombExploded();
-				Game.setState(new RoundFinishedGameState());
 				System.out.println("Estoy aca porque exploto la bomba! le voy a avisar a mis " + countObservers() + " observers.");
+				
+				CurrentPlayer.scoreBombExploded();
+				
+				Game.setState(new RoundFinishedGameState());
+				
 				setChanged();
+				
 				notifyObservers(GameEvent.BOMB_EXPLODED);
 			}
 		};

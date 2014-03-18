@@ -124,13 +124,13 @@ public class Game {
 		LinkageStrategy = linkageStrategy;
 	}
 
-	public synchronized Integer addGamePlayer(GamePlayer p) {
+	public synchronized Integer addGamePlayer(GamePlayer GamePlayer) {
 		if (this.canAddPlayer())
 		{
-			p.setId((this.getGamePlayers().size()+1));
-			this.getGamePlayers().add(p);
+			GamePlayer.setId((this.getGamePlayers().size()+1));
+			this.getGamePlayers().add(GamePlayer);
 
-			return p.getId();
+			return GamePlayer.getId();
 		}
 
 		return -1;
@@ -168,17 +168,25 @@ public class Game {
 
 	public void start()
 	{
-		if(this.CurrentRound == 0) this.getGamePoints().initializeGeneralPoints(this);
-
-		this.CurrentRound++;
+		this.initializeNewRoundScores();
+	
+		this.getBomb().initializeBomb(this.RoundDuration.getDuration(), this.getGamePlayers());
 		
 		this.setState(new RunningGameState());
-		this.getGamePoints().initializeNewRoundPoints(this.GamePlayers);
-		this.getBomb().setDetonationSeconds(this.RoundDuration.getDuration());
-		this.getBomb().setLastPlayer(null);
-		this.getBomb().setCurrentPlayer(this.getGamePlayers().get((int)(Math.random() * this.getGamePlayers().size())));
 	}
 
+	public void initializeNewRoundScores()
+	{
+		if(this.CurrentRound == 0) 
+			for(GamePlayer gp : this.getGamePlayers()) 
+				gp.setGeneralPoints(0);
+		
+		this.CurrentRound++;
+		
+		for(GamePlayer gp : this.getGamePlayers())
+			gp.InitializeNewRoundPoints();
+	}
+	
 	public void configureAdjacentPlayersGraph()
 	{
 		this.getLinkageStrategy().link(this.getGamePlayers());
@@ -186,7 +194,7 @@ public class Game {
 
 	public synchronized void suscribeToBombDetonation(ClientThread ct)
 	{
-		System.out.println("Agregue el observer " + ct.toString() + " para que chequee la bomba");
+		System.out.println("[Game] Agrego el observer " + ct.toString() + " para que chequee la bomba");
 		this.getBomb().addObserver(ct);
 	}
 
@@ -207,7 +215,7 @@ public class Game {
 		v.add(this.getName());
 		v.add(this.getMode());
 		v.add(this.getState());
-		v.add(this.getGamePlayersOverMaxGamePlayers());
+		v.add(this.getGamePlayers().size() + "/" + this.getMaxGamePlayersAllowed());
 
 		return v;
 	}
@@ -226,11 +234,8 @@ public class Game {
 
 	public void setMode(AbstractGameMode mode) {
 		Mode = mode;
-	}
-
-	public String getGamePlayersOverMaxGamePlayers()
-	{
-		return this.getGamePlayers().size() + "/" + this.getMaxGamePlayersAllowed();
+		
+		mode.setGame(this);
 	}
 
 	public AbstractGameState getState() {

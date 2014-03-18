@@ -6,7 +6,7 @@ import java.util.List;
 import network.Player;
 
 import reference.GameEvent;
-import reference.JBombRequestResponse;
+
 
 
 public class JBombEventHandler {
@@ -33,18 +33,6 @@ public class JBombEventHandler {
 		this.suscriptors.remove(ct);
 	}
 	
-	public void waitForMove()
-	{
-	  try
-	  {
-		  this.wait();
-	  }	
-	  catch(InterruptedException e)
-	  {
-		  System.out.println("no pude  hacer un waitForMove porque me vi interrumpido");
-	  }
-	}
-	
 	public synchronized void wakeUpAll()
 	{
 		this.notifyAll();
@@ -62,7 +50,7 @@ public class JBombEventHandler {
 	public synchronized void joinBarrier(ClientThread ct)
 	{
 		this.current_barrier_size++;
-		this.eventTriggerer = ct.getMyPlayer();
+		this.setEventTriggerer(ct.getMyPlayer());
 		
 		if(this.barrier_size != this.current_barrier_size)
 		{
@@ -91,7 +79,6 @@ public class JBombEventHandler {
 		}
 		else
 		{
-			//Soy el último en llegar a la barrera, inicio el juego y despierto a todos
 			this.current_barrier_size = 0;
 			this.setEvent(GameEvent.GAME_STARTED);
 			clientThread.startGame();
