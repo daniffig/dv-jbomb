@@ -76,6 +76,9 @@ public class Bomb extends Observable{
 		System.out.println("Setee la bomba con un tiempo de detonación de " + this.getDetonationMilliseconds() + "ms");
 	}
 
+	public void setDetonationSeconds(Integer detonationsSeconds){
+		this.setDetonationMilliseconds((long)detonationsSeconds*1000);
+	}
 
 	public GamePlayer getLastPlayer() {
 		return LastPlayer;

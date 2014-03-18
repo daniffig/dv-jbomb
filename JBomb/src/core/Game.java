@@ -41,6 +41,7 @@ public class Game {
 
 	public Game()
 	{
+		this.setBomb(new Bomb(this));
 		this.setState(new NewGameState());		
 	}
 
@@ -172,8 +173,8 @@ public class Game {
 		this.CurrentRound++;
 		
 		this.setState(new RunningGameState());
-		this.setBomb(new Bomb(this.RoundDuration.getDuration(), this));
 		this.getGamePoints().initializeNewRoundPoints(this.GamePlayers);
+		this.getBomb().setDetonationSeconds(this.RoundDuration.getDuration());
 		this.getBomb().setLastPlayer(null);
 		this.getBomb().setCurrentPlayer(this.getGamePlayers().get((int)(Math.random() * this.getGamePlayers().size())));
 	}
