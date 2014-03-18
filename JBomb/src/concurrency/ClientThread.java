@@ -94,6 +94,11 @@ public class ClientThread implements Runnable, Observer {
 				case QUIZ_ANSWER_REQUEST:
 					//paro el timer, analizo respuesta y repondo bien o mal
 					this.processQuizAnswer();
+					break;
+				case START_NEW_ROUND_REQUEST:
+					this.EventHandler.joinBarrier(this);
+					this.onHoldJoinHandleEvents();
+					break;
 				default:
 					break;
 				
