@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+import network.GameServer;
+
 public class GamePoints {
 
 	private Vector<HashMap<Integer, Integer>> RoundPoints = new Vector<HashMap<Integer, Integer>>();
@@ -31,12 +33,12 @@ public class GamePoints {
 
 	public void initializeNewRoundPoints(List<GamePlayer> GamePlayers)
 	{
-		HashMap<Integer, Integer> statPoints = new HashMap<Integer, Integer>();
+		HashMap<Integer, Integer> startPoints = new HashMap<Integer, Integer>();
 
 		for(GamePlayer gp : GamePlayers)
-			statPoints.put(gp.getId(), 0);
+			startPoints.put(gp.getId(), 0);
 
-		RoundPoints.add(statPoints);
+		RoundPoints.add(startPoints);
 	}
 
 	public void initializeGeneralPoints(Game Game)
@@ -50,6 +52,8 @@ public class GamePoints {
 
 	public void scoreCorrectAnswer(Integer PlayerId)
 	{
+		System.out.println(String.format("Voy a guardar puntaje para el jugador %s", PlayerId));		
+		System.out.println(String.format("%s tenía %s puntos", PlayerId, this.RoundPoints.lastElement().get(PlayerId)));
 		this.RoundPoints.lastElement().put(PlayerId, this.RoundPoints.lastElement().get(PlayerId) - 10);
 	}
 
