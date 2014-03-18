@@ -1,8 +1,11 @@
 package core;
 
+import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
+
+import network.Player;
 
 import concurrency.ClientThread;
 
@@ -76,6 +79,14 @@ public class Game {
 		return null;
 	}
 
+	public synchronized Vector<Player> getGamePlayersAsPlayers(){
+		Vector<Player> Players = new Vector<Player>();
+		for(GamePlayer gp: this.GamePlayers)
+			Players.add(gp.toPlayer());
+		
+		return Players;
+	}
+	
 	public Integer getMaxRounds() {
 		return MaxRounds;
 	}

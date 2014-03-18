@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import network.Player;
+
 public class GamePlayer {
 
 	private Integer Id;
@@ -112,5 +114,11 @@ public class GamePlayer {
 	public GamePlayer getRandomNeighbour()
 	{
 		return this.getNeighbour((int)(Math.random() * this.getNeighbours().size()));
+	}
+	
+	//To Player instance convertion
+	public Player toPlayer()
+	{
+		return new Player(this.getId(), this.getName(), this.getRoundPoints(), this.getGeneralPoints());
 	}
 }
