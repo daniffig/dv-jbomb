@@ -61,7 +61,7 @@ public class JBombGamePlayView extends JFrame implements Observer {
 		this.Grafo = this.Game.getGraph();
 		this.Game.getBomb().addObserver(this);
 		
-		//setIconImage(Toolkit.getDefaultToolkit().getImage(JBombGamePlayView.class.getResource("/images/icon.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(JBombGamePlayView.class.getResource("/images/icon.png")));
 		setTitle("JBomb - Estado del juego " + Game.getName());
 		setResizable(false);
 		setBounds(100, 100, 500, 600);

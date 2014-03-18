@@ -65,7 +65,7 @@ public class JBombServerMainView {
 	 */
 	private void initialize() {
 		frmJbombV = new JFrame();
-		//frmJbombV.setIconImage(Toolkit.getDefaultToolkit().getImage(JBombServerMainView.class.getResource("/images/icon.png")));
+		frmJbombV.setIconImage(Toolkit.getDefaultToolkit().getImage(JBombServerMainView.class.getResource("/images/icon.png")));
 		frmJbombV.setTitle("JBomb v0.2.1 - Servidor");
 		frmJbombV.setResizable(false);
 		frmJbombV.setBounds(100, 100, 600, 392);

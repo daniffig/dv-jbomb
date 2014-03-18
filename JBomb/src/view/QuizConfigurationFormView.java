@@ -48,7 +48,7 @@ public class QuizConfigurationFormView extends JFrame {
 		this.parentWindow = JBombServerMainView;
 		
 		setResizable(false);
-		//setIconImage(Toolkit.getDefaultToolkit().getImage("/home/daniffig/Escritorio/Bomb.png"));
+		setIconImage(Toolkit.getDefaultToolkit().getImage("/home/daniffig/Escritorio/Bomb.png"));
 		setTitle("Administración de Cuestionarios");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 600, 367);
