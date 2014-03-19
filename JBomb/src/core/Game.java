@@ -293,6 +293,25 @@ public class Game {
 		return gpi;
 	}
 	
+	//Vector para tabla de puntajes en el gamePlay
+	public Vector<Vector<Object>> getVectorScoreBoard()
+	{
+		Vector<Vector<Object>> ScoreBoard = new Vector<Vector<Object>>();
+		
+		for(GamePlayer gamePlayer : this.getGamePlayers())
+		{
+			Vector<Object> ScoreRow = new Vector<Object>();
+			
+			ScoreRow.add(gamePlayer.getName());
+			ScoreRow.add(gamePlayer.getCurrentRoundPoints());
+			ScoreRow.add(gamePlayer.getGeneralPoints());
+			
+			ScoreBoard.add(ScoreRow);
+		}
+		
+		return ScoreBoard;
+	}
+	
 	//Genera el grafo para ser mostrado en el JBombGamePlayView
 	public Graph<String, String> getGraph()
 	{

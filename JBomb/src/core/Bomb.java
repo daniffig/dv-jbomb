@@ -43,7 +43,11 @@ public class Bomb extends Observable{
 		
 		this.setTargetPlayer(null);
 		
-		System.out.println("Setee la bomba con un tiempo de detonación de " + this.getDetonationMilliseconds() + "ms");
+		setChanged();
+		
+		notifyObservers(BombEvent.BOMB_SETTED);
+		
+		System.out.println("Setee la bomba con un tiempo de detonaciï¿½n de " + this.getDetonationMilliseconds() + "ms");
 	}
 	
 	public void activate()

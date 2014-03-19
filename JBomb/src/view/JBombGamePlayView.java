@@ -48,6 +48,8 @@ public class JBombGamePlayView extends JFrame implements Observer {
 
 	private JTable ScoreTable;
 	
+	private JLabel RoundInformation;
+	
 	//Atributos del modelo
 	private Graph<String, String> Grafo = new SparseMultigraph<String, String>();
 	
@@ -85,8 +87,8 @@ public class JBombGamePlayView extends JFrame implements Observer {
 		
 		JScrollPane scrollPane = new JScrollPane();
 		this.getContentPane().add(scrollPane);
-	/*	
-		ScoreTable = new JTable(new DefaultTableModel(this.Game.getGamePoints().getVectorScoreBoard(), ScoreTableFields){
+	
+		ScoreTable = new JTable(new DefaultTableModel(this.Game.getVectorScoreBoard(), ScoreTableFields){
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -96,9 +98,12 @@ public class JBombGamePlayView extends JFrame implements Observer {
 		});
 		
 		scrollPane.setViewportView(ScoreTable);
-		*/
+		
+		RoundInformation = new JLabel("<p>Ronda " + this.Game.getCurrentRound() + " de " + this.Game.getMaxRounds() + "</p>");
+		
 		this.getContentPane().add(new JLabel("<html><i>El vertice de color <font color='red'>rojo</font> indica el poseedor de la bomba.</i></html>"));
 		this.getContentPane().add(contentPanel);
+		this.getContentPane().add(RoundInformation);
 		this.getContentPane().add(scrollPane);
 		
 		this.addWindowListener(new WindowAdapter() {
@@ -140,13 +145,16 @@ public class JBombGamePlayView extends JFrame implements Observer {
 		
 		switch(g){
 			case BOMB_OWNER_CHANGED:
-				System.out.println("[Server-GamePlayView] Me notificaron que el dueño de la bomba cambió");
+				System.out.println("[Server-GamePlayView] Me notificaron que el dueï¿½o de la bomba cambiï¿½");
 				vv.repaint();
 				break;
 			case BOMB_EXPLODED:
 				System.out.println("[Server-GamePlayView] Me notificaron que exploto todo");
 				this.refreshScoreTable();
 				break;
+			case BOMB_SETTED:
+				System.out.println("[Server-GamePlayView] Se seteo la bomba eso quiere decir que empezÃ³ una nueva ronda");
+				this.RoundInformation.repaint();
 			default:
 				break;
 		}
@@ -154,7 +162,7 @@ public class JBombGamePlayView extends JFrame implements Observer {
 	
 	public void refreshScoreTable()
 	{
-		/*
+		
 		Vector<String> ScoreTableFields = new Vector<String>();
 		ScoreTableFields.add("Jugador");
 		ScoreTableFields.add("Puntaje en la ronda actual");
@@ -164,7 +172,7 @@ public class JBombGamePlayView extends JFrame implements Observer {
 		//scrollPane.setBounds(12, 12, 570, 320);
 		//frmJbombV.getContentPane().add(scrollPane);
 		
-		ScoreTable.setModel(new DefaultTableModel(this.Game.getGamePoints().getVectorScoreBoard(), ScoreTableFields){
+		ScoreTable.setModel(new DefaultTableModel(this.Game.getVectorScoreBoard(), ScoreTableFields){
 			private static final long serialVersionUID = 1L;
 
 		    public boolean isCellEditable(int row, int column) {
@@ -172,6 +180,6 @@ public class JBombGamePlayView extends JFrame implements Observer {
 		    }
 		});
 		
-		((DefaultTableModel)this.ScoreTable.getModel()).fireTableDataChanged();*/
+		((DefaultTableModel)this.ScoreTable.getModel()).fireTableDataChanged();
 	}
 }
