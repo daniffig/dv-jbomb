@@ -1,20 +1,27 @@
 package concurrency;
 
+import gameStates.RunnableGameState;
+import gameStates.WaitingGameState;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import network.Player;
 
 import reference.GameEvent;
-
+import core.Game;
 
 
 public class JBombEventHandler {
+	private Game Game;
+	
 	private int current_barrier_size;
 	private int barrier_size;
+	
 	private GameEvent event;
 	private Player eventTriggerer;
 	private String eventMessage;
+	
 	private List<ClientThread> suscriptors = new ArrayList<ClientThread>();
 
 	public JBombEventHandler(int cant)
@@ -54,7 +61,10 @@ public class JBombEventHandler {
 		
 		if(this.barrier_size != this.current_barrier_size)
 		{
-			if(this.current_barrier_size==1) ct.changeGameToWaitingState();
+			if(this.barrier_size==1){
+				this.Game = ct.getGame();
+				this.Game.setState(new WaitingGameState());
+			}
 			
 			this.setEvent(GameEvent.PLAYER_JOINED_GAME);
 			this.notifyAll();
@@ -63,8 +73,8 @@ public class JBombEventHandler {
 		else
 		{
 			this.current_barrier_size = 0;
-			ct.configureAdjacentPlayersGraph();
-			ct.changeGameToRunnableState();
+			this.Game.configureAdjacentPlayersGraph();
+			this.Game.setState(new RunnableGameState());
 			this.setEvent(GameEvent.GAME_RUNNABLE);
 			this.notifyAll();
 		}
@@ -81,8 +91,8 @@ public class JBombEventHandler {
 		else
 		{
 			this.current_barrier_size = 0;
+			this.Game.start();
 			this.setEvent(GameEvent.GAME_STARTED);
-			clientThread.startGame();
 			this.notifyAll();
 		}
 	}

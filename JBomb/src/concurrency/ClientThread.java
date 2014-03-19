@@ -1,9 +1,6 @@
 package concurrency;
 
 
-import gameStates.RunnableGameState;
-import gameStates.WaitingGameState;
-
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -42,6 +39,18 @@ public class ClientThread implements Runnable, Observer {
 	public ClientThread(Socket s)
 	{
 		this.ClientSocket = s;
+	}
+	
+	public Game getGame(){
+		return this.Game;
+	}
+	
+	public Player getMyPlayer() {
+		return MyPlayer;
+	}
+
+	public void setPlayer(Player player) {
+		MyPlayer = player;
 	}
 	
 	@Override
@@ -478,32 +487,6 @@ public class ClientThread implements Runnable, Observer {
 			
 			return null;
 		}
-	}
-
-	public void startGame(){
-		this.Game.start();
-	}
-	
-	public void configureAdjacentPlayersGraph()
-	{
-		this.Game.configureAdjacentPlayersGraph();
-	}
-	
-	public void changeGameToWaitingState(){
-		this.Game.setState(new WaitingGameState());
-	}
-	
-	public void changeGameToRunnableState()
-	{
-		this.Game.setState(new RunnableGameState());
-	}
-	
-	public Player getMyPlayer() {
-		return MyPlayer;
-	}
-
-	public void setPlayer(Player player) {
-		MyPlayer = player;
 	}
 
 	public boolean bombHasBounced()
