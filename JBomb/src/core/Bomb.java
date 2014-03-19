@@ -68,6 +68,22 @@ public class Bomb extends Observable{
 		this.RemainingMilliseconds = this.getRemainingMilliseconds() - (System.currentTimeMillis() - this.TimeOnActivation);
 	}
 	
+	public void sendToTarget()
+	{
+		this.setLastPlayer(this.getCurrentPlayer());
+		
+		this.setCurrentPlayer(this.getTargetPlayer());
+	}
+	
+	public void bounceBomb()
+	{
+		GamePlayer LastPlayer = this.getLastPlayer();
+		
+		this.setLastPlayer(this.getCurrentPlayer());
+		
+		this.setCurrentPlayer(LastPlayer);
+	}
+	
 	public Long getDetonationMilliseconds() {
 		return DetonationMilliseconds;
 	}

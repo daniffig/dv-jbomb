@@ -239,7 +239,7 @@ public class Game {
 	}
 	
 	public boolean processQuizQuestionAnswer(String Answer){
-		return Answer.equals(this.CurrentQuestion.getAnswers().get(this.CurrentQuestion.getCorrectAnswer()));
+		return this.getMode().sendBomb(Answer.equals(this.CurrentQuestion.getAnswers().get(this.CurrentQuestion.getCorrectAnswer())));
 	}
 	
 	public AbstractGameMode getMode() {
