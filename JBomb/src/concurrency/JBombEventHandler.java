@@ -61,7 +61,7 @@ public class JBombEventHandler {
 		
 		if(this.barrier_size != this.current_barrier_size)
 		{
-			if(this.barrier_size==1){
+			if(this.current_barrier_size==1){
 				this.Game = ct.getGame();
 				this.Game.setState(new WaitingGameState());
 			}
