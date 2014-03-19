@@ -91,6 +91,9 @@ public class ClientThread implements Runnable, Observer {
 					this.setResponse(new JBombCommunicationObject(JBombRequestResponse.CONNECTION_ACCEPTED_RESPONSE));
 					this.sendResponseToClient();
 					break;
+				case PLAYER_DISCONNECTED:
+					this.Game.unsuscribeToBombDetonation(this);
+					break;
 				case GAME_SETTINGS_INFORMATION_REQUEST:
 					this.sendGameSettingsInformation();
 					break;
@@ -114,7 +117,9 @@ public class ClientThread implements Runnable, Observer {
 				case SEND_BOMB_REQUEST:
 					this.EventHandler.setEvent(this.Game.processNextPlayerRequest(request.getBombTargetPlayer().getUID()));
 					this.EventHandler.wakeUpAll();
-					this.handleGameEvents();
+					this.EventHandler.getEvent().handle(this);
+					
+					if(!this.Game.getBomb().getCurrentPlayer().getId().equals(this.getMyPlayer().getUID())) this.handleGameEvents();
 					break;
 				case QUIZ_ANSWER_REQUEST:
 					this.processQuizAnswer();
@@ -145,15 +150,14 @@ public class ClientThread implements Runnable, Observer {
 			{
 				this.EventHandler.setEvent(new BombOwnerAnsweredRight());
 				this.EventHandler.setEventMessage(this.MyPlayer.getName() + " respondi� correctamente!");
-				this.EventHandler.wakeUpAll();
-				this.sendBombOwnerNotification();
 			}
 			else
 			{
 				this.EventHandler.setEvent(new NotifyEvent());
 				this.EventHandler.setEventMessage(this.MyPlayer.getName() + " respondi� incorrectamente!");
-				this.EventHandler.wakeUpAll();
 			}
+			this.EventHandler.wakeUpAll();
+			this.sendBombOwnerNotification();
 		}
 	}
 	

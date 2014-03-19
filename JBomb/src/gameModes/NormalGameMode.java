@@ -18,10 +18,12 @@ public class NormalGameMode extends AbstractGameMode {
 	public boolean sendBomb(boolean IsRightAnswer){
 		if(IsRightAnswer)
 		{
+			System.out.println("Estoy en el NormalGameMode y respondió bien - voy a mandar a " + this.getGame().getBomb().getTargetPlayer().getName());
 			this.getGame().getBomb().sendToTarget();
 			
 			return true;
 		}
+		System.out.println("Estoy en el NormalGameMode y respondió mal");
 		
 		return false;
 	}

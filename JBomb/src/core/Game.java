@@ -206,6 +206,11 @@ public class Game {
 		this.getBomb().addObserver(ct);
 	}
 
+	public synchronized void unsuscribeToBombDetonation(ClientThread ct)
+	{
+		System.out.println("[Game] Quito el observer");
+		this.getBomb().deleteObserver(ct);
+	}
 	public void deepCopy(Game newGame)
 	{
 		this.setName(newGame.getName());

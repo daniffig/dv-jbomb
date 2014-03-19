@@ -18,10 +18,9 @@ public class BombOwnerChanged extends AbstractGameEvent {
 			JBombCommunicationObject response = new JBombCommunicationObject(JBombRequestResponse.BOMB_OWNER_RESPONSE);
 			
 			response.setBombOwner(ClientThread.getGame().getBomb().getCurrentPlayer().toPlayer());
-			response.setFlash(ClientThread.getEventHandler().getEventMessage());
+			response.setFlash("Le lanzaron la bomba a " + ClientThread.getGame().getBomb().getCurrentPlayer().getName() + " y recibio la pregunta");
 			
 			ClientThread.setResponse(response);
-			
 			ClientThread.sendResponseToClient();
 		}
 		else
@@ -39,16 +38,11 @@ public class BombOwnerChanged extends AbstractGameEvent {
 			response.setQuizQuestion(qq.getQuestion());
 			response.setQuizAnswers(answers);
 
-			ClientThread.setResponse(response);
-			ClientThread.sendResponseToClient();
-			
 			//activo bomba
 			ClientThread.getGame().getBomb().activate();
 			
-			//armo notificaci�n y despiero a todos
-			ClientThread.getEventHandler().setEvent(new NotifyEvent());
-			ClientThread.getEventHandler().setEventMessage(ClientThread.getMyPlayer().getName() + " recibi� la pregunta");
-			ClientThread.getEventHandler().wakeUpAll();
+			ClientThread.setResponse(response);
+			ClientThread.sendResponseToClient();
 		}
 
 	}

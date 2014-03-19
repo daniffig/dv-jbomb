@@ -18,7 +18,10 @@ public class BombOwnerNotChanged extends AbstractGameEvent {
 		
 			Vector<String> answers = new Vector<String>();
 			for(String a: qq.getAnswers()) answers.add(a);
-		
+
+			//activo bomba
+			ClientThread.getGame().getBomb().activate();
+			
 			//mando pregunta
 			JBombCommunicationObject response = new JBombCommunicationObject(JBombRequestResponse.QUIZ_QUESTION_RESPONSE);
 			response.setFlash("Recibiste una pregunta!");
@@ -27,14 +30,18 @@ public class BombOwnerNotChanged extends AbstractGameEvent {
 
 			ClientThread.setResponse(response);
 			ClientThread.sendResponseToClient();
-		
-			//activo bomba
-			ClientThread.getGame().getBomb().activate();
-		
-			//armo notificaci�n y despiero a todos
-			ClientThread.getEventHandler().setEvent(new NotifyEvent());//this.EventHandler.setEvent(new NotifyEvent());
-			ClientThread.getEventHandler().setEventMessage(ClientThread.getMyPlayer().getName() + " recibi� la pregunta");
-			ClientThread.getEventHandler().wakeUpAll();
+		}
+		else
+		{
+			System.out.println("[Player Id " + ClientThread.getMyPlayer().getUID() +"] Voy a mandar un notice_flash");
+			
+			JBombCommunicationObject response = new JBombCommunicationObject(JBombRequestResponse.NOTICE_FLASH);
+			
+			response.setFlash(ClientThread.getGame().getBomb().getCurrentPlayer().getName() + " recibio la pregunta");
+			
+			ClientThread.setResponse(response);
+			
+			ClientThread.sendResponseToClient();
 		}
 	}
 	
