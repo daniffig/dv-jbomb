@@ -141,6 +141,10 @@ public class ClientThread implements Runnable, Observer {
 					this.EventHandler.joinBarrier(this);
 					this.onHoldJoinHandleEvents();
 					break;
+				case CONNECTION_RESET_REQUEST:
+					System.out.println("[Player ID " + this.MyPlayer.getUID() + "] Voy a resetear mi conexión");
+					this.resetConnection();
+					break;
 				default:
 					break;
 				
@@ -503,6 +507,20 @@ public class ClientThread implements Runnable, Observer {
 		
 		return gpi;
 	}
+	
+	public void resetConnection(){
+		this.EventHandler = null;
+		this.Game = null;
+		this.MyPlayer = null;
+		
+		this.request=null;
+		this.response=null;
+		
+		this.bombTargetPlayer=null;
+		
+		this.CurrentQuestionAnswer=null;
+	}
+	
 	
 	public void sendResponseToClient(JBombComunicationObject jbco){
 		try{
