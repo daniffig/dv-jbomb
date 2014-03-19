@@ -6,5 +6,13 @@ public class BouncingGameMode extends AbstractGameMode {
 	public String toString() {
 		return "Rebote";
 	}
+	
+	public boolean handleNextPlayerRequest(){
+		return true;
+	}
+	
+	public boolean sendBomb(boolean IsRightAnswer){
+		return true;
+	}
 
 }

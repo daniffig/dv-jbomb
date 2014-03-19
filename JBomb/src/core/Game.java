@@ -33,6 +33,7 @@ public class Game {
 	private Bomb Bomb;
 
 	private Quiz Quiz;
+	private QuizQuestion CurrentQuestion;
 
 	private AbstractLinkageStrategy LinkageStrategy;
 	private AbstractGameMode Mode;
@@ -206,11 +207,6 @@ public class Game {
 		this.getBomb().addObserver(ct);
 	}
 
-	public Boolean isValid()
-	{
-		return true;
-	}
-
 	public void deepCopy(Game newGame)
 	{
 		this.setName(newGame.getName());
@@ -236,6 +232,16 @@ public class Game {
 		Quiz = quiz;
 	}
 
+	public QuizQuestion getRandomQuizQuestion(){
+		this.CurrentQuestion = this.Quiz.getRandomQuizQuestion();
+		
+		return this.CurrentQuestion;
+	}
+	
+	public boolean processQuizQuestionAnswer(String Answer){
+		return Answer.equals(this.CurrentQuestion.getAnswers().get(this.CurrentQuestion.getCorrectAnswer()));
+	}
+	
 	public AbstractGameMode getMode() {
 		return Mode;
 	}

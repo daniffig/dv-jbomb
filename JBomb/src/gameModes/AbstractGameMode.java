@@ -8,7 +8,9 @@ public abstract class AbstractGameMode {
 	
 	public abstract String toString();
 	
+	public abstract boolean handleNextPlayerRequest();
 	
+	public abstract boolean sendBomb(boolean IsRightAnswer);
 	
 	public Game getGame() {
 		return Game;

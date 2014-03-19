@@ -7,4 +7,12 @@ public class NormalGameMode extends AbstractGameMode {
 		return "Normal";
 	}
 	
+	public boolean handleNextPlayerRequest(){
+		return true;
+	}
+	
+	public boolean sendBomb(boolean IsRightAnswer){
+		return true;
+	}
+	
 }
