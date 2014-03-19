@@ -10,6 +10,8 @@ public class BouncingGameMode extends AbstractGameMode {
 	}
 	
 	public boolean handleNextPlayerRequest(GamePlayer TargetPlayer){
+		System.out.println("Estoy en Bouncing Mode");
+		
 		this.getGame().getBomb().sendTo(TargetPlayer);
 		
 		return true;

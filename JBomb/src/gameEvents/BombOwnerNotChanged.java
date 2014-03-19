@@ -13,6 +13,7 @@ public class BombOwnerNotChanged extends AbstractGameEvent {
 	public void handle(ClientThread ClientThread) {
 		if(ClientThread.getGame().getBomb().getCurrentPlayer().getId().equals(ClientThread.getMyPlayer().getUID()))
 		{	
+			System.out.println("[Player Id " + ClientThread.getMyPlayer().getUID() +"] BombOwnerNotChange - Soy el dueño de la bomba, voy a enviar question ");
 			QuizQuestion qq = ClientThread.getGame().getRandomQuizQuestion();
 		
 			Vector<String> answers = new Vector<String>();

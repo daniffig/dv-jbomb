@@ -112,7 +112,9 @@ public class ClientThread implements Runnable, Observer {
 					this.sendBombOwnerNotification();
 					break;
 				case SEND_BOMB_REQUEST:
-					this.Game.processNextPlayerRequest(request.getBombTargetPlayer().getUID()).handle(this);
+					this.EventHandler.setEvent(this.Game.processNextPlayerRequest(request.getBombTargetPlayer().getUID()));
+					this.EventHandler.wakeUpAll();
+					this.handleGameEvents();
 					break;
 				case QUIZ_ANSWER_REQUEST:
 					this.processQuizAnswer();
