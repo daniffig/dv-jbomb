@@ -1,7 +1,7 @@
 package gameEvents;
 
 import reference.JBombRequestResponse;
-import network.JBombComunicationObject;
+import network.JBombCommunicationObject;
 import concurrency.ClientThread;
 
 public class GameFullEvent extends AbstractGameEvent {
@@ -11,7 +11,7 @@ public class GameFullEvent extends AbstractGameEvent {
 	public void handle(ClientThread ClientThread) {
 		System.out.println("mando error porque el juego esta completo");
 		
-		JBombComunicationObject response = new JBombComunicationObject();
+		JBombCommunicationObject response = new JBombCommunicationObject();
 		
 		response.setType(JBombRequestResponse.GAME_FULL_ERROR);
 		

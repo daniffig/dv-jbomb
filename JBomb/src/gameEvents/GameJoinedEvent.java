@@ -3,7 +3,7 @@ package gameEvents;
 import network.GameServer;
 import network.Player;
 import reference.JBombRequestResponse;
-import network.JBombComunicationObject;
+import network.JBombCommunicationObject;
 import concurrency.ClientThread;
 import core.Game;
 import core.GamePlayer;
@@ -31,7 +31,7 @@ public class GameJoinedEvent extends AbstractGameEvent {
 		ClientThread.setMyPlayer(new Player(PlayerId, ClientThread.getRequest().getMyPlayer().getName()));
 		
 		
-		JBombComunicationObject response = new JBombComunicationObject(JBombRequestResponse.GAMEPLAY_INFORMATION_RESPONSE);
+		JBombCommunicationObject response = new JBombCommunicationObject(JBombRequestResponse.GAMEPLAY_INFORMATION_RESPONSE);
 		
 		response.setGamePlayInformation(ClientThread.getGamePlayInformation());
 		

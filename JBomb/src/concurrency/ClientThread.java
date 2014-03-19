@@ -16,7 +16,7 @@ import network.GamePlayInformation;
 import network.GameServer;
 import network.GameSettings;
 import network.GameSettingsInformation;
-import network.JBombComunicationObject;
+import network.JBombCommunicationObject;
 import network.Player;
 import core.Game;
 import core.GamePlayer;
@@ -29,8 +29,8 @@ public class ClientThread implements Runnable, Observer {
 	private Game Game;
 	private Player MyPlayer;
 	
-	private JBombComunicationObject request;
-	private JBombComunicationObject response;
+	private JBombCommunicationObject request;
+	private JBombCommunicationObject response;
 	
 	private Player bombTargetPlayer;
 	
@@ -41,19 +41,19 @@ public class ClientThread implements Runnable, Observer {
 		this.ClientSocket = s;
 	}
 	
-	public JBombComunicationObject getRequest() {
+	public JBombCommunicationObject getRequest() {
 		return request;
 	}
 
-	public void setRequest(JBombComunicationObject request) {
+	public void setRequest(JBombCommunicationObject request) {
 		this.request = request;
 	}
 
-	public JBombComunicationObject getResponse() {
+	public JBombCommunicationObject getResponse() {
 		return response;
 	}
 
-	public void setResponse(JBombComunicationObject response) {
+	public void setResponse(JBombCommunicationObject response) {
 		this.response = response;
 	}
 
@@ -185,7 +185,7 @@ public class ClientThread implements Runnable, Observer {
 			}
 			
 			//mando pregunta
-			response = new JBombComunicationObject(JBombRequestResponse.QUIZ_ANSWER_RESPONSE);
+			response = new JBombCommunicationObject(JBombRequestResponse.QUIZ_ANSWER_RESPONSE);
 			response.setFlash("Respuesta Correcta! :)");
 			response.setCorrectAnswer(true);
 			this.sendResponseToClient(response);
@@ -200,7 +200,7 @@ public class ClientThread implements Runnable, Observer {
 			System.out.println("[Player ID " + this.MyPlayer.getUID() + "]Mando respuesta mal mi respuesta= " + this.CurrentQuestionAnswer + " y el tiene " + request.getSelectedQuizAnswer());
 			this.Game.getGamePlayerById(this.MyPlayer.getUID()).scoreWrongAnswer();
 			
-			response = new JBombComunicationObject(JBombRequestResponse.QUIZ_ANSWER_RESPONSE);
+			response = new JBombCommunicationObject(JBombRequestResponse.QUIZ_ANSWER_RESPONSE);
 			response.setFlash("Respuesta incorrecta! :C");
 			response.setCorrectAnswer(false);
 			this.sendResponseToClient(response);
@@ -221,7 +221,7 @@ public class ClientThread implements Runnable, Observer {
 		this.CurrentQuestionAnswer = qq.getAnswers().get(qq.getCorrectAnswer());
 		
 		//mando pregunta
-		response = new JBombComunicationObject(JBombRequestResponse.QUIZ_QUESTION_RESPONSE);
+		response = new JBombCommunicationObject(JBombRequestResponse.QUIZ_QUESTION_RESPONSE);
 		response.setFlash("Recibiste una pregunta!");
 		response.setQuizQuestion(qq.getQuestion());
 		response.setQuizAnswers(answers);
@@ -243,7 +243,7 @@ public class ClientThread implements Runnable, Observer {
 		if(this.bombHasBounced())
 		{
 			//esto sirve para el modo de rebote, si cambio el dueño de la bomba porque el flaco respondió bien y yo soy el dueño de la bomba, tengo que mandar BOMB_REJECTED_RESPONSE
-			response = new JBombComunicationObject(JBombRequestResponse.BOMB_REJECTED_RESPONSE);
+			response = new JBombCommunicationObject(JBombRequestResponse.BOMB_REJECTED_RESPONSE);
 			response.setBombOwner(new Player(BombOwner.getId(), BombOwner.getName()));
 			response.setMyPlayer(this.MyPlayer);
 		
@@ -251,7 +251,7 @@ public class ClientThread implements Runnable, Observer {
 		}
 		else
 		{
-			response = new JBombComunicationObject(JBombRequestResponse.BOMB_OWNER_RESPONSE);
+			response = new JBombCommunicationObject(JBombRequestResponse.BOMB_OWNER_RESPONSE);
 			response.setBombOwner(new Player(BombOwner.getId(), BombOwner.getName()));
 		
 			String flash = (BombOwner.getId().equals(this.MyPlayer.getUID())) ? "Tenes la bomba!": BombOwner.getName() + " tiene la bomba";
@@ -321,7 +321,7 @@ public class ClientThread implements Runnable, Observer {
 		}
 
 		System.out.println("[Player Id " + this.MyPlayer.getUID() +"] voy a enviar informaciï¿½n y adyacentes y toca al barrera de juego"  );
-		response = new JBombComunicationObject(JBombRequestResponse.GAME_RUNNABLE);
+		response = new JBombCommunicationObject(JBombRequestResponse.GAME_RUNNABLE);
 		
 		for(GamePlayer gp: this.Game.getGamePlayerById(this.MyPlayer.getUID()).getNeighbours())
 			response.addPlayer(new Player(gp.getId(), gp.getName()));
@@ -334,7 +334,7 @@ public class ClientThread implements Runnable, Observer {
 	public void sendPlayerJoinGameNotification(){
 		System.out.println("[Player Id " + this.MyPlayer.getUID() +"]recibi player_added notification");
 		
-		response = new JBombComunicationObject(JBombRequestResponse.PLAYER_ADDED);
+		response = new JBombCommunicationObject(JBombRequestResponse.PLAYER_ADDED);
 		response.setGamePlayInformation(this.getGamePlayInformation());
 		response.setFlash(this.EventHandler.getEventTriggerer().getName());
 	
@@ -343,7 +343,7 @@ public class ClientThread implements Runnable, Observer {
 	}
 	
 	public boolean processJoinGameRequest(){		
-		JBombComunicationObject jbco = new JBombComunicationObject();
+		JBombCommunicationObject jbco = new JBombCommunicationObject();
 		
 		try{			
 			Game RequestedGame = GameServer.getInstance().getGameById(request.getRequestedGameId());
@@ -394,7 +394,7 @@ public class ClientThread implements Runnable, Observer {
 	}
 	
 	public void sendGameListInformation(){
-		JBombComunicationObject response = new JBombComunicationObject(JBombRequestResponse.GAME_LIST_RESPONSE);
+		JBombCommunicationObject response = new JBombCommunicationObject(JBombRequestResponse.GAME_LIST_RESPONSE);
 		
 		System.out.println("Tengo " + GameServer.getInstance().getAvailableGames().size() + " juegos disponibles" );
 		
@@ -415,7 +415,7 @@ public class ClientThread implements Runnable, Observer {
 	
 	public void sendGameSettingsInformation()
 	{
-		JBombComunicationObject response = new JBombComunicationObject(JBombRequestResponse.GAME_SETTINGS_INFORMATION_RESPONSE);
+		JBombCommunicationObject response = new JBombCommunicationObject(JBombRequestResponse.GAME_SETTINGS_INFORMATION_RESPONSE);
 		
 		GameSettingsInformation gsi = new GameSettingsInformation();
 		
@@ -474,7 +474,7 @@ public class ClientThread implements Runnable, Observer {
 		
 		GameServer.getInstance().addGame(g);
 		
-		JBombComunicationObject response = new JBombComunicationObject(JBombRequestResponse.CREATE_GAME_RESPONSE);
+		JBombCommunicationObject response = new JBombCommunicationObject(JBombRequestResponse.CREATE_GAME_RESPONSE);
 		
 		GameInformation gi = new GameInformation();
 		
@@ -490,7 +490,7 @@ public class ClientThread implements Runnable, Observer {
 	
 	public void sendNoticeFlash(){
 		
-		response = new JBombComunicationObject(JBombRequestResponse.NOTICE_FLASH);
+		response = new JBombCommunicationObject(JBombRequestResponse.NOTICE_FLASH);
 		response.setFlash(this.EventHandler.getEventMessage());
 		this.sendResponseToClient(response);
 	}
@@ -522,7 +522,7 @@ public class ClientThread implements Runnable, Observer {
 	}
 	
 	
-	public void sendResponseToClient(JBombComunicationObject jbco){
+	public void sendResponseToClient(JBombCommunicationObject jbco){
 		try{
 			ObjectOutputStream outToClient = new ObjectOutputStream(this.ClientSocket.getOutputStream());
 			
@@ -546,11 +546,11 @@ public class ClientThread implements Runnable, Observer {
 		}
 	}
 	
-	public JBombComunicationObject receiveRequestFromClient(){
+	public JBombCommunicationObject receiveRequestFromClient(){
 		try{
 			ObjectInputStream inFromClient = new ObjectInputStream(this.ClientSocket.getInputStream());
 		
-			return (JBombComunicationObject) inFromClient.readObject();
+			return (JBombCommunicationObject) inFromClient.readObject();
 		}catch(Exception e){
 			System.out.println("Fallo la recepcion del request del cliente");
 			
@@ -592,7 +592,7 @@ public class ClientThread implements Runnable, Observer {
 				this.EventHandler.wakeUpAll();
 			}
 					
-			this.response = new JBombComunicationObject(JBombRequestResponse.BOMB_DETONATED_RESPONSE);
+			this.response = new JBombCommunicationObject(JBombRequestResponse.BOMB_DETONATED_RESPONSE);
 			this.response.setPlayers(this.Game.getGamePlayersAsPlayers());
 			this.response.setGamePlayInformation(this.getGamePlayInformation());
 			this.response.setLoser(new Player(BombOwner.getId(), BombOwner.getName()));

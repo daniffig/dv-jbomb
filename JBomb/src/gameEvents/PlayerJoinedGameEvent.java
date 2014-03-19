@@ -1,7 +1,7 @@
 package gameEvents;
 
 import network.GamePlayInformation;
-import network.JBombComunicationObject;
+import network.JBombCommunicationObject;
 import reference.JBombRequestResponse;
 import concurrency.ClientThread;
 
@@ -19,7 +19,7 @@ public class PlayerJoinedGameEvent extends AbstractGameEvent {
 		gpi.setCurrentRound(ClientThread.getGame().getCurrentRound());
 		gpi.setMaxRounds(ClientThread.getGame().getMaxRounds());
 		
-		JBombComunicationObject response = new JBombComunicationObject(JBombRequestResponse.PLAYER_ADDED);
+		JBombCommunicationObject response = new JBombCommunicationObject(JBombRequestResponse.PLAYER_ADDED);
 		response.setGamePlayInformation(gpi);
 		response.setFlash(ClientThread.getEventHandler().getEventTriggerer().getName());
 	
