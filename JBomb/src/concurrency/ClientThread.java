@@ -41,10 +41,42 @@ public class ClientThread implements Runnable, Observer {
 		this.ClientSocket = s;
 	}
 	
+	public JBombComunicationObject getRequest() {
+		return request;
+	}
+
+	public void setRequest(JBombComunicationObject request) {
+		this.request = request;
+	}
+
+	public JBombComunicationObject getResponse() {
+		return response;
+	}
+
+	public void setResponse(JBombComunicationObject response) {
+		this.response = response;
+	}
+
 	public Game getGame(){
 		return this.Game;
 	}
 	
+	public JBombEventHandler getEventHandler() {
+		return EventHandler;
+	}
+
+	public void setEventHandler(JBombEventHandler eventHandler) {
+		EventHandler = eventHandler;
+	}
+
+	public void setGame(Game game) {
+		Game = game;
+	}
+
+	public void setMyPlayer(Player myPlayer) {
+		MyPlayer = myPlayer;
+	}
+
 	public Player getMyPlayer() {
 		return MyPlayer;
 	}
@@ -477,6 +509,18 @@ public class ClientThread implements Runnable, Observer {
 		}
 	}
 	
+	public void sendResponseToClient(){
+		try{
+			ObjectOutputStream outToClient = new ObjectOutputStream(this.ClientSocket.getOutputStream());
+			
+			outToClient.writeObject(this.response);
+			
+			System.out.println("Envie response al cliente");
+		}catch(Exception e){
+			System.out.println("Fallo el envio del response");
+		}
+	}
+	
 	public JBombComunicationObject receiveRequestFromClient(){
 		try{
 			ObjectInputStream inFromClient = new ObjectInputStream(this.ClientSocket.getInputStream());
@@ -488,6 +532,18 @@ public class ClientThread implements Runnable, Observer {
 			return null;
 		}
 	}
+	
+	/*public void receiveRequestFromClient(){
+		try{
+			ObjectInputStream inFromClient = new ObjectInputStream(this.ClientSocket.getInputStream());
+		
+			this.request = (JBombComunicationObject) inFromClient.readObject();
+		}catch(Exception e){
+			System.out.println("Fallo la recepcion del request del cliente");
+			
+			this.request = null;
+		}
+	}*/
 
 	public boolean bombHasBounced()
 	{

@@ -144,7 +144,19 @@ public class Game {
 
 		return -1;
 	}
+	/*
+  	public synchronized AbstractGameEvent addGamePlayer(GamePlayer GamePlayer) {
+	if (this.canAddPlayer())
+	{
+		GamePlayer.setId((this.getGamePlayers().size()+1));
+		this.getGamePlayers().add(GamePlayer);
 
+		return new GameJoinedEvent(this, GamePlayer.getId());
+	}
+
+	return new GameFullEvent();
+}
+ * */
 	public synchronized Boolean canAddPlayer() {
 		return this.getGamePlayers().size() <= this.getMaxGamePlayersAllowed();
 	}

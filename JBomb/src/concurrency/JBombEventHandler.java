@@ -66,7 +66,7 @@ public class JBombEventHandler {
 				this.Game.setState(new WaitingGameState());
 			}
 			
-			this.setEvent(GameEvent.PLAYER_JOINED_GAME);
+			this.setEvent(GameEvent.PLAYER_JOINED_GAME);//this.setEvent(new PlayerJoinedGameEvent());
 			this.notifyAll();
 			this.goToSleep();
 		}
@@ -75,7 +75,7 @@ public class JBombEventHandler {
 			this.current_barrier_size = 0;
 			this.Game.configureAdjacentPlayersGraph();
 			this.Game.setState(new RunnableGameState());
-			this.setEvent(GameEvent.GAME_RUNNABLE);
+			this.setEvent(GameEvent.GAME_RUNNABLE);//this.setEvent(new GameRunnableEvent());
 			this.notifyAll();
 		}
 	}
@@ -92,7 +92,7 @@ public class JBombEventHandler {
 		{
 			this.current_barrier_size = 0;
 			this.Game.start();
-			this.setEvent(GameEvent.GAME_STARTED);
+			this.setEvent(GameEvent.GAME_STARTED);//this.setEvent(new GameStartedEvent());
 			this.notifyAll();
 		}
 	}
