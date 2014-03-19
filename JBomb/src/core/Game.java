@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import network.GamePlayInformation;
 import network.Player;
 
 import concurrency.ClientThread;
@@ -13,6 +14,13 @@ import roundDurations.AbstractRoundDuration;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
+import gameEvents.AbstractGameEvent;
+import gameEvents.BombOwnerChanged;
+import gameEvents.BombOwnerNotChanged;
+import gameEvents.GameFullEvent;
+import gameEvents.GameJoinedEvent;
+import gameEvents.GameStartedEvent;
+import gameEvents.SetupEvent;
 import gameModes.AbstractGameMode;
 import gameStates.*;
 import linkageStrategies.AbstractLinkageStrategy;
@@ -133,30 +141,18 @@ public class Game {
 		LinkageStrategy = linkageStrategy;
 	}
 
-	public synchronized Integer addGamePlayer(GamePlayer GamePlayer) {
-		if (this.canAddPlayer())
+  	public synchronized SetupEvent addGamePlayer(GamePlayer GamePlayer) {
+  		if (this.canAddPlayer())
 		{
-			GamePlayer.setId((this.getGamePlayers().size()+1));
-			this.getGamePlayers().add(GamePlayer);
-
-			return GamePlayer.getId();
+  			GamePlayer.setId((this.getGamePlayers().size()+1));
+  			this.getGamePlayers().add(GamePlayer);
+  			
+  			return new GameJoinedEvent(this, GamePlayer.getId());
 		}
 
-		return -1;
-	}
-	/*
-  	public synchronized AbstractGameEvent addGamePlayer(GamePlayer GamePlayer) {
-	if (this.canAddPlayer())
-	{
-		GamePlayer.setId((this.getGamePlayers().size()+1));
-		this.getGamePlayers().add(GamePlayer);
+		return new GameFullEvent();
+  	}
 
-		return new GameJoinedEvent(this, GamePlayer.getId());
-	}
-
-	return new GameFullEvent();
-}
- * */
 	public synchronized Boolean canAddPlayer() {
 		return this.getGamePlayers().size() <= this.getMaxGamePlayersAllowed();
 	}
@@ -176,15 +172,6 @@ public class Game {
 	public Boolean canSendBomb(GamePlayer sourceGamePlayer,	GamePlayer destinationGamePlayer)
 	{
 		return true;
-	}
-
-	public synchronized void sendBomb(GamePlayer sourceGamePlayer,GamePlayer destinationGamePlayer)
-	{
-		if (this.canSendBomb(sourceGamePlayer, destinationGamePlayer))
-		{
-			Bomb.setLastPlayer(sourceGamePlayer);
-			Bomb.setCurrentPlayer(destinationGamePlayer);
-		}
 	}
 
 	public void start()
@@ -251,10 +238,23 @@ public class Game {
 	}
 	
 	public boolean processQuizQuestionAnswer(String Answer){
-		return this.getMode().sendBomb(Answer.equals(this.CurrentQuestion.getAnswers().get(this.CurrentQuestion.getCorrectAnswer())));
+		
+		Boolean IsCorrectAnswer = Answer.equals(this.CurrentQuestion.getAnswers().get(this.CurrentQuestion.getCorrectAnswer()));
+		
+		if(IsCorrectAnswer)
+			this.getBomb().getCurrentPlayer().scoreRightAnswer();
+		else
+			this.getBomb().getCurrentPlayer().scoreWrongAnswer();
+		
+		return this.getMode().sendBomb(IsCorrectAnswer);
 	}
 	
-	
+	public AbstractGameEvent processNextPlayerRequest(Integer TargetPlayerId){
+
+		return (this.getMode().handleNextPlayerRequest(this.getGamePlayerById(TargetPlayerId)))
+				? new BombOwnerChanged()
+				: new BombOwnerNotChanged();
+	}
 	
 	public AbstractGameMode getMode() {
 		return Mode;
@@ -274,6 +274,20 @@ public class Game {
 		State = state;
 	}
 
+	public GamePlayInformation toGamePlayInformation(){
+		
+		GamePlayInformation gpi = new GamePlayInformation();
+		
+		gpi.setId(this.getUID());
+		gpi.setName(this.getName());
+		gpi.setMaxPlayers(this.getMaxGamePlayersAllowed());
+		gpi.setTotalPlayers(this.getTotalGamePlayers());
+		gpi.setCurrentRound(this.getCurrentRound());
+		gpi.setMaxRounds(this.getMaxRounds());
+		
+		return gpi;
+	}
+	
 	//Genera el grafo para ser mostrado en el JBombGamePlayView
 	public Graph<String, String> getGraph()
 	{

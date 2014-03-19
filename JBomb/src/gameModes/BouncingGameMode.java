@@ -18,7 +18,7 @@ public class BouncingGameMode extends AbstractGameMode {
 	public boolean sendBomb(boolean IsRightAnswer){
 		if(IsRightAnswer)
 		{
-			this.getGame().getBomb().sendToTarget();
+			this.getGame().getBomb().bounceBomb();
 			
 			return true;
 		}

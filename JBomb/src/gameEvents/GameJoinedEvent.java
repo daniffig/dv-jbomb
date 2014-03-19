@@ -6,9 +6,8 @@ import reference.JBombRequestResponse;
 import network.JBombCommunicationObject;
 import concurrency.ClientThread;
 import core.Game;
-import core.GamePlayer;
 
-public class GameJoinedEvent extends AbstractGameEvent {
+public class GameJoinedEvent extends SetupEvent {
 
 	private Game RequestedGame;
 	private Integer PlayerId;
@@ -17,6 +16,10 @@ public class GameJoinedEvent extends AbstractGameEvent {
 	{
 		this.RequestedGame = RequestedGame;
 		this.PlayerId = PlayerId;
+	}
+	
+	public boolean JoinedToGameSucceded(){
+		return true;
 	}
 	
 	@Override
@@ -33,17 +36,17 @@ public class GameJoinedEvent extends AbstractGameEvent {
 		
 		JBombCommunicationObject response = new JBombCommunicationObject(JBombRequestResponse.GAMEPLAY_INFORMATION_RESPONSE);
 		
-		response.setGamePlayInformation(ClientThread.getGamePlayInformation());
+		response.setGamePlayInformation(ClientThread.getGame().toGamePlayInformation());
 		
 		response.setMyPlayer(ClientThread.getMyPlayer());
 		
 		ClientThread.setResponse(response);
 		
+		ClientThread.sendResponseToClient();
+		
 		GameServer.getInstance().refreshGamesTable();
 		
 		System.out.println("[GameJoinedEvent] El Player con ID " + ClientThread.getMyPlayer().getUID() + " se agregó al juego y le mande la información");
-		
-		ClientThread.sendResponseToClient();
 	}
 
 }

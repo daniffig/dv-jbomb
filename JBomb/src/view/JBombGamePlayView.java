@@ -20,9 +20,7 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-import network.GameServer;
-
-import reference.GameEvent;
+import reference.BombEvent;
 
 import core.Game;
 
@@ -138,7 +136,7 @@ public class JBombGamePlayView extends JFrame implements Observer {
 
 	@Override
 	public void update(Observable arg0, Object event) {
-		GameEvent g = (GameEvent)event;
+		BombEvent g = (BombEvent)event;
 		
 		switch(g){
 			case BOMB_OWNER_CHANGED:
@@ -156,6 +154,7 @@ public class JBombGamePlayView extends JFrame implements Observer {
 	
 	public void refreshScoreTable()
 	{
+		/*
 		Vector<String> ScoreTableFields = new Vector<String>();
 		ScoreTableFields.add("Jugador");
 		ScoreTableFields.add("Puntaje en la ronda actual");
@@ -164,7 +163,7 @@ public class JBombGamePlayView extends JFrame implements Observer {
 		//JScrollPane scrollPane = new JScrollPane();
 		//scrollPane.setBounds(12, 12, 570, 320);
 		//frmJbombV.getContentPane().add(scrollPane);
-		/*
+		
 		ScoreTable.setModel(new DefaultTableModel(this.Game.getGamePoints().getVectorScoreBoard(), ScoreTableFields){
 			private static final long serialVersionUID = 1L;
 
@@ -172,7 +171,7 @@ public class JBombGamePlayView extends JFrame implements Observer {
 		        return false;
 		    }
 		});
-		*/
-		((DefaultTableModel)this.ScoreTable.getModel()).fireTableDataChanged();
+		
+		((DefaultTableModel)this.ScoreTable.getModel()).fireTableDataChanged();*/
 	}
 }

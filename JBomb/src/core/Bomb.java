@@ -7,7 +7,7 @@ import java.util.Observable;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import reference.GameEvent;
+import reference.BombEvent;
 
 public class Bomb extends Observable{
 
@@ -116,7 +116,7 @@ public class Bomb extends Observable{
 		
 		setChanged();
 		
-		notifyObservers(GameEvent.BOMB_OWNER_CHANGED);
+		notifyObservers(BombEvent.BOMB_OWNER_CHANGED);
 	}
 	
 	public GamePlayer getTargetPlayer() {
@@ -167,7 +167,7 @@ public class Bomb extends Observable{
 				
 				setChanged();
 				
-				notifyObservers(GameEvent.BOMB_EXPLODED);
+				notifyObservers(BombEvent.BOMB_EXPLODED);
 			}
 		};
 	}

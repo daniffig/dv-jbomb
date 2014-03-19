@@ -4,9 +4,11 @@ import reference.JBombRequestResponse;
 import network.JBombCommunicationObject;
 import concurrency.ClientThread;
 
-public class GameFullEvent extends AbstractGameEvent {
+public class GameFullEvent extends SetupEvent {
 
-	//gameEvents.AbstractGameEvent
+	public boolean JoinedToGameSucceded(){
+		return false;
+	}
 
 	public void handle(ClientThread ClientThread) {
 		System.out.println("mando error porque el juego esta completo");

@@ -8,7 +8,7 @@ import java.util.List;
 
 import network.Player;
 
-import reference.GameEvent;
+import gameEvents.*;
 import core.Game;
 
 
@@ -18,7 +18,7 @@ public class JBombEventHandler {
 	private int current_barrier_size;
 	private int barrier_size;
 	
-	private GameEvent event;
+	private AbstractGameEvent event;
 	private Player eventTriggerer;
 	private String eventMessage;
 	
@@ -66,7 +66,7 @@ public class JBombEventHandler {
 				this.Game.setState(new WaitingGameState());
 			}
 			
-			this.setEvent(GameEvent.PLAYER_JOINED_GAME);//this.setEvent(new PlayerJoinedGameEvent());
+			this.setEvent(new PlayerJoinedGameEvent());
 			this.notifyAll();
 			this.goToSleep();
 		}
@@ -75,7 +75,7 @@ public class JBombEventHandler {
 			this.current_barrier_size = 0;
 			this.Game.configureAdjacentPlayersGraph();
 			this.Game.setState(new RunnableGameState());
-			this.setEvent(GameEvent.GAME_RUNNABLE);//this.setEvent(new GameRunnableEvent());
+			this.setEvent(new GameRunnableEvent());
 			this.notifyAll();
 		}
 	}
@@ -92,17 +92,17 @@ public class JBombEventHandler {
 		{
 			this.current_barrier_size = 0;
 			this.Game.start();
-			this.setEvent(GameEvent.GAME_STARTED);//this.setEvent(new GameStartedEvent());
+			this.setEvent(new GameStartedEvent());
 			this.notifyAll();
 		}
 	}
 	
-	public void setEvent(GameEvent e)
+	public void setEvent(AbstractGameEvent e)
 	{
 		this.event = e;
 	}
 	
-	public GameEvent getEvent()
+	public AbstractGameEvent getEvent()
 	{
 		return this.event;
 	}

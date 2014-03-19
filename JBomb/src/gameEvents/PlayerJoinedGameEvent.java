@@ -25,7 +25,10 @@ public class PlayerJoinedGameEvent extends AbstractGameEvent {
 	
 		ClientThread.setResponse(response);
 		ClientThread.sendResponseToClient();
-		
-		//this.EventHandler.goToSleep();
+	}
+	
+	@Override
+	public boolean isNotification(ClientThread ClientThread){
+		return true;
 	}
 }
