@@ -87,6 +87,10 @@ public class ClientThread implements Runnable, Observer {
 		while(!request.getType().equals(JBombRequestResponse.CLOSE_CONNECTION_REQUEST))
 		{
 			switch(request.getType()){
+				case TRY_CONNECTION_REQUEST:
+					this.setResponse(new JBombCommunicationObject(JBombRequestResponse.CONNECTION_ACCEPTED_RESPONSE));
+					this.sendResponseToClient();
+					break;
 				case GAME_SETTINGS_INFORMATION_REQUEST:
 					this.sendGameSettingsInformation();
 					break;
@@ -318,7 +322,7 @@ public class ClientThread implements Runnable, Observer {
 	}
 	
 	public void resetConnection(){
-		System.out.println("[Player ID " + this.MyPlayer.getUID() + "] Voy a resetear mi conexión");
+		System.out.println("[Player ID " + this.MyPlayer.getUID() + "] Voy a resetear mi conexiï¿½n");
 		
 		this.EventHandler = null;
 		this.Game = null;
