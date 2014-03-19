@@ -135,21 +135,25 @@ public class ClientThread implements Runnable, Observer {
 	}
 	
 	public void processQuizAnswer(){
+		System.out.println("[Player ID " + this.MyPlayer.getUID() + "] Voy a ver si respondio bien");
 		
 		this.Game.getBomb().deactivate();
 		
-		if(this.Game.processQuizQuestionAnswer(request.getSelectedQuizAnswer()))
-		{
-			this.EventHandler.setEvent(new BombOwnerAnsweredRight());
-			this.EventHandler.setEventMessage(this.MyPlayer.getName() + " respondi� correctamente!");
-			this.EventHandler.wakeUpAll();
-			this.sendBombOwnerNotification();
-		}
-		else
-		{
-			this.EventHandler.setEvent(new NotifyEvent());
-			this.EventHandler.setEventMessage(this.MyPlayer.getName() + " respondi� incorrectamente!");
-			this.EventHandler.wakeUpAll();
+		if(!this.Game.getBomb().isDetonated())
+		{		
+			if(this.Game.processQuizQuestionAnswer(request.getSelectedQuizAnswer()))
+			{
+				this.EventHandler.setEvent(new BombOwnerAnsweredRight());
+				this.EventHandler.setEventMessage(this.MyPlayer.getName() + " respondi� correctamente!");
+				this.EventHandler.wakeUpAll();
+				this.sendBombOwnerNotification();
+			}
+			else
+			{
+				this.EventHandler.setEvent(new NotifyEvent());
+				this.EventHandler.setEventMessage(this.MyPlayer.getName() + " respondi� incorrectamente!");
+				this.EventHandler.wakeUpAll();
+			}
 		}
 	}
 	

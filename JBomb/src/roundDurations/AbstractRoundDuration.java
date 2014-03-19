@@ -16,8 +16,8 @@ public abstract class AbstractRoundDuration {
 
 	public Integer getDuration() {
 		
-		return 5;
-		//return duration;
+		//return 5;
+		return duration;
 	}
 
 	public void setDuration(Integer duration) {
