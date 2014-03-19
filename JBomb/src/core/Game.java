@@ -1,6 +1,5 @@
 package core;
 
-import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
@@ -26,8 +25,6 @@ public class Game {
 
 	private Integer MaxGamePlayersAllowed = 0;
 	private List<GamePlayer> GamePlayers = new ArrayList<GamePlayer>();
-
-	private GamePoints GamePoints = new GamePoints();
 
 	private Integer CurrentRound = 0;
 	private Integer MaxRounds = 0;
@@ -255,14 +252,6 @@ public class Game {
 
 	public void setState(AbstractGameState state) {
 		State = state;
-	}
-
-	public GamePoints getGamePoints() {
-		return GamePoints;
-	}
-
-	public void setGamePoints(GamePoints gamePoints) {
-		GamePoints = gamePoints;
 	}
 
 	//Genera el grafo para ser mostrado en el JBombGamePlayView

@@ -1,6 +1,7 @@
 package concurrency;
 
 
+import gameStates.RunnableGameState;
 import gameStates.WaitingGameState;
 
 import java.io.ObjectInputStream;
@@ -490,6 +491,11 @@ public class ClientThread implements Runnable, Observer {
 	
 	public void changeGameToWaitingState(){
 		this.Game.setState(new WaitingGameState());
+	}
+	
+	public void changeGameToRunnableState()
+	{
+		this.Game.setState(new RunnableGameState());
 	}
 	
 	public Player getMyPlayer() {

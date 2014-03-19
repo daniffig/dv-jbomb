@@ -8,6 +8,8 @@ public abstract class AbstractGameMode {
 	
 	public abstract String toString();
 	
+	
+	
 	public Game getGame() {
 		return Game;
 	}

@@ -64,6 +64,7 @@ public class JBombEventHandler {
 		{
 			this.current_barrier_size = 0;
 			ct.configureAdjacentPlayersGraph();
+			ct.changeGameToRunnableState();
 			this.setEvent(GameEvent.GAME_RUNNABLE);
 			this.notifyAll();
 		}
