@@ -272,7 +272,7 @@ public class ClientThread implements Runnable, Observer {
 		GameEvent event = this.EventHandler.getEvent();
 		
 		mainLoop:
-		while(!event.equals(GameEvent.BOMB_OWNER_CHANGED))
+		while(!event.equals(GameEvent.BOMB_OWNER_CHANGED) && !event.equals(GameEvent.BOMB_EXPLODED))
 		{
 			switch(event){
 				case PLAYER_RECEIVED_QUESTION:
@@ -292,14 +292,21 @@ public class ClientThread implements Runnable, Observer {
 				default:
 					break;
 			}
-			
+			System.out.println("Algo paso algo pasoooo");
 			event = this.EventHandler.getEvent();
 		}
 		
 		//Si sali de aca es ó porque el flaco respondió bien así que tengo que notificar a todos quien tiene la bomba
 		//o alguien le tiro la bomba a otro porque es modo rebote y en ese caso tambien tengo que notificar y mandar la pregunta
-		this.sendBombOwnerNotification();
-		if(event.equals(GameEvent.BOMB_OWNER_CHANGED)) this.sendQuizQuestion();
+		if(event.equals(GameEvent.BOMB_EXPLODED))
+		{
+			System.out.println("[Player Id " + this.MyPlayer.getUID() +"] ME DESPERTE PORQUE LA BOMBA EXPLOTOOOO");
+		}
+		else
+		{
+			this.sendBombOwnerNotification();
+			if(event.equals(GameEvent.BOMB_OWNER_CHANGED)) this.sendQuizQuestion();
+		}
 	}
 	
 	public void onHoldJoinHandleEvents(){
@@ -560,6 +567,12 @@ public class ClientThread implements Runnable, Observer {
 			System.out.println("[Player Id " + this.MyPlayer.getUID() +"] Acabo de recibir notificacion de explosion de bomba!");
 			
 			GamePlayer BombOwner = this.Game.getBomb().getCurrentPlayer();
+			
+			if(BombOwner.getId().equals(this.MyPlayer.getUID()))
+			{
+				this.EventHandler.setEvent(GameEvent.BOMB_EXPLODED);
+				this.EventHandler.wakeUpAll();
+			}
 					
 			this.response = new JBombComunicationObject(JBombRequestResponse.BOMB_DETONATED_RESPONSE);
 			this.response.setPlayers(this.Game.getGamePlayersAsPlayers());

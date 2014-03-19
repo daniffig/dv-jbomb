@@ -254,6 +254,8 @@ public class Game {
 		return this.getMode().sendBomb(Answer.equals(this.CurrentQuestion.getAnswers().get(this.CurrentQuestion.getCorrectAnswer())));
 	}
 	
+	
+	
 	public AbstractGameMode getMode() {
 		return Mode;
 	}

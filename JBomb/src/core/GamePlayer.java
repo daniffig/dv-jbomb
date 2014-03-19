@@ -73,14 +73,20 @@ public class GamePlayer {
 	
 	public void scoreWrongAnswer(){
 		this.RoundPoints.set(this.RoundPoints.size()-1, this.getCurrentRoundPoints()-5);
+		
+		this.GeneralPoints = this.GeneralPoints -5;
 	}
 	
 	public void scoreRightAnswer(){
 		this.RoundPoints.set(this.RoundPoints.size()-1, this.getCurrentRoundPoints()+10);
+		
+		this.GeneralPoints = this.GeneralPoints +10;
 	}
 	
 	public void scoreBombExploded(){
 		this.RoundPoints.set(this.RoundPoints.size()-1, this.getCurrentRoundPoints()-50);
+		
+		this.GeneralPoints = this.GeneralPoints - 50;
 	}
 	
 	//Jugadores adyacentes
