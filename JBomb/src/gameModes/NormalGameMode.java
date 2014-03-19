@@ -1,5 +1,7 @@
 package gameModes;
 
+import core.GamePlayer;
+
 public class NormalGameMode extends AbstractGameMode {
 
 	@Override
@@ -7,8 +9,10 @@ public class NormalGameMode extends AbstractGameMode {
 		return "Normal";
 	}
 	
-	public boolean handleNextPlayerRequest(){
-		return true;
+	public boolean handleNextPlayerRequest(GamePlayer TargetPlayer){
+		this.getGame().getBomb().setTargetPlayer(TargetPlayer);
+		
+		return false;
 	}
 	
 	public boolean sendBomb(boolean IsRightAnswer){

@@ -1,5 +1,7 @@
 package gameModes;
 
+import core.GamePlayer;
+
 public class BouncingGameMode extends AbstractGameMode {
 
 	@Override
@@ -7,7 +9,9 @@ public class BouncingGameMode extends AbstractGameMode {
 		return "Rebote";
 	}
 	
-	public boolean handleNextPlayerRequest(){
+	public boolean handleNextPlayerRequest(GamePlayer TargetPlayer){
+		this.getGame().getBomb().sendTo(TargetPlayer);
+		
 		return true;
 	}
 	

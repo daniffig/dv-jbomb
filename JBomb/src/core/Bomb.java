@@ -84,6 +84,13 @@ public class Bomb extends Observable{
 		this.setCurrentPlayer(LastPlayer);
 	}
 	
+	public void sendTo(GamePlayer TargetPlayer)
+	{
+		this.setLastPlayer(this.getCurrentPlayer());
+		
+		this.setCurrentPlayer(TargetPlayer);
+	}
+	
 	public Long getDetonationMilliseconds() {
 		return DetonationMilliseconds;
 	}
