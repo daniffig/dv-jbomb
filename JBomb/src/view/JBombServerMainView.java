@@ -143,9 +143,9 @@ public class JBombServerMainView {
 		
 		mnArchivo.addSeparator();
 		
-		JMenuItem mntmNewMenuItem_3 = new JMenuItem("Iniciar");
-		buttonGroup_1.add(mntmNewMenuItem_3);
-		mnArchivo.add(mntmNewMenuItem_3);
+		//JMenuItem mntmNewMenuItem_3 = new JMenuItem("Iniciar");
+		//buttonGroup_1.add(mntmNewMenuItem_3);
+		//mnArchivo.add(mntmNewMenuItem_3);
 		
 		JMenuItem mntmNewMenuItem_4 = new JMenuItem("Ver estado");
 		mntmNewMenuItem_4.addActionListener(new ActionListener() {

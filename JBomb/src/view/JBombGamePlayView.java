@@ -131,8 +131,8 @@ public class JBombGamePlayView extends JFrame implements Observer {
 			Point2D center = layout.transform(vertex);
 			Color color = null;
 			
-			if (vertex.equals(this.Game.getBomb().getCurrentPlayer().getName())) color = new Color(0, 255, 0);
-			else color = new Color(255, 0, 0);
+			if (vertex.equals(this.Game.getBomb().getCurrentPlayer().getName())) color = new Color(255, 0, 0); 
+			else color = new Color(0, 255, 0);
 
 			graphicsContext.setPaint(color);
 			graphicsContext.fill(new Ellipse2D.Double(center.getX() - 10, center.getY() - 10, 20, 20));

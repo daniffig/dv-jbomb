@@ -115,10 +115,10 @@ public class QuizConfigurationFormView extends JFrame {
 
 		mnNewMenu.addSeparator();
 		
-		JMenuItem mntmWizard = new JMenuItem("Wizard");
-		mnNewMenu.add(mntmWizard);
+		//JMenuItem mntmWizard = new JMenuItem("Wizard");
+		//mnNewMenu.add(mntmWizard);
 		
-		mnNewMenu.addSeparator();
+		//mnNewMenu.addSeparator();
 		
 		JMenuItem mntmNewMenuItem_1 = new JMenuItem("Cerrar");
 		mntmNewMenuItem_1.addActionListener(new ActionListener() {
